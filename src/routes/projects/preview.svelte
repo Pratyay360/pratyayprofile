@@ -1,0 +1,39 @@
+<script lang="ts">
+	import ProjectCard from '$lib/components/normaluicomponents/projectCard.svelte';
+	import { Skeleton } from '$lib/components/ui/skeleton';
+	import { projectsStore } from '$lib/data/content-store';
+
+	let loading = false;
+</script>
+
+<section class="container mx-auto px-6 py-12">
+	<h1 class="text-center text-3xl font-bold tracking-[0.2em]">PROJECTS</h1>
+
+	{#if loading}
+		<div class="mt-10">
+			<Skeleton class="h-64 w-full" />
+		</div>
+	{/if}
+
+	<div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+		{#each $projectsStore.slice(0, 3) as project (project.title)}
+			<ProjectCard
+				imageUrl={project.imageUrl}
+				title={project.title}
+				brief={project.brief}
+				link={project.link}
+			/>
+		{/each}
+	</div>
+
+	{#if $projectsStore.length > 3}
+		<div class="mt-8 text-center">
+			<a href="/projects">
+				<button class="button-30" role="button_open_projects">See More</button>
+			</a>
+		</div>
+	{/if}
+	{#if $projectsStore.length === 0 && !loading}
+		<p class="mt-8 text-center text-sm text-muted-foreground">Add your projects to display them here.</p>
+	{/if}
+</section>

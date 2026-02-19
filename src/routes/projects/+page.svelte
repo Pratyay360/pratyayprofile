@@ -1,0 +1,35 @@
+<script lang="ts">
+	import ProjectCard from '$lib/components/normaluicomponents/projectCard.svelte';
+	import { Skeleton } from '$lib/components/ui/skeleton';
+	import { projectsStore } from '$lib/data/content-store';
+
+	let loading = false;
+</script>
+
+<main class="min-h-screen px-4 py-24">
+	<h1 class="text-center text-3xl font-bold tracking-[0.2em] lg:text-5xl">
+		Projects By Pratyay Mitra Mustafi
+	</h1>
+
+	{#if loading}
+		<div class="mt-10">
+			<Skeleton class="h-64 w-full" />
+		</div>
+	{/if}
+
+	<section class="mx-auto mt-12 max-w-6xl">
+		<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+			{#each $projectsStore as project (project.title)}
+				<ProjectCard
+					imageUrl={project.imageUrl}
+					title={project.title}
+					brief={project.brief}
+					link={project.link}
+				/>
+			{/each}
+		</div>
+		{#if $projectsStore.length === 0 && !loading}
+			<p class="mt-8 text-center text-sm text-muted-foreground">Add your projects to display them here.</p>
+		{/if}
+	</section>
+</main>
