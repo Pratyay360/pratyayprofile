@@ -17,7 +17,7 @@
 		CardDescription
 	} from '$lib/components/ui/card';
 	import { AspectRatio } from '$lib/components/ui/aspect-ratio';
-	import Aboutme from '../../../routes/sections/aboutme.svelte';
+	import Aboutme from '$/../../routes/sections/aboutme.svelte';
 
 
 	export let	imageUrl: string = '';

@@ -22,5 +22,6 @@
 			style={`width: ${ring.size}px; height: ${ring.size}px; animation-duration: ${4 + i * 0.5}s; animation-delay: ${i * 0.2}s; border-width: ${1 + i * 0.5}px;`}
 		></div>
 	{/each}
-	<div class="absolute h-[255px] w-[255px] rounded-full border border-gray-300/5 blur-[1px] dark:border-white/5"></div>
+	<div class="absolute h-63.75 w-63.75 rounded-full border border-gray-300/5 blur-[1px] dark:border-white/5"></div>
 </div>
+

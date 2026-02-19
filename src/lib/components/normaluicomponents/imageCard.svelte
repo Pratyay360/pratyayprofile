@@ -8,9 +8,9 @@
 
 <script lang="ts">
 	// Individual typed Svelte props so parents can pass values directly
-	export let image: string = '#';
-	export let link: string = '#';
-	export let name: string = '#';
+	export let image: string = '';
+	export let link: string = '';
+	export let name: string = '';
 
 	/**
 	 * Open the provided link in a new tab/window using noopener,noreferrer for safety.

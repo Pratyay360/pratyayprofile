@@ -12,13 +12,13 @@
 <script lang="ts">
 	import { Card, CardHeader, CardTitle, CardDescription } from '$lib/components/ui/card';
 	import { AspectRatio } from '$lib/components/ui/aspect-ratio';
-	import { Skeleton } from '$lib/components/ui/skeleton';
+	import { Skeleton } from '$lib/components/ui/skeleton/index';
 
-	// Individual Svelte props (use `export let` so parent can pass values)
+
 	export let imageSrc: string = '';
 	export let title: string = '';
 	export let description: string = '';
-	export let link: string = '#';
+	export let link: string = '';
 	export let date: string = '';
 </script>
 
@@ -47,7 +47,7 @@
 			<CardTitle class="line-clamp-2 text-lg">{title}</CardTitle>
 			<CardDescription class="line-clamp-3">{description}</CardDescription>
 			{#if date}
-				<div class="mt-2 text-xs text-muted-foreground">{date}</div>
+				<div class="text-muted-foreground mt-2 text-xs">{date}</div>
 			{/if}
 		</CardHeader>
 	</Card>

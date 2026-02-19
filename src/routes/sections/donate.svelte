@@ -1,15 +1,9 @@
 <script lang="ts">
 	import DonationCard from '$lib/components/normaluicomponents/donation.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
-
-	type Donation = {
-		name: string;
-		image: string;
-		link: string;
-	};
+	import { donationsStore } from '$lib/data/content-store';
 
 	let loading = false;
-	const donations: Donation[] = [];
 </script>
 
 <section class="container mx-auto px-6 py-12">
@@ -22,12 +16,12 @@
 	{/if}
 
 	<div class="mt-10 flex flex-wrap justify-center gap-6">
-		{#each donations as donation (donation.name)}
+		{#each $donationsStore as donation (donation.name)}
 			<div class="w-full md:w-1/3">
 				<DonationCard name={donation.name} image={donation.image} link={donation.link} />
 			</div>
 		{/each}
-		{#if donations.length === 0}
+		{#if $donationsStore.length === 0 && !loading}
 			<p class="text-sm text-muted-foreground">Add donation links to display them here.</p>
 		{/if}
 	</div>

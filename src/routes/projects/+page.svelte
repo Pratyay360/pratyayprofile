@@ -1,14 +1,14 @@
 <script lang="ts">
 	import ProjectCard from '$lib/components/normaluicomponents/projectCard.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
-	import { projectsStore } from '$lib/data/content-store';
+	import { photoStore, projectsStore } from '$lib/data/content-store';
 
 	let loading = false;
 </script>
 
 <main class="min-h-screen px-4 py-24">
 	<h1 class="text-center text-3xl font-bold tracking-[0.2em] lg:text-5xl">
-		Projects By Pratyay Mitra Mustafi
+		Projects By {$photoStore.name}
 	</h1>
 
 	{#if loading}

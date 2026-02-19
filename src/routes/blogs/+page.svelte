@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import BlogCard from '$lib/components/normaluicomponents/blogCard.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
+	import { hashnodeHostStore, photoStore } from '$lib/data/content-store';
 
 	const ENDPOINT = 'https://gql.hashnode.com';
 
@@ -19,7 +20,7 @@
 	onMount(async () => {
 		const query = `
 			query Publication {
-				publication(host: "pratyaywrites.hashnode.dev") {
+				publication(host: "${$hashnodeHostStore}") {
 					posts(first: 50) {
 						edges {
 							node {
@@ -55,7 +56,7 @@
 
 <main class="min-h-screen bg-background px-4 py-24">
 	<h1 class="mb-16 text-center text-4xl font-bold tracking-wider md:text-5xl">
-		Blogs by Pratyay Mitra Mustafi
+		Blogs by {$photoStore.name}
 	</h1>
 
 	{#if failed}

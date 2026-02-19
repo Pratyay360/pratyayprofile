@@ -16,12 +16,12 @@
 		CardTitle,
 		CardDescription
 	} from '$lib/components/ui/card';
-	import { AspectRatio } from '$lib/components/ui/aspect-ratio';
-	import { Skeleton } from '$lib/components/ui/skeleton';
+	import { AspectRatio } from '$lib/components/ui/aspect-ratio/index';
+	import { Skeleton } from '$lib/components/ui/skeleton/index';
 
 	// Individual Svelte props (use `export let` so parent can pass values)
 	export let imageUrl: string = '';
-	export let link: string = '#';
+	export let link: string = '';
 	export let title: string = '';
 	export let brief: string = '';
 </script>

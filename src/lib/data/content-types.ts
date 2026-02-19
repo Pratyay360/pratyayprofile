@@ -27,9 +27,31 @@ export type EducationEntry = {
 	description: string;
 };
 
+export type SocialLink = {
+	name: string;
+	image: string;
+	link: string;
+};
+
+export type Donation = {
+	name: string;
+	image: string;
+	link: string;
+};
+
 export type PortfolioContent = {
 	projects: Project[];
 	certificates: Certificate[];
 	skills: SkillCategory[];
 	education: EducationEntry[];
+	aboutMe: string;
+	photo: {
+		name: string;
+		title: string;
+		imageUrl: string;
+	};
+	resumeUrl: string;
+	socialLinks: SocialLink[];
+	donations: Donation[];
+	hashnodeHost: string;
 };

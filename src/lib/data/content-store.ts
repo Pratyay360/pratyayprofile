@@ -4,7 +4,15 @@ import { certificates as defaultCertificates } from './certificates';
 import { education as defaultEducation } from './education';
 import { projects as defaultProjects } from './projects';
 import { skills as defaultSkills } from './skills';
-import type { Certificate, EducationEntry, PortfolioContent, Project, SkillCategory } from './content-types';
+import type {
+	Certificate,
+	Donation,
+	EducationEntry,
+	PortfolioContent,
+	Project,
+	SkillCategory,
+	SocialLink
+} from './content-types';
 
 const STORAGE_KEY = 'portfolio-content-v1';
 
@@ -14,13 +22,32 @@ const defaults: PortfolioContent = {
 	projects: deepClone(defaultProjects),
 	certificates: deepClone(defaultCertificates),
 	skills: deepClone(defaultSkills),
-	education: deepClone(defaultEducation)
+	education: deepClone(defaultEducation),
+	aboutMe:
+		'I build performant web experiences with a focus on clean UI, accessibility, and maintainable systems. I enjoy taking products from idea to polished delivery and iterating quickly based on user feedback.',
+	photo: {
+		name: 'Pratyay Mitra Mustafi',
+		title: 'Software Engineer',
+		imageUrl: ''
+	},
+	resumeUrl: 'https://drive.google.com/file/d/1Kb_cOhevNgiif-lV3LPJFPjStCKEd0dt/view?usp=drive_link',
+	socialLinks: [],
+	donations: [],
+	hashnodeHost: 'pratyaywrites.hashnode.dev'
 };
 
 export const projectsStore = writable<Project[]>(deepClone(defaults.projects));
 export const certificatesStore = writable<Certificate[]>(deepClone(defaults.certificates));
 export const skillsStore = writable<SkillCategory[]>(deepClone(defaults.skills));
 export const educationStore = writable<EducationEntry[]>(deepClone(defaults.education));
+export const aboutMeStore = writable<string>(defaults.aboutMe);
+export const photoStore = writable<{ name: string; title: string; imageUrl: string }>(
+	deepClone(defaults.photo)
+);
+export const resumeUrlStore = writable<string>(defaults.resumeUrl);
+export const socialLinksStore = writable<SocialLink[]>(deepClone(defaults.socialLinks));
+export const donationsStore = writable<Donation[]>(deepClone(defaults.donations));
+export const hashnodeHostStore = writable<string>(defaults.hashnodeHost);
 
 let initialized = false;
 
@@ -81,11 +108,35 @@ const normalizeEducation = (value: unknown): EducationEntry[] => {
 		.filter((item) => item.degree.trim() !== '');
 };
 
+const normalizeSocialLinks = (value: unknown): SocialLink[] => {
+	if (!Array.isArray(value)) return deepClone(defaults.socialLinks);
+	return value.map((item) => ({
+		name: cleanString((item as Record<string, unknown>)?.name),
+		image: cleanString((item as Record<string, unknown>)?.image),
+		link: cleanString((item as Record<string, unknown>)?.link)
+	}));
+};
+
+const normalizeDonations = (value: unknown): Donation[] => {
+	if (!Array.isArray(value)) return deepClone(defaults.donations);
+	return value.map((item) => ({
+		name: cleanString((item as Record<string, unknown>)?.name),
+		image: cleanString((item as Record<string, unknown>)?.image),
+		link: cleanString((item as Record<string, unknown>)?.link)
+	}));
+};
+
 const currentContent = (): PortfolioContent => ({
 	projects: deepClone(get(projectsStore)),
 	certificates: deepClone(get(certificatesStore)),
 	skills: deepClone(get(skillsStore)),
-	education: deepClone(get(educationStore))
+	education: deepClone(get(educationStore)),
+	aboutMe: get(aboutMeStore),
+	photo: deepClone(get(photoStore)),
+	resumeUrl: get(resumeUrlStore),
+	socialLinks: deepClone(get(socialLinksStore)),
+	donations: deepClone(get(donationsStore)),
+	hashnodeHost: get(hashnodeHostStore)
 });
 
 const applyContent = (content: PortfolioContent): void => {
@@ -93,6 +144,12 @@ const applyContent = (content: PortfolioContent): void => {
 	certificatesStore.set(deepClone(content.certificates));
 	skillsStore.set(deepClone(content.skills));
 	educationStore.set(deepClone(content.education));
+	aboutMeStore.set(content.aboutMe);
+	photoStore.set(deepClone(content.photo));
+	resumeUrlStore.set(content.resumeUrl);
+	socialLinksStore.set(deepClone(content.socialLinks));
+	donationsStore.set(deepClone(content.donations));
+	hashnodeHostStore.set(content.hashnodeHost);
 };
 
 const persistContent = (): void => {
@@ -116,7 +173,17 @@ export const initContentStore = (): void => {
 			projects: normalizeProjects(parsed.projects),
 			certificates: normalizeCertificates(parsed.certificates),
 			skills: normalizeSkills(parsed.skills),
-			education: normalizeEducation(parsed.education)
+			education: normalizeEducation(parsed.education),
+			aboutMe: cleanString(parsed.aboutMe) || defaults.aboutMe,
+			photo: {
+				name: cleanString((parsed.photo as Record<string, unknown>)?.name) || defaults.photo.name,
+				title: cleanString((parsed.photo as Record<string, unknown>)?.title) || defaults.photo.title,
+				imageUrl: cleanString((parsed.photo as Record<string, unknown>)?.imageUrl)
+			},
+			resumeUrl: cleanString(parsed.resumeUrl) || defaults.resumeUrl,
+			socialLinks: normalizeSocialLinks(parsed.socialLinks),
+			donations: normalizeDonations(parsed.donations),
+			hashnodeHost: cleanString(parsed.hashnodeHost) || defaults.hashnodeHost
 		});
 	} catch {
 		applyContent(deepClone(defaults));
@@ -141,6 +208,36 @@ export const setSkills = (items: SkillCategory[]): void => {
 
 export const setEducation = (items: EducationEntry[]): void => {
 	educationStore.set(deepClone(items));
+	persistContent();
+};
+
+export const setAboutMe = (value: string): void => {
+	aboutMeStore.set(value);
+	persistContent();
+};
+
+export const setPhoto = (value: { name: string; title: string; imageUrl: string }): void => {
+	photoStore.set(deepClone(value));
+	persistContent();
+};
+
+export const setResumeUrl = (value: string): void => {
+	resumeUrlStore.set(value);
+	persistContent();
+};
+
+export const setSocialLinks = (items: SocialLink[]): void => {
+	socialLinksStore.set(deepClone(items));
+	persistContent();
+};
+
+export const setDonations = (items: Donation[]): void => {
+	donationsStore.set(deepClone(items));
+	persistContent();
+};
+
+export const setHashnodeHost = (value: string): void => {
+	hashnodeHostStore.set(value);
 	persistContent();
 };
 
