@@ -26,7 +26,7 @@
 	export let brief: string = '';
 </script>
 
-<div
+<a
 	href={link}
 	target="_blank"
 	rel="noopener noreferrer"
@@ -57,4 +57,4 @@
 			</CardHeader>
 		</CardContent>
 	</Card>
-</div>
+</a>

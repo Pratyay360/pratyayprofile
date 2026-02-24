@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	import { authorized, setStatus } from './admin-store';
+	import { authorized, setStatus, statusMessage } from '../admin-store';
 
 	const pass = import.meta.env.VITE_PASS ?? '';
 	let input = '';

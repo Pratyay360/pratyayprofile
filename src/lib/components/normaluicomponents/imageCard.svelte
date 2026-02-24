@@ -35,7 +35,7 @@
 		aria-label={name ? `Open ${name}` : 'Open image'}
 	>
 		{#if image}
-			<enhanced:img src={image} alt={name || ''} size="40" class="rounded-md object-cover" />
+			<enhanced:img src={image} alt={name || ''} sizes="40px" class="rounded-md object-cover" />
 		{:else}
 			<div
 				class="h-10 w-10 rounded-md bg-gray-200"

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ProjectCard from '$lib/components/normaluicomponents/projectCard';
+	import ProjectCard from '$lib/components/normaluicomponents/projectCard.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { projectsStore } from '$lib/data/content-store';
 

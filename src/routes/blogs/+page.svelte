@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import BlogCard from '$lib/components/normaluicomponents/blogCard';
+	import BlogCard from '$lib/components/normaluicomponents/blogCard.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { hashnodeHostStore, photoStore } from '$lib/data/content-store';
 
