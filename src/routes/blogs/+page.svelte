@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import BlogCard from '$lib/components/normaluicomponents/blogCard.svelte';
+	import BlogCard from '$lib/components/normaluicomponents/blogCard';
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { hashnodeHostStore, photoStore } from '$lib/data/content-store';
 
@@ -54,13 +54,13 @@
 	});
 </script>
 
-<main class="min-h-screen bg-background px-4 py-24">
+<main class="bg-background min-h-screen px-4 py-24">
 	<h1 class="mb-16 text-center text-4xl font-bold tracking-wider md:text-5xl">
 		Blogs by {$photoStore.name}
 	</h1>
 
 	{#if failed}
-		<div class="text-center text-destructive">
+		<div class="text-destructive text-center">
 			<p class="text-xl">Couldn&apos;t fetch posts. Try again later.</p>
 		</div>
 	{/if}
@@ -79,7 +79,7 @@
 	{/if}
 
 	{#if !loading && !failed && posts.length === 0}
-		<p class="text-center text-sm text-muted-foreground">No posts yet.</p>
+		<p class="text-muted-foreground text-center text-sm">No posts yet.</p>
 	{/if}
 
 	{#if posts.length > 0}

@@ -1,12 +1,12 @@
 <script lang="ts">
-	import ProjectCard from '$lib/components/normaluicomponents/projectCard.svelte';
+	import ProjectCard from '$lib/components/normaluicomponents/projectCard';
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { photoStore, projectsStore } from '$lib/data/content-store';
 
 	let loading = false;
 </script>
 
-<main class="min-h-screen px-4 py-24">
+<main class="bg-background min-h-screen px-4 py-24">
 	<h1 class="text-center text-3xl font-bold tracking-[0.2em] lg:text-5xl">
 		Projects By {$photoStore.name}
 	</h1>
@@ -29,7 +29,9 @@
 			{/each}
 		</div>
 		{#if $projectsStore.length === 0 && !loading}
-			<p class="mt-8 text-center text-sm text-muted-foreground">Add your projects to display them here.</p>
+			<p class="text-muted-foreground mt-8 text-center text-sm">
+				Add your projects to display them here.
+			</p>
 		{/if}
 	</section>
 </main>

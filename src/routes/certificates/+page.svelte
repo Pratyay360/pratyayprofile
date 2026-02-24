@@ -28,7 +28,9 @@
 			{/each}
 		</div>
 		{#if $certificatesStore.length === 0 && !loading}
-			<p class="mt-8 text-center text-sm text-muted-foreground">Add your certificates to display them here.</p>
+			<p class="text-muted-foreground mt-8 text-center text-sm">
+				Add your certificates to display them here.
+			</p>
 		{/if}
 	</section>
 </main>

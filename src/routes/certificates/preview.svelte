@@ -31,8 +31,7 @@
 		<div class="mt-8 text-center">
 			<a href="/certificates">
 				<button
-					class="rounded-md border border-primary px-4 py-2 text-sm font-medium transition-colors hover:bg-primary hover:text-primary-foreground"
-					role="button_more_certificate"
+					class="border-primary hover:bg-primary hover:text-primary-foreground rounded-md border px-4 py-2 text-sm font-medium transition-colors"
 				>
 					See More
 				</button>
@@ -40,6 +39,8 @@
 		</div>
 	{/if}
 	{#if $certificatesStore.length === 0 && !loading}
-		<p class="mt-8 text-center text-sm text-muted-foreground">Add certificates to show them here.</p>
+		<p class="text-muted-foreground mt-8 text-center text-sm">
+			Add certificates to show them here.
+		</p>
 	{/if}
 </section>

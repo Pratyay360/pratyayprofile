@@ -2,45 +2,43 @@ import type { Project } from './content-types';
 
 export const projects: Project[] = [
 	{
-		imageUrl:
-			'https://images.unsplash.com/photo-1555066941-3645baa6be49?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80',
-		title: 'Portfolio Website',
-		brief: 'A modern portfolio website built with SvelteKit, TypeScript, and Tailwind CSS.',
-		link: 'https://github.com/pratyaymitra/pratyayprofile'
+		imageUrl: 'https://via.placeholder.com/1200x800?text=Project+Alpha',
+		title: 'Project Alpha',
+		brief:
+			'A placeholder project demonstrating a standard project card with image, title, brief description, and a link.',
+		link: 'https://example.com/project-alpha'
 	},
 	{
-		imageUrl:
-			'https://images.unsplash.com/photo-1555066941-3645baa6be49?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80',
-		title: 'Task Management App',
-		brief: 'A full-featured task management application with drag-and-drop functionality.',
-		link: 'https://github.com/pratyaymitra/task-manager'
+		imageUrl: 'https://via.placeholder.com/1200x800?text=Project+Beta',
+		title: 'Project Beta',
+		brief: 'An example project used as placeholder content. Replace with your own project details.',
+		link: 'https://example.com/project-beta'
 	},
 	{
-		imageUrl:
-			'https://images.unsplash.com/photo-1555066941-3645baa6be49?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80',
-		title: 'E-commerce Platform',
-		brief: 'A scalable e-commerce platform with payment integration and inventory management.',
-		link: 'https://github.com/pratyaymitra/ecommerce-platform'
+		imageUrl: 'https://via.placeholder.com/1200x800?text=Project+Gamma',
+		title: 'Project Gamma',
+		brief:
+			'Placeholder entry for a project. Use this slot for showcasing projects, case studies, or demos.',
+		link: 'https://example.com/project-gamma'
 	},
 	{
-		imageUrl:
-			'https://images.unsplash.com/photo-1555066941-3645baa6be49?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80',
-		title: 'Real-time Chat Application',
-		brief: 'A WebSocket-based real-time chat application with user authentication.',
-		link: 'https://github.com/pratyaymitra/realtime-chat'
+		imageUrl: 'https://via.placeholder.com/1200x800?text=Project+Delta',
+		title: 'Project Delta',
+		brief:
+			'Sample project description — short, focused summary that fits into a project card layout.',
+		link: 'https://example.com/project-delta'
 	},
 	{
-		imageUrl:
-			'https://images.unsplash.com/photo-1555066941-3645baa6be49?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80',
-		title: 'Data Visualization Dashboard',
-		brief: 'An interactive dashboard for visualizing complex datasets with D3.js integration.',
-		link: 'https://github.com/pratyaymitra/data-dashboard'
+		imageUrl: 'https://via.placeholder.com/1200x800?text=Project+Epsilon',
+		title: 'Project Epsilon',
+		brief:
+			'Generic placeholder project used to populate the projects list during development and testing.',
+		link: 'https://example.com/project-epsilon'
 	},
 	{
-		imageUrl:
-			'https://images.unsplash.com/photo-1555066941-3645baa6be49?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80',
-		title: 'AI-Powered Recommendation Engine',
-		brief: 'A machine learning-based recommendation system for personalized content delivery.',
-		link: 'https://github.com/pratyaymitra/recommendation-engine'
+		imageUrl: 'https://via.placeholder.com/1200x800?text=Project+Zeta',
+		title: 'Project Zeta',
+		brief: 'Final placeholder project. Swap these items out for real projects when ready.',
+		link: 'https://example.com/project-zeta'
 	}
 ];

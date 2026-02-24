@@ -1,0 +1,108 @@
+<script lang="ts">
+	import { projectsStore, setProjects } from '$lib/data/content-store';
+	import type { Project } from '$lib/data/content-types';
+	import { setStatus } from '../admin-store';
+
+	let projectForm: Project = {
+		imageUrl: '',
+		title: '',
+		brief: '',
+		link: ''
+	};
+	let projectEditingIndex: number | null = null;
+
+	function resetProjectForm(): void {
+		projectForm = { imageUrl: '', title: '', brief: '', link: '' };
+		projectEditingIndex = null;
+	}
+
+	function saveProject(event: SubmitEvent): void {
+		event.preventDefault();
+		if (!projectForm.title.trim()) {
+			setStatus('Project title is required.');
+			return;
+		}
+
+		const next = [...$projectsStore];
+		if (projectEditingIndex === null) {
+			next.push({ ...projectForm });
+			setStatus('Project added.');
+		} else {
+			next[projectEditingIndex] = { ...projectForm };
+			setStatus('Project updated.');
+		}
+		setProjects(next);
+		resetProjectForm();
+	}
+
+	function editProject(index: number): void {
+		projectForm = { ...$projectsStore[index] };
+		projectEditingIndex = index;
+		setStatus('Editing project.');
+	}
+
+	function removeProject(index: number): void {
+		setProjects($projectsStore.filter((_, i) => i !== index));
+		if (projectEditingIndex === index) {
+			resetProjectForm();
+		}
+		setStatus('Project removed.');
+	}
+</script>
+
+<div class="mt-6 grid gap-6 lg:grid-cols-2">
+	<form onsubmit={saveProject} class="space-y-3 rounded border p-4">
+		<h2 class="text-lg font-medium">
+			{projectEditingIndex === null ? 'Add Project' : 'Edit Project'}
+		</h2>
+		<input
+			class="w-full rounded border p-2 text-black"
+			placeholder="Title"
+			bind:value={projectForm.title}
+		/>
+		<input
+			class="w-full rounded border p-2 text-black"
+			placeholder="Image URL"
+			bind:value={projectForm.imageUrl}
+		/>
+		<input
+			class="w-full rounded border p-2 text-black"
+			placeholder="Project Link"
+			bind:value={projectForm.link}
+		/>
+		<textarea
+			class="w-full rounded border p-2 text-black"
+			placeholder="Brief"
+			rows="4"
+			bind:value={projectForm.brief}
+		></textarea>
+		<div class="flex gap-2">
+			<button class="rounded border px-4 py-2" type="submit">
+				{projectEditingIndex === null ? 'Add' : 'Update'}
+			</button>
+			{#if projectEditingIndex !== null}
+				<button class="rounded border px-4 py-2" type="button" onclick={resetProjectForm}>
+					Cancel
+				</button>
+			{/if}
+		</div>
+	</form>
+
+	<div class="space-y-2 rounded border p-4">
+		<h2 class="text-lg font-medium">Current Projects</h2>
+		{#each $projectsStore as item, index (item.title + index)}
+			<div class="rounded border p-3">
+				<p class="font-medium">{item.title}</p>
+				<p class="text-sm text-muted-foreground">{item.link}</p>
+				<div class="mt-2 flex gap-2">
+					<button class="rounded border px-3 py-1 text-sm" onclick={() => editProject(index)}>
+						Edit
+					</button>
+					<button class="rounded border px-3 py-1 text-sm" onclick={() => removeProject(index)}>
+						Delete
+					</button>
+				</div>
+			</div>
+		{/each}
+	</div>
+</div>

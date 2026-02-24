@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import BlogCard from '$lib/components/normaluicomponents/blogCard.svelte';
+	import BlogCard from '$lib/components/normaluicomponents/blogCard';
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { hashnodeHostStore } from '$lib/data/content-store';
 
@@ -74,8 +74,7 @@
 		<div class="mt-8 text-center">
 			<a href="/blogs">
 				<button
-					class="rounded-md border border-primary px-4 py-2 text-sm font-medium hover:bg-primary hover:text-primary-foreground"
-					role="button_more_blogs"
+					class="border-primary hover:bg-primary hover:text-primary-foreground rounded-md border px-4 py-2 text-sm font-medium"
 				>
 					See More
 				</button>
@@ -83,6 +82,6 @@
 		</div>
 	{/if}
 	{#if posts.length === 0 && !loading}
-		<p class="mt-8 text-center text-sm text-muted-foreground">No posts yet.</p>
+		<p class="text-muted-foreground mt-8 text-center text-sm">No posts yet.</p>
 	{/if}
 </section>

@@ -1,9 +1,5 @@
 import { browser } from '$app/environment';
 import { get, writable } from 'svelte/store';
-import { certificates as defaultCertificates } from './certificates';
-import { education as defaultEducation } from './education';
-import { projects as defaultProjects } from './projects';
-import { skills as defaultSkills } from './skills';
 import type {
 	Certificate,
 	Donation,
@@ -14,28 +10,110 @@ import type {
 	SocialLink
 } from './content-types';
 
+/**
+ * This file provides a local content store for a portfolio.
+ * Personal / real data has been replaced with generic placeholder content.
+ */
+
 const STORAGE_KEY = 'portfolio-content-v1';
 
 const deepClone = <T>(value: T): T => JSON.parse(JSON.stringify(value));
 
+/* Placeholder data (replaces any personal data) */
+const placeholderImage =
+	'https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=1200&q=80';
+
+const placeholderProjects: Project[] = [
+	{
+		imageUrl: placeholderImage,
+		title: 'Sample Project A',
+		brief: 'A sample project demonstrating core concepts and layout.',
+		link: 'https://example.com/project-a'
+	},
+	{
+		imageUrl: placeholderImage,
+		title: 'Sample Project B',
+		brief: 'Another example project showcasing functionality.',
+		link: 'https://example.com/project-b'
+	},
+	{
+		imageUrl: placeholderImage,
+		title: 'Sample Project C',
+		brief: 'A demonstration project for visuals and interactivity.',
+		link: 'https://example.com/project-c'
+	}
+];
+
+const placeholderCertificates: Certificate[] = [
+	{
+		title: 'Sample Certificate 1',
+		issuer: 'Example Institute',
+		date: '2023',
+		description: 'Placeholder certificate for demonstration purposes.',
+		imageSrc: placeholderImage,
+		link: '#'
+	},
+	{
+		title: 'Sample Certificate 2',
+		issuer: 'Example Institute',
+		date: '2022',
+		description: 'Another placeholder certificate.',
+		imageSrc: placeholderImage,
+		link: '#'
+	}
+];
+
+const placeholderSkills: SkillCategory[] = [
+	{
+		category: 'Languages',
+		items: ['TypeScript', 'JavaScript', 'Python']
+	},
+	{
+		category: 'Frontend',
+		items: ['Svelte', 'HTML', 'CSS']
+	},
+	{
+		category: 'Tools',
+		items: ['Git', 'Vite', 'Testing']
+	}
+];
+
+const placeholderEducation: EducationEntry[] = [
+	{
+		degree: 'Bachelor of Example Studies',
+		institution: 'Example University',
+		location: 'Example City',
+		period: '2016 - 2020',
+		description: 'Placeholder education entry used for demo purposes.'
+	}
+];
+
+const placeholderSocialLinks: SocialLink[] = [
+	{ name: 'Website', image: '', link: 'https://example.com' },
+	{ name: 'GitHub', image: '', link: 'https://example.com/github' }
+];
+
+const placeholderDonations: Donation[] = [];
+
 const defaults: PortfolioContent = {
-	projects: deepClone(defaultProjects),
-	certificates: deepClone(defaultCertificates),
-	skills: deepClone(defaultSkills),
-	education: deepClone(defaultEducation),
+	projects: deepClone(placeholderProjects),
+	certificates: deepClone(placeholderCertificates),
+	skills: deepClone(placeholderSkills),
+	education: deepClone(placeholderEducation),
 	aboutMe:
-		'I build performant web experiences with a focus on clean UI, accessibility, and maintainable systems. I enjoy taking products from idea to polished delivery and iterating quickly based on user feedback.',
+		'I am a developer who builds accessible and maintainable web experiences. This is placeholder text — replace it with your own summary.',
 	photo: {
-		name: 'Pratyay Mitra Mustafi',
-		title: 'Software Engineer',
+		name: 'Your Name',
+		title: 'Your Title',
 		imageUrl: ''
 	},
-	resumeUrl: 'https://drive.google.com/file/d/1Kb_cOhevNgiif-lV3LPJFPjStCKEd0dt/view?usp=drive_link',
-	socialLinks: [],
-	donations: [],
-	hashnodeHost: 'pratyaywrites.hashnode.dev'
+	resumeUrl: 'https://example.com/resume.pdf',
+	socialLinks: deepClone(placeholderSocialLinks),
+	donations: deepClone(placeholderDonations),
+	hashnodeHost: 'example.hashnode.dev'
 };
 
+/* Svelte stores */
 export const projectsStore = writable<Project[]>(deepClone(defaults.projects));
 export const certificatesStore = writable<Certificate[]>(deepClone(defaults.certificates));
 export const skillsStore = writable<SkillCategory[]>(deepClone(defaults.skills));
@@ -177,7 +255,8 @@ export const initContentStore = (): void => {
 			aboutMe: cleanString(parsed.aboutMe) || defaults.aboutMe,
 			photo: {
 				name: cleanString((parsed.photo as Record<string, unknown>)?.name) || defaults.photo.name,
-				title: cleanString((parsed.photo as Record<string, unknown>)?.title) || defaults.photo.title,
+				title:
+					cleanString((parsed.photo as Record<string, unknown>)?.title) || defaults.photo.title,
 				imageUrl: cleanString((parsed.photo as Record<string, unknown>)?.imageUrl)
 			},
 			resumeUrl: cleanString(parsed.resumeUrl) || defaults.resumeUrl,
