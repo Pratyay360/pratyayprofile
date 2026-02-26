@@ -22,7 +22,7 @@
 			/>
 		{/each}
 		{#if $educationStore.length === 0 && !loading}
-			<p class="text-center text-sm text-muted-foreground">Add your education details.</p>
+			<p class="text-muted-foreground text-center text-sm">Add your education details.</p>
 		{/if}
 	</div>
 </section>

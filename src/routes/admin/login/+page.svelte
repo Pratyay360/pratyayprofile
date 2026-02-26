@@ -43,7 +43,7 @@
 			required
 		/>
 		<button class="rounded-md border px-4 py-2" type="submit">Login</button>
-		<p class="text-sm text-muted-foreground">Login to manage portfolio content.</p>
+		<p class="text-muted-foreground text-sm">Login to manage portfolio content.</p>
 		{#if $statusMessage}
 			<p class="text-sm">{$statusMessage}</p>
 		{/if}

@@ -57,27 +57,27 @@
 			{educationEditingIndex === null ? 'Add Education' : 'Edit Education'}
 		</h2>
 		<input
-			class="w-full rounded border p-2 text-black"
+			class="w-full rounded border p-2 "
 			placeholder="Degree"
 			bind:value={educationForm.degree}
 		/>
 		<input
-			class="w-full rounded border p-2 text-black"
+			class="w-full rounded border p-2 "
 			placeholder="Institution"
 			bind:value={educationForm.institution}
 		/>
 		<input
-			class="w-full rounded border p-2 text-black"
+			class="w-full rounded border p-2 "
 			placeholder="Location"
 			bind:value={educationForm.location}
 		/>
 		<input
-			class="w-full rounded border p-2 text-black"
+			class="w-full rounded border p-2 "
 			placeholder="Period (e.g. 2021 - 2023)"
 			bind:value={educationForm.period}
 		/>
 		<textarea
-			class="w-full rounded border p-2 text-black"
+			class="w-full rounded border p-2 "
 			placeholder="Description"
 			rows="4"
 			bind:value={educationForm.description}
@@ -99,7 +99,7 @@
 		{#each $educationStore as item, index (item.degree + index)}
 			<div class="rounded border p-3">
 				<p class="font-medium">{item.degree}</p>
-				<p class="text-sm text-muted-foreground">{item.institution}</p>
+				<p class="text-muted-foreground text-sm">{item.institution}</p>
 				<div class="mt-2 flex gap-2">
 					<button class="rounded border px-3 py-1 text-sm" onclick={() => editEducation(index)}>
 						Edit

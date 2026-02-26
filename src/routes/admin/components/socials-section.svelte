@@ -55,17 +55,17 @@
 			{socialEditingIndex === null ? 'Add Social Link' : 'Edit Social Link'}
 		</h2>
 		<input
-			class="w-full rounded border p-2 text-black"
+			class="w-full rounded border p-2 "
 			placeholder="Name (e.g. GitHub)"
 			bind:value={socialForm.name}
 		/>
 		<input
-			class="w-full rounded border p-2 text-black"
+			class="w-full rounded border p-2 "
 			placeholder="Icon/Image URL"
 			bind:value={socialForm.image}
 		/>
 		<input
-			class="w-full rounded border p-2 text-black"
+			class="w-full rounded border p-2 "
 			placeholder="Profile Link"
 			bind:value={socialForm.link}
 		/>
@@ -86,7 +86,7 @@
 		{#each $socialLinksStore as item, index (item.name + index)}
 			<div class="rounded border p-3">
 				<p class="font-medium">{item.name}</p>
-				<p class="text-sm text-muted-foreground">{item.link}</p>
+				<p class="text-muted-foreground text-sm">{item.link}</p>
 				<div class="mt-2 flex gap-2">
 					<button class="rounded border px-3 py-1 text-sm" onclick={() => editSocial(index)}>
 						Edit

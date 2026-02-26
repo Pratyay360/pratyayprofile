@@ -46,12 +46,7 @@
 	</button>
 {:else if image}
 	<div class="inline-block" aria-label={name ? name : 'image'}>
-		<enhanced:img
-			src={image}
-			alt={name || ''}
-			sizes="40"
-			class="rounded-md object-cover"
-		/>
+		<enhanced:img src={image} alt={name || ''} sizes="40" class="rounded-md object-cover" />
 	</div>
 {:else}
 	<div

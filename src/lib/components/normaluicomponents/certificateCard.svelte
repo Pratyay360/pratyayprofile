@@ -14,7 +14,6 @@
 	import { AspectRatio } from '$lib/components/ui/aspect-ratio';
 	import { Skeleton } from '$lib/components/ui/skeleton/index';
 
-
 	export let imageSrc: string = '';
 	export let title: string = '';
 	export let description: string = '';

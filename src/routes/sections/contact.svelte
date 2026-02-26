@@ -22,7 +22,7 @@
 			</div>
 		{/each}
 		{#if $socialLinksStore.length === 0 && !loading}
-			<p class="text-sm text-muted-foreground">Add your social links to show them here.</p>
+			<p class="text-muted-foreground text-sm">Add your social links to show them here.</p>
 		{/if}
 	</div>
 

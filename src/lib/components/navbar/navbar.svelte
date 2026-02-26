@@ -34,7 +34,7 @@
 </script>
 
 <header
-	class="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60"
+	class="bg-background/95 supports-backdrop-filter:bg-background/60 sticky top-0 z-50 w-full border-b backdrop-blur"
 >
 	<div class="container flex h-16 items-center justify-center">
 		<NavigationMenu class="hidden flex-1 justify-center md:flex">
@@ -53,7 +53,7 @@
 							{label}
 							<span
 								class={cn(
-									'absolute bottom-0 left-0 h-0.5 w-full scale-x-0 bg-primary transition-transform duration-200',
+									'bg-primary absolute bottom-0 left-0 h-0.5 w-full scale-x-0 transition-transform duration-200',
 									$page.url.pathname === href && 'scale-x-100'
 								)}
 							></span>
@@ -86,7 +86,7 @@
 								<a
 									{href}
 									onclick={() => (open = false)}
-									class="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+									class="text-muted-foreground hover:text-primary text-sm font-medium transition-colors"
 								>
 									{label}
 								</a>

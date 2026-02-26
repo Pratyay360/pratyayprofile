@@ -1,5 +1,14 @@
 <script lang="ts">
-	import { aboutMeStore, hashnodeHostStore, photoStore, resumeUrlStore, setAboutMe, setHashnodeHost, setPhoto, setResumeUrl } from '$lib/data/content-store';
+	import {
+		aboutMeStore,
+		hashnodeHostStore,
+		photoStore,
+		resumeUrlStore,
+		setAboutMe,
+		setHashnodeHost,
+		setPhoto,
+		setResumeUrl
+	} from '$lib/data/content-store';
 	import { setStatus } from '../admin-store';
 
 	let profileForm = {
@@ -32,7 +41,7 @@
 			<label for="profile-name" class="text-sm font-medium">Name</label>
 			<input
 				id="profile-name"
-				class="w-full rounded border p-2 text-black"
+				class="w-full rounded border p-2 "
 				bind:value={profileForm.name}
 			/>
 		</div>
@@ -40,7 +49,7 @@
 			<label for="profile-title" class="text-sm font-medium">Title</label>
 			<input
 				id="profile-title"
-				class="w-full rounded border p-2 text-black"
+				class="w-full rounded border p-2 "
 				bind:value={profileForm.title}
 			/>
 		</div>
@@ -49,7 +58,7 @@
 		<label for="profile-image" class="text-sm font-medium">Profile Image URL</label>
 		<input
 			id="profile-image"
-			class="w-full rounded border p-2 text-black"
+			class="w-full rounded border p-2 "
 			bind:value={profileForm.imageUrl}
 		/>
 	</div>
@@ -57,7 +66,7 @@
 		<label for="profile-about" class="text-sm font-medium">About Me</label>
 		<textarea
 			id="profile-about"
-			class="w-full rounded border p-2 text-black"
+			class="w-full rounded border p-2 "
 			rows="4"
 			bind:value={profileForm.aboutMe}
 		></textarea>
@@ -66,7 +75,7 @@
 		<label for="profile-resume" class="text-sm font-medium">Resume Link (Google Drive/etc)</label>
 		<input
 			id="profile-resume"
-			class="w-full rounded border p-2 text-black"
+			class="w-full rounded border p-2 "
 			bind:value={profileForm.resumeUrl}
 		/>
 	</div>
@@ -74,12 +83,12 @@
 		<label for="profile-hashnode" class="text-sm font-medium">Hashnode Hostname</label>
 		<input
 			id="profile-hashnode"
-			class="w-full rounded border p-2 text-black"
+			class="w-full rounded border p-2 "
 			placeholder="yourname.hashnode.dev"
 			bind:value={profileForm.hashnodeHost}
 		/>
 	</div>
-	<button class="rounded border bg-primary px-4 py-2 text-primary-foreground" type="submit">
+	<button class="bg-primary text-primary-foreground rounded border px-4 py-2" type="submit">
 		Save Profile
 	</button>
 </form>

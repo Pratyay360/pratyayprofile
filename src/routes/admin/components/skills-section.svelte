@@ -65,12 +65,12 @@
 			{skillEditingIndex === null ? 'Add Skill Category' : 'Edit Skill Category'}
 		</h2>
 		<input
-			class="w-full rounded border p-2 text-black"
+			class="w-full rounded border p-2 "
 			placeholder="Category"
 			bind:value={skillForm.category}
 		/>
 		<textarea
-			class="w-full rounded border p-2 text-black"
+			class="w-full rounded border p-2 "
 			placeholder="Items (comma separated)"
 			rows="4"
 			bind:value={skillItemsInput}
@@ -92,7 +92,7 @@
 		{#each $skillsStore as item, index (item.category + index)}
 			<div class="rounded border p-3">
 				<p class="font-medium">{item.category}</p>
-				<p class="text-sm text-muted-foreground">{item.items.join(', ')}</p>
+				<p class="text-muted-foreground text-sm">{item.items.join(', ')}</p>
 				<div class="mt-2 flex gap-2">
 					<button class="rounded border px-3 py-1 text-sm" onclick={() => editSkill(index)}>
 						Edit

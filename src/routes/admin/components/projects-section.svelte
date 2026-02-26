@@ -56,22 +56,22 @@
 			{projectEditingIndex === null ? 'Add Project' : 'Edit Project'}
 		</h2>
 		<input
-			class="w-full rounded border p-2 text-black"
+			class="w-full rounded border p-2 "
 			placeholder="Title"
 			bind:value={projectForm.title}
 		/>
 		<input
-			class="w-full rounded border p-2 text-black"
+			class="w-full rounded border p-2 "
 			placeholder="Image URL"
 			bind:value={projectForm.imageUrl}
 		/>
 		<input
-			class="w-full rounded border p-2 text-black"
+			class="w-full rounded border p-2 "
 			placeholder="Project Link"
 			bind:value={projectForm.link}
 		/>
 		<textarea
-			class="w-full rounded border p-2 text-black"
+			class="w-full rounded border p-2 "
 			placeholder="Brief"
 			rows="4"
 			bind:value={projectForm.brief}
@@ -93,7 +93,7 @@
 		{#each $projectsStore as item, index (item.title + index)}
 			<div class="rounded border p-3">
 				<p class="font-medium">{item.title}</p>
-				<p class="text-sm text-muted-foreground">{item.link}</p>
+				<p class="text-muted-foreground text-sm">{item.link}</p>
 				<div class="mt-2 flex gap-2">
 					<button class="rounded border px-3 py-1 text-sm" onclick={() => editProject(index)}>
 						Edit

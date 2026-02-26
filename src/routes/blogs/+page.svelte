@@ -67,7 +67,7 @@
 
 	{#if loading && !failed}
 		<div class="mx-auto grid max-w-6xl gap-8 md:grid-cols-2 lg:grid-cols-3">
-			{#each Array.from({ length: 6 }) as _, i (i)}
+			{#each Array.from({ length: 6 }, (_, i) => i) as i (i)}
 				<div class="space-y-3">
 					<Skeleton class="h-56 w-full rounded-xl" />
 					<Skeleton class="h-6 w-2/3" />

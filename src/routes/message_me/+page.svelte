@@ -35,12 +35,12 @@
 	}
 </script>
 
-<main class="flex min-h-screen items-center justify-center bg-background p-4">
+<main class="bg-background flex min-h-screen items-center justify-center p-4">
 	<Toaster />
 	<Card class="w-full max-w-2xl border-slate-200 shadow-xl dark:border-slate-700">
 		<CardHeader class="pb-4">
-			<CardTitle class="text-center text-3xl font-bold text-foreground">Get in Touch</CardTitle>
-			<CardDescription class="text-center text-muted-foreground">
+			<CardTitle class="text-foreground text-center text-3xl font-bold">Get in Touch</CardTitle>
+			<CardDescription class="text-muted-foreground text-center">
 				Have a question or want to collaborate?
 			</CardDescription>
 		</CardHeader>
@@ -48,7 +48,7 @@
 		<CardContent>
 			<form on:submit|preventDefault={handleSubmit} class="space-y-6">
 				<div>
-					<label for="name" class="text-sm font-medium text-foreground">Name</label>
+					<label for="name" class="text-foreground text-sm font-medium">Name</label>
 					<Input
 						id="name"
 						name="Name"
@@ -60,7 +60,7 @@
 				</div>
 
 				<div>
-					<label for="email" class="text-sm font-medium text-foreground">Email</label>
+					<label for="email" class="text-foreground text-sm font-medium">Email</label>
 					<Input
 						id="email"
 						name="Email"
@@ -73,7 +73,7 @@
 				</div>
 
 				<div>
-					<label for="message" class="text-sm font-medium text-foreground">Message</label>
+					<label for="message" class="text-foreground text-sm font-medium">Message</label>
 					<Textarea
 						id="message"
 						name="Message"

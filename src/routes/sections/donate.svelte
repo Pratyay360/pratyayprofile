@@ -22,7 +22,7 @@
 			</div>
 		{/each}
 		{#if $donationsStore.length === 0 && !loading}
-			<p class="text-sm text-muted-foreground">Add donation links to display them here.</p>
+			<p class="text-muted-foreground text-sm">Add donation links to display them here.</p>
 		{/if}
 	</div>
 </section>

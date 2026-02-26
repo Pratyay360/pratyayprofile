@@ -26,6 +26,6 @@
 	</CardHeader>
 	<CardContent class="flex-1">
 		<h3 class="mb-1 text-lg font-semibold">{title}</h3>
-		<p class="text-lg text-muted-foreground">{description}</p>
+		<p class="text-muted-foreground text-lg">{description}</p>
 	</CardContent>
 </Card>

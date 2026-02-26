@@ -18,11 +18,10 @@
 	} from '$lib/components/ui/card';
 	import { AspectRatio } from '$lib/components/ui/aspect-ratio';
 
-	export let	imageUrl: string = '';
-	export let	link: string = '';
-	export let	title: string = '';
-	export let	brief: string = '';
-
+	export let imageUrl: string = '';
+	export let link: string = '';
+	export let title: string = '';
+	export let brief: string = '';
 </script>
 
 <a href={link} target="_blank" rel="noopener noreferrer" class="block">
