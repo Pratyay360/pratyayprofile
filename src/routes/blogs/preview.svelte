@@ -2,36 +2,6 @@
 	import { onMount } from 'svelte';
 	import BlogCard from '$lib/components/normaluicomponents/blogCard.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
-	
-
-	type PostNode = {
-		url: string;
-		coverImage: { url: string } | null;
-		title: string;
-		brief: string;
-	};
-
-	let posts: PostNode[] = [];
-	let loading = true;
-
-	onMount(async () => {
-		const query = `
-		
-
-		try {
-			const response = await fetch(ENDPOINT, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ query })
-			});
-			const result = await response.json();
-			posts = result.data?.publication?.posts?.edges.map((e: { node: PostNode }) => e.node) ?? [];
-		} catch (e) {
-			console.error(e);
-		} finally {
-			loading = false;
-		}
-	});
 </script>
 
 <section class="container mx-auto px-6 py-12">

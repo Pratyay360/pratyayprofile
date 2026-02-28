@@ -38,4 +38,4 @@
 			<p class="text-muted-foreground text-center text-sm">No messages yet.</p>
 		{/if}
 	</div>
-</section>      
+</section>

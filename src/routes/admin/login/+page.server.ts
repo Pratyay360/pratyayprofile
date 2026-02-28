@@ -8,8 +8,5 @@ export const actions = {
 		const otp = data.get('otp');
 		const req = await pb.collection('users').requestOTP(email);
 	},
-    otpverify: async({}) => {
-        
-    }
-
+	otpverify: async ({}) => {}
 };

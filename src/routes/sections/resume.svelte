@@ -29,7 +29,7 @@
 				<span class="relative rounded-md bg-white px-5 py-2.5 transition-all dark:bg-gray-900">
 					Show Resume
 				</span>
-			</button>	
+			</button>
 		</a>
 	</div>
 </section>

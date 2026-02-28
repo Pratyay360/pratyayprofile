@@ -27,7 +27,6 @@
 				.filter(Boolean)
 		};
 
-		
 		resetSkillForm();
 	}
 
@@ -35,9 +34,7 @@
 		skillEditingIndex = index;
 	}
 
-	function removeSkill(index: number): void {
-	
-	}
+	function removeSkill(index: number): void {}
 </script>
 
 <div class="mt-6 grid gap-6 lg:grid-cols-2">
