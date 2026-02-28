@@ -18,7 +18,7 @@
 			return;
 		}
 
-		const next = [...$socialLinksStore];
+		const next = [...$socialLinks];
 		if (socialEditingIndex === null) {
 			next.push({ ...socialForm });
 			setStatus('Social link added.');
@@ -31,13 +31,13 @@
 	}
 
 	function editSocial(index: number): void {
-		socialForm = { ...$socialLinksStore[index] };
+		socialForm = { ...$socialLinks[index] };
 		socialEditingIndex = index;
 		setStatus('Editing social link.');
 	}
 
 	function removeSocial(index: number): void {
-		setSocialLinks($socialLinksStore.filter((_, i) => i !== index));
+		setSocialLinks($socialLinks.filter((_, i) => i !== index));
 		if (socialEditingIndex === index) {
 			resetSocialForm();
 		}
@@ -79,7 +79,7 @@
 
 	<div class="space-y-2 rounded border p-4">
 		<h2 class="text-lg font-medium">Current Social Links</h2>
-		{#each $socialLinksStore as item, index (item.name + index)}
+		{#each $socialLinks as item, index (item.name + index)}
 			<div class="rounded border p-3">
 				<p class="font-medium">{item.name}</p>
 				<p class="text-muted-foreground text-sm">{item.link}</p>

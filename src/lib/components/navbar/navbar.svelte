@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { page } from '$app/s';
 	import { cn } from '$lib/utils';
 	import {
 		NavigationMenuRoot as NavigationMenu,

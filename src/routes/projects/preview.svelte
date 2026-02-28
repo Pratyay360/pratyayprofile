@@ -17,7 +17,7 @@
 	{/if}
 
 	<div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-		{#each $projectsStore.slice(0, 3) as project (project.title)}
+		{#each $projects.slice(0, 3) as project (project.title)}
 			<ProjectCard
 				imageUrl={project.imageUrl}
 				title={project.title}
@@ -27,14 +27,14 @@
 		{/each}
 	</div>
 
-	{#if $projectsStore.length > 3}
+	{#if $projects.length > 3}
 		<div class="mt-8 text-center">
 			<a href="/projects">
 				<button class="button-30">See More</button>
 			</a>
 		</div>
 	{/if}
-	{#if $projectsStore.length === 0 && !loading}
+	{#if $projects.length === 0 && !loading}
 		<p class="text-muted-foreground mt-8 text-center text-sm">
 			Add your projects to display them here.
 		</p>

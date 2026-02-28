@@ -17,7 +17,7 @@
 
 	<section class="mx-auto mt-12 max-w-6xl">
 		<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-			{#each $certificatesStore as cert (cert.title)}
+			{#each $certificates as cert (cert.title)}
 				<CertificateCard
 					link={cert.link}
 					imageSrc={cert.imageSrc}
@@ -27,7 +27,7 @@
 				/>
 			{/each}
 		</div>
-		{#if $certificatesStore.length === 0 && !loading}
+		{#if $certificates.length === 0 && !loading}
 			<p class="text-muted-foreground mt-8 text-center text-sm">
 				Add your certificates to display them here.
 			</p>

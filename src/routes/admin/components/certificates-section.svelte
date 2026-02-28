@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { setStatus } from '../admin-store';
+	import { setStatus } from '../admin-';
 
 	let certificateForm: Certificate = {
 		title: '',
@@ -23,7 +23,7 @@
 			return;
 		}
 
-		const next = [...$certificatesStore];
+		const next = [...$certificates];
 		if (certificateEditingIndex === null) {
 			next.push({ ...certificateForm });
 			setStatus('Certificate added.');
@@ -36,13 +36,13 @@
 	}
 
 	function editCertificate(index: number): void {
-		certificateForm = { ...$certificatesStore[index] };
+		certificateForm = { ...$certificates[index] };
 		certificateEditingIndex = index;
 		setStatus('Editing certificate.');
 	}
 
 	function removeCertificate(index: number): void {
-		setCertificates($certificatesStore.filter((_, i) => i !== index));
+		setCertificates($certificates.filter((_, i) => i !== index));
 		if (certificateEditingIndex === index) {
 			resetCertificateForm();
 		}
@@ -96,7 +96,7 @@
 
 	<div class="space-y-2 rounded border p-4">
 		<h2 class="text-lg font-medium">Current Certificates</h2>
-		{#each $certificatesStore as item, index (item.title + index)}
+		{#each $certificates as item, index (item.title + index)}
 			<div class="rounded border p-3">
 				<p class="font-medium">{item.title}</p>
 				<p class="text-muted-foreground text-sm">{item.date}</p>

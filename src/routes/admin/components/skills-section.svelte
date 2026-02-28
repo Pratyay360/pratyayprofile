@@ -67,7 +67,7 @@
 
 	<div class="space-y-2 rounded border p-4">
 		<h2 class="text-lg font-medium">Current Skill Categories</h2>
-		{#each $skillsStore as item, index (item.category + index)}
+		{#each $skills as item, index (item.category + index)}
 			<div class="rounded border p-3">
 				<p class="font-medium">{item.category}</p>
 				<p class="text-muted-foreground text-sm">{item.items.join(', ')}</p>

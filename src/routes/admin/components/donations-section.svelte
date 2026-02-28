@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { setStatus } from '../admin-store';
-
 	let donationForm: Donation = {
 		name: '',
 		image: '',
@@ -16,34 +14,29 @@
 	function saveDonation(event: SubmitEvent): void {
 		event.preventDefault();
 		if (!donationForm.name.trim()) {
-			setStatus('Name is required.');
 			return;
 		}
 
-		const next = [...$donationsStore];
+		const next = [...$donations];
 		if (donationEditingIndex === null) {
 			next.push({ ...donationForm });
-			setStatus('Donation link added.');
 		} else {
 			next[donationEditingIndex] = { ...donationForm };
-			setStatus('Donation link updated.');
 		}
 		setDonations(next);
 		resetDonationForm();
 	}
 
 	function editDonation(index: number): void {
-		donationForm = { ...$donationsStore[index] };
+		donationForm = { ...$donations[index] };
 		donationEditingIndex = index;
-		setStatus('Editing donation link.');
 	}
 
 	function removeDonation(index: number): void {
-		setDonations($donationsStore.filter((_, i) => i !== index));
+		setDonations($donations.filter((_, i) => i !== index));
 		if (donationEditingIndex === index) {
 			resetDonationForm();
 		}
-		setStatus('Donation link removed.');
 	}
 </script>
 
@@ -81,7 +74,7 @@
 
 	<div class="space-y-2 rounded border p-4">
 		<h2 class="text-lg font-medium">Current Donation Links</h2>
-		{#each $donationsStore as item, index (item.name + index)}
+		{#each $donations as item, index (item.name + index)}
 			<div class="rounded border p-3">
 				<p class="font-medium">{item.name}</p>
 				<p class="text-muted-foreground text-sm">{item.link}</p>

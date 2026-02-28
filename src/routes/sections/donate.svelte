@@ -17,12 +17,12 @@
 	{/if}
 
 	<div class="mt-10 flex flex-wrap justify-center gap-6">
-		{#each $donationsStore as donation (donation.name)}
+		{#each $donations as donation (donation.name)}
 			<div class="w-full md:w-1/3">
 				<DonationCard name={donation.name} image={donation.image} link={donation.link} />
 			</div>
 		{/each}
-		{#if $donationsStore.length === 0 && !loading}
+		{#if $donations.length === 0 && !loading}
 			<p class="text-muted-foreground text-sm">Add donation links to display them here.</p>
 		{/if}
 	</div>

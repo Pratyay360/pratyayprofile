@@ -13,9 +13,9 @@
 	let input = '';
 
 	onMount(() => {
-		initContentStore();
-		const stored = localStorage.getItem('pass') ?? '';
-		const isAuthorized = pass !== '' && stored === pass;
+		initContent();
+		const d = localStorage.getItem('pass') ?? '';
+		const isAuthorized = pass !== '' && d === pass;
 		authorized.set(isAuthorized);
 
 		// Redirect to login if not authorized
@@ -46,7 +46,7 @@
 
 	function handleResetData(): void {
 		if (!window.confirm('Reset all admin content to defaults?')) return;
-		resetContentStore();
+		resetContent();
 		setStatus('All content reset to defaults.');
 	}
 </script>

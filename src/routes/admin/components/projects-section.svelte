@@ -22,7 +22,7 @@
 	}
 
 	function editProject(index: number): void {
-		projectForm = { ...$projectsStore[index] };
+		projectForm = { ...$projects[index] };
 		projectEditingIndex = index;
 	}
 
@@ -69,7 +69,7 @@
 
 	<div class="space-y-2 rounded border p-4">
 		<h2 class="text-lg font-medium">Current Projects</h2>
-		{#each $projectsStore as item, index (item.title + index)}
+		{#each $projects as item, index (item.title + index)}
 			<div class="rounded border p-3">
 				<p class="font-medium">{item.title}</p>
 				<p class="text-muted-foreground text-sm">{item.link}</p>

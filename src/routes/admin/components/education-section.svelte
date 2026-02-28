@@ -78,7 +78,7 @@
 
 	<div class="space-y-2 rounded border p-4">
 		<h2 class="text-lg font-medium">Current Education Entries</h2>
-		{#each $educationStore as item, index (item.degree + index)}
+		{#each $education as item}
 			<div class="rounded border p-3">
 				<p class="font-medium">{item.degree}</p>
 				<p class="text-muted-foreground text-sm">{item.institution}</p>

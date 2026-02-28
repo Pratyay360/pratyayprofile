@@ -8,7 +8,7 @@
 
 <main class="bg-background min-h-screen px-4 py-24">
 	<h1 class="text-center text-3xl font-bold tracking-[0.2em] lg:text-5xl">
-		Projects By {$photoStore.name}
+		Projects By {$photo.name}
 	</h1>
 
 	{#if loading}
@@ -19,7 +19,7 @@
 
 	<section class="mx-auto mt-12 max-w-6xl">
 		<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-			{#each $projectsStore as project (project.title)}
+			{#each $projects as project (project.title)}
 				<ProjectCard
 					imageUrl={project.imageUrl}
 					title={project.title}
@@ -28,7 +28,7 @@
 				/>
 			{/each}
 		</div>
-		{#if $projectsStore.length === 0 && !loading}
+		{#if $projects.length === 0 && !loading}
 			<p class="text-muted-foreground mt-8 text-center text-sm">
 				Add your projects to display them here.
 			</p>
