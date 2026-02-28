@@ -12,14 +12,16 @@
 		description: string;
 	}
 
-	const pb = new PocketBase(import.meta.env.VITE_POCKETBASE_URL);
+	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE);
 	let loading = true;
 	let education: EducationRecord[] = [];
 	let failed = false;
 
 	onMount(async () => {
 		try {
-			education = await pb.collection('education').getFullList<EducationRecord>({ sort: '-created' });
+			education = await pb
+				.collection('education')
+				.getFullList<EducationRecord>({ });
 		} catch (e) {
 			console.error(e);
 			failed = true;

@@ -16,7 +16,7 @@
 
 <div class="container mx-auto px-6 py-8">
 	<h1 class="text-2xl font-semibold">Admin Login</h1>
-	<p class="text-muted-foreground mt-2 text-sm">Authenticate with email + OTP (superuser only).</p>
+	<p class="text-muted-foreground mt-2 text-sm">Authenticate with email + OTP (admin only).</p>
 
 	{#if stage === 'request'}
 		<form method="POST" action="?/requestOtp" class="mt-6 max-w-sm space-y-3">

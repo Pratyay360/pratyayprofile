@@ -1,4 +1,6 @@
 <script lang="ts">
+	import PocketBase from 'pocketbase';
+	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE);
 	interface ProfileForm {
 		name: string;
 		title: string;
@@ -6,7 +8,6 @@
 		aboutMe: string;
 		resumeUrl: string;
 	}
-
 	let profileForm: ProfileForm = {
 		name: '',
 		title: '',
@@ -35,7 +36,18 @@
 	</div>
 	<div class="space-y-1">
 		<label for="profile-image" class="text-sm font-medium">Profile Image URL</label>
-		<input id="profile-image" class="w-full rounded border p-2" bind:value={profileForm.imageUrl} />
+		<input
+			class="w-full rounded border p-2"
+			type="file"
+			accept="image/*"	
+			on:change={(e) => {
+				const file = e.target.files?.[0];
+				if (file) {
+					imageSrc = file;
+				}
+			}}	
+			bind:value={profileForm.imageSrc}
+		/>
 	</div>
 	<div class="space-y-1">
 		<label for="profile-about" class="text-sm font-medium">About Me</label>
@@ -48,7 +60,11 @@
 	</div>
 	<div class="space-y-1">
 		<label for="profile-resume" class="text-sm font-medium">Resume Link (Google Drive/etc)</label>
-		<input id="profile-resume" class="w-full rounded border p-2" bind:value={profileForm.resumeUrl} />
+		<input
+			id="profile-resume"
+			class="w-full rounded border p-2"
+			bind:value={profileForm.resumeUrl}
+		/>
 	</div>
 	<button class="bg-primary text-primary-foreground rounded border px-4 py-2" type="submit">
 		Save Profile

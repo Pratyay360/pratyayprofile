@@ -13,7 +13,7 @@
 		link: string;
 	}
 
-	const pb = new PocketBase(import.meta.env.VITE_POCKETBASE_URL);
+	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE);
 	let loading = true;
 	let failed = false;
 	let certificates: CertificateRecord[] = [];
@@ -22,7 +22,7 @@
 		try {
 			certificates = await pb
 				.collection('certificates')
-				.getFullList<CertificateRecord>({ sort: '-created' });
+				.getFullList<CertificateRecord>({ });
 		} catch (e) {
 			console.error(e);
 			failed = true;
@@ -69,6 +69,8 @@
 		</div>
 	{/if}
 	{#if certificates.length === 0 && !loading && !failed}
-		<p class="text-muted-foreground mt-8 text-center text-sm">Add certificates to show them here.</p>
+		<p class="text-muted-foreground mt-8 text-center text-sm">
+			Add certificates to show them here.
+		</p>
 	{/if}
 </section>

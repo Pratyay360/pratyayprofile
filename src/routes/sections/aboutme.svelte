@@ -10,7 +10,7 @@
 		title?: string;
 	}
 
-	const pb = new PocketBase(import.meta.env.VITE_POCKETBASE_URL);
+	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE);
 	let name = 'Pratyay Mustafi';
 	let image = 'https://img.placeholder.com/500*500';
 	let description = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.';
@@ -18,13 +18,17 @@
 
 	onMount(async () => {
 		try {
-			const records = await pb.collection('aboutme').getFullList<AboutMeRecord>({ sort: '-created' });
+			const records = await pb
+				.collection('aboutme')
+				.getFullList<AboutMeRecord>({ });
 			if (records.length > 0) {
 				const first = records[0];
 				name = first.name ?? name;
 				image = first.image ?? image;
 				description = first.description ?? description;
-				titles = records.map((record) => record.title).filter((title): title is string => Boolean(title));
+				titles = records
+					.map((record) => record.title)
+					.filter((title): title is string => Boolean(title));
 			}
 		} catch (error) {
 			console.error(error);

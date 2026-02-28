@@ -55,7 +55,11 @@
 		<h2 class="text-lg font-medium">
 			{educationEditingIndex === null ? 'Add Education' : 'Edit Education'}
 		</h2>
-		<input class="w-full rounded border p-2" placeholder="Degree" bind:value={educationForm.degree} />
+		<input
+			class="w-full rounded border p-2"
+			placeholder="Degree"
+			bind:value={educationForm.degree}
+		/>
 		<input
 			class="w-full rounded border p-2"
 			placeholder="Institution"

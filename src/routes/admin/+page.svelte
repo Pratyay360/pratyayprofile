@@ -28,13 +28,17 @@
 
 	<div class="mt-6 flex flex-wrap gap-2">
 		<button
-			class="rounded border px-3 py-1 {currentSection === 'profile' ? 'bg-primary text-primary-foreground' : ''}"
+			class="rounded border px-3 py-1 {currentSection === 'profile'
+				? 'bg-primary text-primary-foreground'
+				: ''}"
 			onclick={() => setSection('profile')}
 		>
 			Profile
 		</button>
 		<button
-			class="rounded border px-3 py-1 {currentSection === 'projects' ? 'bg-primary text-primary-foreground' : ''}"
+			class="rounded border px-3 py-1 {currentSection === 'projects'
+				? 'bg-primary text-primary-foreground'
+				: ''}"
 			onclick={() => setSection('projects')}
 		>
 			Projects
@@ -48,25 +52,33 @@
 			Certificates
 		</button>
 		<button
-			class="rounded border px-3 py-1 {currentSection === 'skills' ? 'bg-primary text-primary-foreground' : ''}"
+			class="rounded border px-3 py-1 {currentSection === 'skills'
+				? 'bg-primary text-primary-foreground'
+				: ''}"
 			onclick={() => setSection('skills')}
 		>
 			Skills
 		</button>
 		<button
-			class="rounded border px-3 py-1 {currentSection === 'education' ? 'bg-primary text-primary-foreground' : ''}"
+			class="rounded border px-3 py-1 {currentSection === 'education'
+				? 'bg-primary text-primary-foreground'
+				: ''}"
 			onclick={() => setSection('education')}
 		>
 			Education
 		</button>
 		<button
-			class="rounded border px-3 py-1 {currentSection === 'socials' ? 'bg-primary text-primary-foreground' : ''}"
+			class="rounded border px-3 py-1 {currentSection === 'socials'
+				? 'bg-primary text-primary-foreground'
+				: ''}"
 			onclick={() => setSection('socials')}
 		>
 			Socials
 		</button>
 		<button
-			class="rounded border px-3 py-1 {currentSection === 'donations' ? 'bg-primary text-primary-foreground' : ''}"
+			class="rounded border px-3 py-1 {currentSection === 'donations'
+				? 'bg-primary text-primary-foreground'
+				: ''}"
 			onclick={() => setSection('donations')}
 		>
 			Donations

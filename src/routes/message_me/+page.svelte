@@ -10,6 +10,10 @@
 		CardHeader,
 		CardTitle
 	} from '$lib/components/ui/card';
+	import PocketBase from 'pocketbase';
+
+	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE!);
+	
 
 	let name = '';
 	let email = '';
@@ -17,20 +21,19 @@
 	let loading = false;
 
 	async function handleSubmit(): Promise<void> {
-		if (loading) return;
-		loading = true;
-		try {
-			// Replace with a real endpoint when available.
-			await new Promise((resolve) => setTimeout(resolve, 600));
-			toast.success('Message sent!');
+		const data = {
+			name,
+			email,
+			message
+		};
+		const record = await pb.collection('messages').create(data);
+		if(record){
+			toast.success('Message sent successfully');
 			name = '';
 			email = '';
 			message = '';
-		} catch (e) {
-			console.error(e);
-			toast.error('Failed to send message.');
-		} finally {
-			loading = false;
+		}else{
+			toast.error('Failed to send message');
 		}
 	}
 </script>

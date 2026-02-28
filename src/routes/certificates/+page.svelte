@@ -13,7 +13,7 @@
 		link: string;
 	}
 
-	const pb = new PocketBase(import.meta.env.VITE_POCKETBASE_URL);
+	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE);
 	let loading = true;
 	let certificates: CertificateRecord[] = [];
 
@@ -21,7 +21,7 @@
 		try {
 			certificates = await pb
 				.collection('certificates')
-				.getFullList<CertificateRecord>({ sort: '-created' });
+				.getFullList<CertificateRecord>({ });
 		} catch (error) {
 			console.error(error);
 		} finally {

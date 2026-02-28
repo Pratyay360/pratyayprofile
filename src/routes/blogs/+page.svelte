@@ -17,7 +17,7 @@
 		name?: string;
 	}
 
-	const pb = new PocketBase(import.meta.env.VITE_POCKETBASE_URL);
+	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE);
 	let posts: BlogRecord[] = [];
 	let failed = false;
 	let loading = true;
@@ -26,7 +26,7 @@
 	onMount(async () => {
 		try {
 			const [postResult, profileResult] = await Promise.all([
-				pb.collection('posts').getFullList<BlogRecord>({ sort: '-created' }),
+				pb.collection('posts').getFullList<BlogRecord>({}),
 				pb.collection('aboutme').getFirstListItem<ProfileRecord>('')
 			]);
 			posts = postResult;
@@ -41,7 +41,9 @@
 </script>
 
 <main class="bg-background min-h-screen px-4 py-24">
-	<h1 class="mb-16 text-center text-4xl font-bold tracking-wider md:text-5xl">Blogs by {profileName}</h1>
+	<h1 class="mb-16 text-center text-4xl font-bold tracking-wider md:text-5xl">
+		Blogs by {profileName}
+	</h1>
 
 	{#if failed}
 		<div class="text-destructive text-center">

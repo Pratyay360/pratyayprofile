@@ -17,15 +17,15 @@
 		name?: string;
 	}
 
-	const pb = new PocketBase(import.meta.env.VITE_POCKETBASE_URL);
+	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE);
 	let loading = true;
 	let projects: ProjectRecord[] = [];
 	let profileName = 'Pratyay';
 
 	onMount(async () => {
-		try {
+		try {	
 			const [projectsResult, profileResult] = await Promise.all([
-				pb.collection('projects').getFullList<ProjectRecord>({ sort: '-created' }),
+				pb.collection('projects').getFullList<ProjectRecord>({}),
 				pb.collection('aboutme').getFirstListItem<ProfileRecord>('')
 			]);
 			projects = projectsResult;
@@ -39,7 +39,9 @@
 </script>
 
 <main class="bg-background min-h-screen px-4 py-24">
-	<h1 class="text-center text-3xl font-bold tracking-[0.2em] lg:text-5xl">Projects By {profileName}</h1>
+	<h1 class="text-center text-3xl font-bold tracking-[0.2em] lg:text-5xl">
+		Projects By {profileName}
+	</h1>
 
 	{#if loading}
 		<div class="mt-10">

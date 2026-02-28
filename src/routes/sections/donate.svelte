@@ -11,14 +11,16 @@
 		link: string;
 	}
 
-	const pb = new PocketBase(import.meta.env.VITE_POCKETBASE_URL);
+	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE);
 
 	let loading = true;
 	let donations: DonationRecord[] = [];
 
 	onMount(async () => {
 		try {
-			donations = await pb.collection('donations').getFullList<DonationRecord>({ sort: '-created' });
+			donations = await pb
+				.collection('donations')
+				.getFullList<DonationRecord>({ });
 		} catch (error) {
 			console.error(error);
 		} finally {

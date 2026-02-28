@@ -1,14 +1,15 @@
 <script lang="ts">
+	import PocketBase from 'pocketbase';
+	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE);
 	interface Project {
-		imageUrl: string;
+		imageUrl: object;
 		title: string;
 		brief: string;
 		link: string;
 	}
-
 	let projects: Project[] = [];
 	let projectForm: Project = {
-		imageUrl: '',
+		imageUrl: {},
 		title: '',
 		brief: '',
 		link: ''

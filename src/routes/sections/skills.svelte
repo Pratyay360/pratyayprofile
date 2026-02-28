@@ -9,7 +9,7 @@
 		items: string[];
 	}
 
-	const pb = new PocketBase(import.meta.env.VITE_POCKETBASE_URL);
+	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE);
 
 	let loading = true;
 	let skills: SkillRecord[] = [];
@@ -17,7 +17,7 @@
 
 	onMount(async () => {
 		try {
-			skills = await pb.collection('skills').getFullList<SkillRecord>({ sort: '-created' });
+			skills = await pb.collection('skills').getFullList<SkillRecord>({ });
 		} catch (error) {
 			console.error(error);
 			failed = true;

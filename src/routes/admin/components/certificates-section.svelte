@@ -1,14 +1,17 @@
 <script lang="ts">
+	import PocketBase from 'pocketbase';
+	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE);
 	interface Certificate {
 		title: string;
 		description: string;
 		date: string;
-		imageSrc: string;
+		imageSrc: object;
 		link: string;
 		issuer: string;
 	}
 
-	let certificates: Certificate[] = [];
+	const fileInput = document.getElementById('fileInput');
+	let certificates: Certificate[]  = pb.collection('certificate').getFullList();
 	let certificateForm: Certificate = {
 		title: '',
 		description: '',
@@ -20,7 +23,7 @@
 	let certificateEditingIndex: number | null = null;
 
 	function resetCertificateForm(): void {
-		certificateForm = { title: '', description: '', date: '', imageSrc: '', link: '', issuer: '' };
+		certificateForm = { title: '', description: '', date: '', link: '', issuer: '' };
 		certificateEditingIndex = null;
 	}
 
@@ -32,9 +35,11 @@
 
 		if (certificateEditingIndex === null) {
 			certificates = [...certificates, { ...certificateForm }];
+			pb.collection('certificate').create(certificateForm);
 		} else {
 			certificates[certificateEditingIndex] = { ...certificateForm };
 			certificates = [...certificates];
+			pb.collection('certificate').update(certificateForm.id, certificateForm);
 		}
 		resetCertificateForm();
 	}
@@ -70,8 +75,14 @@
 		<input class="w-full rounded border p-2" placeholder="Date" bind:value={certificateForm.date} />
 		<input
 			class="w-full rounded border p-2"
-			placeholder="Image URL"
-			bind:value={certificateForm.imageSrc}
+			type="file"
+			accept="image/*"	
+			on:change={(e) => {
+				const file = e.target.files?.[0];
+				if (file) {
+					imageSrc = file;
+				}
+			}}
 		/>
 		<input
 			class="w-full rounded border p-2"

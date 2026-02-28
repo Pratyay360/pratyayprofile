@@ -1,10 +1,12 @@
 <script lang="ts">
+	import PocketBase from 'pocketbase';
+	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE);
 	interface Donation {
 		name: string;
 		image: string;
 		link: string;
 	}
-
+	const fileInput = document.getElementById('fileInput');
 	let donations: Donation[] = [];
 	let donationForm: Donation = {
 		name: '',
@@ -58,7 +60,14 @@
 		/>
 		<input
 			class="w-full rounded border p-2"
-			placeholder="Icon/Image URL"
+			type="file"
+			accept="image/*"	
+			on:change={(e) => {
+				const file = e.target.files?.[0];
+				if (file) {
+					imageSrc = file;
+				}
+			}}	
 			bind:value={donationForm.image}
 		/>
 		<input

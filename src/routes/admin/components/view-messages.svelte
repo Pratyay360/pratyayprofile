@@ -11,7 +11,7 @@
 		created?: string;
 	}
 
-	const pb = new PocketBase(import.meta.env.VITE_POCKETBASE_URL);
+	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE);
 
 	let loading = true;
 	let messages: MessageRecord[] = [];
@@ -19,7 +19,7 @@
 
 	onMount(async () => {
 		try {
-			messages = await pb.collection('messages').getFullList<MessageRecord>({ sort: '-created' });
+			messages = await pb.collection('messages').getFullList<MessageRecord>({});
 		} catch (e) {
 			console.error(e);
 			failed = true;

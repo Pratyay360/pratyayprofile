@@ -1,4 +1,6 @@
 <script lang="ts">
+	import PocketBase from 'pocketbase';
+	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE);	
 	interface SkillCategory {
 		category: string;
 		items: string[];
@@ -60,7 +62,11 @@
 		<h2 class="text-lg font-medium">
 			{skillEditingIndex === null ? 'Add Skill Category' : 'Edit Skill Category'}
 		</h2>
-		<input class="w-full rounded border p-2" placeholder="Category" bind:value={skillForm.category} />
+		<input
+			class="w-full rounded border p-2"
+			placeholder="Category"
+			bind:value={skillForm.category}
+		/>
 		<textarea
 			class="w-full rounded border p-2"
 			placeholder="Items (comma separated)"

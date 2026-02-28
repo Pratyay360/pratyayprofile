@@ -12,13 +12,13 @@
 		link: string;
 	}
 
-	const pb = new PocketBase(import.meta.env.VITE_POCKETBASE_URL);
+	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE);
 	let loading = true;
 	let projects: ProjectRecord[] = [];
 
 	onMount(async () => {
 		try {
-			projects = await pb.collection('projects').getFullList<ProjectRecord>({ sort: '-created' });
+			projects = await pb.collection('projects').getFullList<ProjectRecord>({ });
 		} catch (error) {
 			console.error(error);
 		} finally {

@@ -11,7 +11,7 @@
 		link: string;
 	}
 
-	const pb = new PocketBase(import.meta.env.VITE_POCKETBASE_URL);
+	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE);
 	let social: SocialRecord[] = [];
 	let loading = false;
 	let failed = false;
@@ -19,7 +19,7 @@
 	async function loadSocial() {
 		loading = true;
 		try {
-			social = await pb.collection('social').getFullList<SocialRecord>({ sort: '-created' });
+			social = await pb.collection('social').getFullList<SocialRecord>({  });
 		} catch (error) {
 			console.error(error);
 			failed = true;

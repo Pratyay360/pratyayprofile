@@ -12,13 +12,13 @@
 		coverImage?: { url?: string };
 	}
 
-	const pb = new PocketBase(import.meta.env.VITE_POCKETBASE_URL);
+	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE);
 	let posts: BlogRecord[] = [];
 	let loading = true;
 
 	onMount(async () => {
 		try {
-			posts = await pb.collection('posts').getFullList<BlogRecord>({ sort: '-created' });
+			posts = await pb.collection('posts').getFullList<BlogRecord>({ });
 		} catch (error) {
 			console.error(error);
 		} finally {
