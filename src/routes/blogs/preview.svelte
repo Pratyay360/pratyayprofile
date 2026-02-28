@@ -2,6 +2,29 @@
 	import { onMount } from 'svelte';
 	import BlogCard from '$lib/components/normaluicomponents/blogCard.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
+	import PocketBase from 'pocketbase';
+
+	interface BlogRecord {
+		id: string;
+		url: string;
+		title: string;
+		brief: string;
+		coverImage?: { url?: string };
+	}
+
+	const pb = new PocketBase(import.meta.env.VITE_POCKETBASE_URL);
+	let posts: BlogRecord[] = [];
+	let loading = true;
+
+	onMount(async () => {
+		try {
+			posts = await pb.collection('posts').getFullList<BlogRecord>({ sort: '-created' });
+		} catch (error) {
+			console.error(error);
+		} finally {
+			loading = false;
+		}
+	});
 </script>
 
 <section class="container mx-auto px-6 py-12">
@@ -14,7 +37,7 @@
 	{/if}
 
 	<div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-		{#each posts.slice(0, 3) as post (post.url)}
+		{#each posts.slice(0, 3) as post (post.id)}
 			<BlogCard
 				link={post.url}
 				imageUrl={post.coverImage?.url ?? ''}

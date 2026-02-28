@@ -1,3 +1,9 @@
-import PocketBase from 'pocketbase';
+import { redirect } from '@sveltejs/kit';
+import { clearAuthCookie } from '$lib/server/admin-auth';
 
-const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE!);
+export const actions = {
+	logout: async ({ cookies }) => {
+		clearAuthCookie(cookies);
+		throw redirect(303, '/admin/login');
+	}
+};

@@ -1,4 +1,11 @@
 <script lang="ts">
+	interface SocialLink {
+		name: string;
+		image: string;
+		link: string;
+	}
+
+	let socialLinks: SocialLink[] = [];
 	let socialForm: SocialLink = {
 		name: '',
 		image: '',
@@ -14,34 +21,28 @@
 	function saveSocial(event: SubmitEvent): void {
 		event.preventDefault();
 		if (!socialForm.name.trim()) {
-			setStatus('Name is required.');
 			return;
 		}
 
-		const next = [...$socialLinks];
 		if (socialEditingIndex === null) {
-			next.push({ ...socialForm });
-			setStatus('Social link added.');
+			socialLinks = [...socialLinks, { ...socialForm }];
 		} else {
-			next[socialEditingIndex] = { ...socialForm };
-			setStatus('Social link updated.');
+			socialLinks[socialEditingIndex] = { ...socialForm };
+			socialLinks = [...socialLinks];
 		}
-		setSocialLinks(next);
 		resetSocialForm();
 	}
 
 	function editSocial(index: number): void {
-		socialForm = { ...$socialLinks[index] };
+		socialForm = { ...socialLinks[index] };
 		socialEditingIndex = index;
-		setStatus('Editing social link.');
 	}
 
 	function removeSocial(index: number): void {
-		setSocialLinks($socialLinks.filter((_, i) => i !== index));
+		socialLinks = socialLinks.filter((_, i) => i !== index);
 		if (socialEditingIndex === index) {
 			resetSocialForm();
 		}
-		setStatus('Social link removed.');
 	}
 </script>
 
@@ -79,7 +80,7 @@
 
 	<div class="space-y-2 rounded border p-4">
 		<h2 class="text-lg font-medium">Current Social Links</h2>
-		{#each $socialLinks as item, index (item.name + index)}
+		{#each socialLinks as item, index (item.name + index)}
 			<div class="rounded border p-3">
 				<p class="font-medium">{item.name}</p>
 				<p class="text-muted-foreground text-sm">{item.link}</p>

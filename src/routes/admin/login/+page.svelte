@@ -1,40 +1,63 @@
 <script lang="ts">
-	import Dialog from '@/lib/components/ui/dialog';
-	import PocketBase from 'pocketbase';
-	const pb = new PocketBase(import.meta.env.VITE_POCKETBASE_URL);
-	let otpModal = false;
-	let email = '';
-	const reqotp = () => {
-		const req = pb.collection('users').requestOTP(email);
-		otpModal = true;
+	type LoginFormState = {
+		stage?: 'request' | 'otp';
+		email?: string;
+		otpId?: string;
+		message?: string;
+		error?: string;
 	};
+
+	let { form } = $props<{ form?: LoginFormState }>();
+
+	const stage = $derived(form?.stage ?? 'request');
+	const email = $derived(form?.email ?? '');
+	const otpId = $derived(form?.otpId ?? '');
 </script>
 
 <div class="container mx-auto px-6 py-8">
 	<h1 class="text-2xl font-semibold">Admin Login</h1>
-	<form class="mt-6 max-w-sm space-y-3">
-		<label for="email" class="block text-sm font-medium">Email</label>
-		<input
-			id="email"
-			type="email"
-			class="w-full rounded border p-2 text-black"
-			bind:value={email}
-			required
-		/>
-		<button class="rounded-md border px-4 py-2" onclick={reqotp}>Request Otp</button>
-	</form>
-	{#if otpModal}
-		<Dialog.Root>
-			<Dialog.Trigger>Open</Dialog.Trigger>
-			<Dialog.Content>
-				<Dialog.Header>
-					<Dialog.Title>Are you sure absolutely sure?</Dialog.Title>
-					<Dialog.Description>
-						This action cannot be undone. This will permanently delete your account and remove your
-						data from our servers.
-					</Dialog.Description>
-				</Dialog.Header>
-			</Dialog.Content>
-		</Dialog.Root>
+	<p class="text-muted-foreground mt-2 text-sm">Authenticate with email + OTP (superuser only).</p>
+
+	{#if stage === 'request'}
+		<form method="POST" action="?/requestOtp" class="mt-6 max-w-sm space-y-3">
+			<label for="email" class="block text-sm font-medium">Email</label>
+			<input
+				id="email"
+				name="email"
+				type="email"
+				class="w-full rounded border p-2"
+				value={email}
+				required
+			/>
+			<button class="rounded-md border px-4 py-2" type="submit">Request OTP</button>
+		</form>
+	{:else}
+		<form method="POST" action="?/verifyOtp" class="mt-6 max-w-sm space-y-3">
+			<input type="hidden" name="email" value={email} />
+			<input type="hidden" name="otpId" value={otpId} />
+
+			<div>
+				<p class="block text-sm font-medium">Email</p>
+				<p class="text-muted-foreground mt-1 text-sm">{email}</p>
+			</div>
+
+			<label for="otp" class="block text-sm font-medium">OTP</label>
+			<input
+				id="otp"
+				name="otp"
+				type="text"
+				class="w-full rounded border p-2"
+				autocomplete="one-time-code"
+				required
+			/>
+			<button class="rounded-md border px-4 py-2" type="submit">Verify OTP</button>
+		</form>
+	{/if}
+
+	{#if form?.message}
+		<p class="mt-4 text-sm text-green-700 dark:text-green-400">{form.message}</p>
+	{/if}
+	{#if form?.error}
+		<p class="mt-4 text-sm text-red-700 dark:text-red-400">{form.error}</p>
 	{/if}
 </div>

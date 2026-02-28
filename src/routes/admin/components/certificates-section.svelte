@@ -1,6 +1,14 @@
 <script lang="ts">
-	import { setStatus } from '../admin-';
+	interface Certificate {
+		title: string;
+		description: string;
+		date: string;
+		imageSrc: string;
+		link: string;
+		issuer: string;
+	}
 
+	let certificates: Certificate[] = [];
 	let certificateForm: Certificate = {
 		title: '',
 		description: '',
@@ -19,34 +27,28 @@
 	function saveCertificate(event: SubmitEvent): void {
 		event.preventDefault();
 		if (!certificateForm.title.trim()) {
-			setStatus('Certificate title is required.');
 			return;
 		}
 
-		const next = [...$certificates];
 		if (certificateEditingIndex === null) {
-			next.push({ ...certificateForm });
-			setStatus('Certificate added.');
+			certificates = [...certificates, { ...certificateForm }];
 		} else {
-			next[certificateEditingIndex] = { ...certificateForm };
-			setStatus('Certificate updated.');
+			certificates[certificateEditingIndex] = { ...certificateForm };
+			certificates = [...certificates];
 		}
-		setCertificates(next);
 		resetCertificateForm();
 	}
 
 	function editCertificate(index: number): void {
-		certificateForm = { ...$certificates[index] };
+		certificateForm = { ...certificates[index] };
 		certificateEditingIndex = index;
-		setStatus('Editing certificate.');
 	}
 
 	function removeCertificate(index: number): void {
-		setCertificates($certificates.filter((_, i) => i !== index));
+		certificates = certificates.filter((_, i) => i !== index);
 		if (certificateEditingIndex === index) {
 			resetCertificateForm();
 		}
-		setStatus('Certificate removed.');
 	}
 </script>
 
@@ -96,7 +98,7 @@
 
 	<div class="space-y-2 rounded border p-4">
 		<h2 class="text-lg font-medium">Current Certificates</h2>
-		{#each $certificates as item, index (item.title + index)}
+		{#each certificates as item, index (item.title + index)}
 			<div class="rounded border p-3">
 				<p class="font-medium">{item.title}</p>
 				<p class="text-muted-foreground text-sm">{item.date}</p>

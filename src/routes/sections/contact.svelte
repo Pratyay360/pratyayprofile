@@ -1,19 +1,30 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import ImageCard from '$lib/components/normaluicomponents/imageCard.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import PocketBase from 'pocketbase';
+
+	interface SocialRecord {
+		id: string;
+		name: string;
+		image: string;
+		link: string;
+	}
+
 	const pb = new PocketBase(import.meta.env.VITE_POCKETBASE_URL);
-	let social = $state<PostNode[]>([]);
-	let loading = $state(false);
-	let failed = $state(false);
+	let social: SocialRecord[] = [];
+	let loading = false;
+	let failed = false;
 
 	async function loadSocial() {
-		loading.set(true);
+		loading = true;
 		try {
-			social.set(await pb.records('social').getFullList());
+			social = await pb.collection('social').getFullList<SocialRecord>({ sort: '-created' });
 		} catch (error) {
-			failed.set(true);
+			console.error(error);
+			failed = true;
 		} finally {
-			loading.set(false);
+			loading = false;
 		}
 	}
 
@@ -38,12 +49,12 @@
 	{/if}
 
 	<div class="mt-10 flex flex-wrap items-center justify-center gap-4">
-		{#each $social as item}
+		{#each social as item (item.id)}
 			<div class="rounded-lg bg-black/5 p-3 dark:bg-white/10">
-				<enhanced:image src={item.image} href={item.link} alt={item.name} />
+				<ImageCard image={item.image} link={item.link} name={item.name} />
 			</div>
 		{/each}
-		{#if $social.length === 0 && !loading}
+		{#if social.length === 0 && !loading}
 			<p class="text-muted-foreground text-sm">Add your social links to show them here.</p>
 		{/if}
 	</div>

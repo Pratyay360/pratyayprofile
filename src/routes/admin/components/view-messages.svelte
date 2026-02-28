@@ -1,16 +1,25 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { Skeleton } from '$lib/components/ui/skeleton';
 	import PocketBase from 'pocketbase';
+
+	interface MessageRecord {
+		id: string;
+		name?: string;
+		email?: string;
+		message?: string;
+		created?: string;
+	}
+
 	const pb = new PocketBase(import.meta.env.VITE_POCKETBASE_URL);
 
-	let loading = $state(false);
-	let messages = $state<PostNode[]>([]);
-	let failed = $state(false);
+	let loading = true;
+	let messages: MessageRecord[] = [];
+	let failed = false;
 
 	onMount(async () => {
 		try {
-			const res = await pb.collection('messages').getFullList({ sort: '-created' });
-			messages = res;
+			messages = await pb.collection('messages').getFullList<MessageRecord>({ sort: '-created' });
 		} catch (e) {
 			console.error(e);
 			failed = true;
@@ -26,15 +35,18 @@
 		{#if loading}
 			<Skeleton class="h-32 w-full" />
 		{/if}
+		{#if failed}
+			<p class="text-destructive text-center text-sm">Unable to load messages.</p>
+		{/if}
 		{#each messages as message (message.id)}
-			<MessageCard
-				name={message.name}
-				email={message.email}
-				message={message.message}
-				created={message.created}
-			/>
+			<article class="rounded border p-4">
+				<p class="font-medium">{message.name ?? 'Unknown'}</p>
+				<p class="text-muted-foreground text-sm">{message.email ?? ''}</p>
+				<p class="mt-3 whitespace-pre-wrap">{message.message ?? ''}</p>
+				<p class="text-muted-foreground mt-2 text-xs">{message.created ?? ''}</p>
+			</article>
 		{/each}
-		{#if messages.length === 0 && !loading}
+		{#if messages.length === 0 && !loading && !failed}
 			<p class="text-muted-foreground text-center text-sm">No messages yet.</p>
 		{/if}
 	</div>

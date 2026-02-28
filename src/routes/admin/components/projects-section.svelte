@@ -1,4 +1,12 @@
 <script lang="ts">
+	interface Project {
+		imageUrl: string;
+		title: string;
+		brief: string;
+		link: string;
+	}
+
+	let projects: Project[] = [];
 	let projectForm: Project = {
 		imageUrl: '',
 		title: '',
@@ -18,15 +26,22 @@
 			return;
 		}
 
+		if (projectEditingIndex === null) {
+			projects = [...projects, { ...projectForm }];
+		} else {
+			projects[projectEditingIndex] = { ...projectForm };
+			projects = [...projects];
+		}
 		resetProjectForm();
 	}
 
 	function editProject(index: number): void {
-		projectForm = { ...$projects[index] };
+		projectForm = { ...projects[index] };
 		projectEditingIndex = index;
 	}
 
 	function removeProject(index: number): void {
+		projects = projects.filter((_, i) => i !== index);
 		if (projectEditingIndex === index) {
 			resetProjectForm();
 		}
@@ -69,7 +84,7 @@
 
 	<div class="space-y-2 rounded border p-4">
 		<h2 class="text-lg font-medium">Current Projects</h2>
-		{#each $projects as item, index (item.title + index)}
+		{#each projects as item, index (item.title + index)}
 			<div class="rounded border p-3">
 				<p class="font-medium">{item.title}</p>
 				<p class="text-muted-foreground text-sm">{item.link}</p>

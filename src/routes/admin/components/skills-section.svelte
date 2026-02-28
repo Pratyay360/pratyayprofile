@@ -1,4 +1,10 @@
 <script lang="ts">
+	interface SkillCategory {
+		category: string;
+		items: string[];
+	}
+
+	let skills: SkillCategory[] = [];
 	let skillForm: SkillCategory = {
 		category: '',
 		items: []
@@ -15,7 +21,6 @@
 	function saveSkill(event: SubmitEvent): void {
 		event.preventDefault();
 		if (!skillForm.category.trim()) {
-			setStatus('Skill category is required.');
 			return;
 		}
 
@@ -27,14 +32,27 @@
 				.filter(Boolean)
 		};
 
+		if (skillEditingIndex === null) {
+			skills = [...skills, payload];
+		} else {
+			skills[skillEditingIndex] = payload;
+			skills = [...skills];
+		}
 		resetSkillForm();
 	}
 
 	function editSkill(index: number): void {
+		skillForm = { ...skills[index] };
+		skillItemsInput = skills[index].items.join(', ');
 		skillEditingIndex = index;
 	}
 
-	function removeSkill(index: number): void {}
+	function removeSkill(index: number): void {
+		skills = skills.filter((_, i) => i !== index);
+		if (skillEditingIndex === index) {
+			resetSkillForm();
+		}
+	}
 </script>
 
 <div class="mt-6 grid gap-6 lg:grid-cols-2">
@@ -42,11 +60,7 @@
 		<h2 class="text-lg font-medium">
 			{skillEditingIndex === null ? 'Add Skill Category' : 'Edit Skill Category'}
 		</h2>
-		<input
-			class="w-full rounded border p-2"
-			placeholder="Category"
-			bind:value={skillForm.category}
-		/>
+		<input class="w-full rounded border p-2" placeholder="Category" bind:value={skillForm.category} />
 		<textarea
 			class="w-full rounded border p-2"
 			placeholder="Items (comma separated)"
@@ -67,7 +81,7 @@
 
 	<div class="space-y-2 rounded border p-4">
 		<h2 class="text-lg font-medium">Current Skill Categories</h2>
-		{#each $skills as item, index (item.category + index)}
+		{#each skills as item, index (item.category + index)}
 			<div class="rounded border p-3">
 				<p class="font-medium">{item.category}</p>
 				<p class="text-muted-foreground text-sm">{item.items.join(', ')}</p>

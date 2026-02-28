@@ -1,4 +1,11 @@
 <script lang="ts">
+	interface Donation {
+		name: string;
+		image: string;
+		link: string;
+	}
+
+	let donations: Donation[] = [];
 	let donationForm: Donation = {
 		name: '',
 		image: '',
@@ -17,23 +24,22 @@
 			return;
 		}
 
-		const next = [...$donations];
 		if (donationEditingIndex === null) {
-			next.push({ ...donationForm });
+			donations = [...donations, { ...donationForm }];
 		} else {
-			next[donationEditingIndex] = { ...donationForm };
+			donations[donationEditingIndex] = { ...donationForm };
+			donations = [...donations];
 		}
-		setDonations(next);
 		resetDonationForm();
 	}
 
 	function editDonation(index: number): void {
-		donationForm = { ...$donations[index] };
+		donationForm = { ...donations[index] };
 		donationEditingIndex = index;
 	}
 
 	function removeDonation(index: number): void {
-		setDonations($donations.filter((_, i) => i !== index));
+		donations = donations.filter((_, i) => i !== index);
 		if (donationEditingIndex === index) {
 			resetDonationForm();
 		}
@@ -74,7 +80,7 @@
 
 	<div class="space-y-2 rounded border p-4">
 		<h2 class="text-lg font-medium">Current Donation Links</h2>
-		{#each $donations as item, index (item.name + index)}
+		{#each donations as item, index (item.name + index)}
 			<div class="rounded border p-3">
 				<p class="font-medium">{item.name}</p>
 				<p class="text-muted-foreground text-sm">{item.link}</p>

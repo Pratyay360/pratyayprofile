@@ -1,11 +1,30 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import PocketBase from 'pocketbase';
+
+	interface SkillRecord {
+		id: string;
+		category: string;
+		items: string[];
+	}
+
 	const pb = new PocketBase(import.meta.env.VITE_POCKETBASE_URL);
 
-	let loading = $state(false);
-	let skills = $state<PostNode[]>([]);
-	let failed = $state(false);
+	let loading = true;
+	let skills: SkillRecord[] = [];
+	let failed = false;
+
+	onMount(async () => {
+		try {
+			skills = await pb.collection('skills').getFullList<SkillRecord>({ sort: '-created' });
+		} catch (error) {
+			console.error(error);
+			failed = true;
+		} finally {
+			loading = false;
+		}
+	});
 </script>
 
 <section class="container mx-auto px-6 py-12">
@@ -25,7 +44,7 @@
 
 	{#if !loading && !failed}
 		<div class="mt-10 space-y-8">
-			{#each skills as category (category.category)}
+			{#each skills as category (category.id)}
 				<div class="border-primary border-l-4 pl-4">
 					<h2 class="mb-3 text-xl font-semibold">{category.category}</h2>
 					<div class="flex flex-wrap gap-2">

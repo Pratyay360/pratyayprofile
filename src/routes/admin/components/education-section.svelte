@@ -1,4 +1,13 @@
 <script lang="ts">
+	interface EducationEntry {
+		degree: string;
+		institution: string;
+		location: string;
+		period: string;
+		description: string;
+	}
+
+	let education: EducationEntry[] = [];
 	let educationForm: EducationEntry = {
 		degree: '',
 		institution: '',
@@ -19,14 +28,22 @@
 			return;
 		}
 
+		if (educationEditingIndex === null) {
+			education = [...education, { ...educationForm }];
+		} else {
+			education[educationEditingIndex] = { ...educationForm };
+			education = [...education];
+		}
 		resetEducationForm();
 	}
 
 	function editEducation(index: number): void {
+		educationForm = { ...education[index] };
 		educationEditingIndex = index;
 	}
 
 	function removeEducation(index: number): void {
+		education = education.filter((_, i) => i !== index);
 		if (educationEditingIndex === index) {
 			resetEducationForm();
 		}
@@ -38,11 +55,7 @@
 		<h2 class="text-lg font-medium">
 			{educationEditingIndex === null ? 'Add Education' : 'Edit Education'}
 		</h2>
-		<input
-			class="w-full rounded border p-2"
-			placeholder="Degree"
-			bind:value={educationForm.degree}
-		/>
+		<input class="w-full rounded border p-2" placeholder="Degree" bind:value={educationForm.degree} />
 		<input
 			class="w-full rounded border p-2"
 			placeholder="Institution"
@@ -78,7 +91,7 @@
 
 	<div class="space-y-2 rounded border p-4">
 		<h2 class="text-lg font-medium">Current Education Entries</h2>
-		{#each $education as item}
+		{#each education as item, index (item.degree + index)}
 			<div class="rounded border p-3">
 				<p class="font-medium">{item.degree}</p>
 				<p class="text-muted-foreground text-sm">{item.institution}</p>

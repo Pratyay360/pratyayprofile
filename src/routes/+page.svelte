@@ -6,6 +6,7 @@
 	import BlogsPreview from './blogs/preview.svelte';
 	import Donate from './sections/donate.svelte';
 	import Contact from './sections/contact.svelte';
+	import Resume from './sections/resume.svelte';
 </script>
 
 <div>
