@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import ImageCard from '$lib/components/normaluicomponents/imageCard.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
-	import PocketBase from 'pocketbase';
+	import PocketBase, { type RecordModel } from 'pocketbase';
 
 	interface SocialRecord {
 		id: string;
@@ -16,10 +16,25 @@
 	let loading = false;
 	let failed = false;
 
+	function toMediaUrl(record: RecordModel, field: string): string {
+		const value = record[field];
+		if (typeof value !== 'string' || !value) return '';
+		if (value.startsWith('http://') || value.startsWith('https://') || value.startsWith('/')) {
+			return value;
+		}
+		return pb.files.getURL(record, value);
+	}
+
 	async function loadSocial() {
 		loading = true;
 		try {
-			social = await pb.collection('social').getFullList<SocialRecord>({  });
+			const records = await pb.collection('social').getFullList<RecordModel>({});
+			social = records.map((record) => ({
+				id: record.id,
+				name: typeof record.name === 'string' ? record.name : '',
+				image: toMediaUrl(record, 'image'),
+				link: typeof record.link === 'string' ? record.link : ''
+			}));
 		} catch (error) {
 			console.error(error);
 			failed = true;

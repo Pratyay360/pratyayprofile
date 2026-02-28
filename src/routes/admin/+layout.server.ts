@@ -34,4 +34,4 @@ export const load = async ({ cookies, url }) => {
   return {
     adminEmail: pb.authStore.record?.email ?? null,
   };
-};  
+};

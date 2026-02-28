@@ -2,7 +2,8 @@ import type { Cookies } from "@sveltejs/kit";
 import { dev } from "$app/environment";
 import PocketBase from "pocketbase";
 
-export const AUTH_COOKIE = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2xsZWN0aW9uSWQiOiJwYmNfMTUxMzcwMjAzNiIsImV4cCI6MTc3MjkxNzI2MiwiaWQiOiJ0ZWR4OW54bHdyNmFieHciLCJyZWZyZXNoYWJsZSI6ZmFsc2UsInR5cGUiOiJhdXRoIn0.wsmNFV8qLzAagXTmct_wAFcTM0XqRym6wnFxTp4cAig";
+export const AUTH_COOKIE =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2xsZWN0aW9uSWQiOiJwYmNfMTUxMzcwMjAzNiIsImV4cCI6MTc3MjkxNzI2MiwiaWQiOiJ0ZWR4OW54bHdyNmFieHciLCJyZWZyZXNoYWJsZSI6ZmFsc2UsInR5cGUiOiJhdXRoIn0.wsmNFV8qLzAagXTmct_wAFcTM0XqRym6wnFxTp4cAig";
 
 function cookieOptions() {
   return {

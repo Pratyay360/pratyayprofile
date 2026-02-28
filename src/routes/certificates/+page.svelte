@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import CertificateCard from '$lib/components/normaluicomponents/certificateCard.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
-	import PocketBase from 'pocketbase';
+	import PocketBase, { type RecordModel } from 'pocketbase';
 
 	interface CertificateRecord {
 		id: string;
@@ -17,11 +17,26 @@
 	let loading = true;
 	let certificates: CertificateRecord[] = [];
 
+	function toMediaUrl(record: RecordModel, field: string): string {
+		const value = record[field];
+		if (typeof value !== 'string' || !value) return '';
+		if (value.startsWith('http://') || value.startsWith('https://') || value.startsWith('/')) {
+			return value;
+		}
+		return pb.files.getURL(record, value);
+	}
+
 	onMount(async () => {
 		try {
-			certificates = await pb
-				.collection('certificates')
-				.getFullList<CertificateRecord>({ });
+			const records = await pb.collection('certificates').getFullList<RecordModel>({});
+			certificates = records.map((record) => ({
+				id: record.id,
+				title: typeof record.title === 'string' ? record.title : '',
+				description: typeof record.description === 'string' ? record.description : '',
+				date: typeof record.date === 'string' ? record.date : '',
+				imageSrc: toMediaUrl(record, 'imageSrc'),
+				link: typeof record.link === 'string' ? record.link : ''
+			}));
 		} catch (error) {
 			console.error(error);
 		} finally {
@@ -52,9 +67,7 @@
 			{/each}
 		</div>
 		{#if certificates.length === 0 && !loading}
-			<p class="text-muted-foreground mt-8 text-center text-sm">
-				Add your certificates to display them here.
-			</p>
+			<p class="text-muted-foreground mt-8 text-center text-sm">Add your certificates to display them here.</p>
 		{/if}
 	</section>
 </main>

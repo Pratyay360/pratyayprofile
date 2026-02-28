@@ -1,105 +1,66 @@
 <script lang="ts">
-	import PocketBase from 'pocketbase';
-	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE);	
 	interface SkillCategory {
-		category: string;
-		items: string[];
+		id: string;
+		category?: string;
+		items?: string[];
 	}
 
-	let skills: SkillCategory[] = [];
-	let skillForm: SkillCategory = {
+	export let skills: SkillCategory[] = [];
+
+	let skillForm: {
+		id: string;
+		category: string;
+		items: string;
+	} = {
+		id: '',
 		category: '',
-		items: []
+		items: ''
 	};
-	let skillItemsInput = '';
-	let skillEditingIndex: number | null = null;
 
 	function resetSkillForm(): void {
-		skillForm = { category: '', items: [] };
-		skillItemsInput = '';
-		skillEditingIndex = null;
+		skillForm = { id: '', category: '', items: '' };
 	}
 
-	function saveSkill(event: SubmitEvent): void {
-		event.preventDefault();
-		if (!skillForm.category.trim()) {
-			return;
-		}
-
-		const payload: SkillCategory = {
-			category: skillForm.category,
-			items: skillItemsInput
-				.split(',')
-				.map((item) => item.trim())
-				.filter(Boolean)
+	function editSkill(skill: SkillCategory): void {
+		skillForm = {
+			id: skill.id,
+			category: skill.category ?? '',
+			items: (skill.items ?? []).join(', ')
 		};
-
-		if (skillEditingIndex === null) {
-			skills = [...skills, payload];
-		} else {
-			skills[skillEditingIndex] = payload;
-			skills = [...skills];
-		}
-		resetSkillForm();
-	}
-
-	function editSkill(index: number): void {
-		skillForm = { ...skills[index] };
-		skillItemsInput = skills[index].items.join(', ');
-		skillEditingIndex = index;
-	}
-
-	function removeSkill(index: number): void {
-		skills = skills.filter((_, i) => i !== index);
-		if (skillEditingIndex === index) {
-			resetSkillForm();
-		}
 	}
 </script>
 
 <div class="mt-6 grid gap-6 lg:grid-cols-2">
-	<form onsubmit={saveSkill} class="space-y-3 rounded border p-4">
-		<h2 class="text-lg font-medium">
-			{skillEditingIndex === null ? 'Add Skill Category' : 'Edit Skill Category'}
-		</h2>
-		<input
-			class="w-full rounded border p-2"
-			placeholder="Category"
-			bind:value={skillForm.category}
-		/>
-		<textarea
-			class="w-full rounded border p-2"
-			placeholder="Items (comma separated)"
-			rows="4"
-			bind:value={skillItemsInput}
-		></textarea>
+	<form method="POST" action="?/saveSkill" class="space-y-3 rounded border p-4">
+		<h2 class="text-lg font-medium">{skillForm.id ? 'Edit Skill Category' : 'Add Skill Category'}</h2>
+		<input type="hidden" name="id" value={skillForm.id} />
+		<input class="w-full rounded border p-2" name="category" placeholder="Category" bind:value={skillForm.category} required />
+		<textarea class="w-full rounded border p-2" name="items" placeholder="Items (comma separated)" rows="4" bind:value={skillForm.items}></textarea>
 		<div class="flex gap-2">
-			<button class="rounded border px-4 py-2" type="submit">
-				{skillEditingIndex === null ? 'Add' : 'Update'}
-			</button>
-			{#if skillEditingIndex !== null}
-				<button class="rounded border px-4 py-2" type="button" onclick={resetSkillForm}>
-					Cancel
-				</button>
+			<button class="rounded border px-4 py-2" type="submit">{skillForm.id ? 'Update' : 'Add'}</button>
+			{#if skillForm.id}
+				<button class="rounded border px-4 py-2" type="button" onclick={resetSkillForm}>Cancel</button>
 			{/if}
 		</div>
 	</form>
 
 	<div class="space-y-2 rounded border p-4">
 		<h2 class="text-lg font-medium">Current Skill Categories</h2>
-		{#each skills as item, index (item.category + index)}
+		{#each skills as item (item.id)}
 			<div class="rounded border p-3">
 				<p class="font-medium">{item.category}</p>
-				<p class="text-muted-foreground text-sm">{item.items.join(', ')}</p>
+				<p class="text-muted-foreground text-sm">{(item.items ?? []).join(', ')}</p>
 				<div class="mt-2 flex gap-2">
-					<button class="rounded border px-3 py-1 text-sm" onclick={() => editSkill(index)}>
-						Edit
-					</button>
-					<button class="rounded border px-3 py-1 text-sm" onclick={() => removeSkill(index)}>
-						Delete
-					</button>
+					<button class="rounded border px-3 py-1 text-sm" type="button" onclick={() => editSkill(item)}>Edit</button>
+					<form method="POST" action="?/deleteSkill">
+						<input type="hidden" name="id" value={item.id} />
+						<button class="rounded border px-3 py-1 text-sm" type="submit">Delete</button>
+					</form>
 				</div>
 			</div>
 		{/each}
+		{#if skills.length === 0}
+			<p class="text-muted-foreground text-sm">No skill categories yet.</p>
+		{/if}
 	</div>
 </div>

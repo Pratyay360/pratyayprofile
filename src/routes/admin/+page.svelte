@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { PageData } from './$types';
 	import ProfileSection from './components/profile-section.svelte';
 	import ProjectsSection from './components/projects-section.svelte';
 	import CertificatesSection from './components/certificates-section.svelte';
@@ -6,6 +7,8 @@
 	import EducationSection from './components/education-section.svelte';
 	import SocialsSection from './components/socials-section.svelte';
 	import DonationsSection from './components/donations-section.svelte';
+
+	export let data: PageData;
 
 	type AdminSection =
 		| 'profile'
@@ -89,18 +92,18 @@
 	</div>
 
 	{#if currentSection === 'profile'}
-		<ProfileSection />
+		<ProfileSection profiles={data.profiles} />
 	{:else if currentSection === 'projects'}
-		<ProjectsSection />
+		<ProjectsSection projects={data.projects} />
 	{:else if currentSection === 'certificates'}
-		<CertificatesSection />
+		<CertificatesSection certificates={data.certificates} />
 	{:else if currentSection === 'skills'}
-		<SkillsSection />
+		<SkillsSection skills={data.skills} />
 	{:else if currentSection === 'education'}
-		<EducationSection />
+		<EducationSection education={data.education} />
 	{:else if currentSection === 'socials'}
-		<SocialsSection />
+		<SocialsSection socials={data.socials} />
 	{:else if currentSection === 'donations'}
-		<DonationsSection />
+		<DonationsSection donations={data.donations} />
 	{/if}
 </div>

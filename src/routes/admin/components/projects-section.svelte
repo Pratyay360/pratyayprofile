@@ -1,103 +1,72 @@
 <script lang="ts">
-	import PocketBase from 'pocketbase';
-	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE);
 	interface Project {
-		imageUrl: object;
+		id: string;
+		title?: string;
+		brief?: string;
+		link?: string;
+	}
+
+	export let projects: Project[] = [];
+
+	let projectForm: {
+		id: string;
 		title: string;
 		brief: string;
 		link: string;
-	}
-	let projects: Project[] = [];
-	let projectForm: Project = {
-		imageUrl: {},
+	} = {
+		id: '',
 		title: '',
 		brief: '',
 		link: ''
 	};
-	let projectEditingIndex: number | null = null;
 
 	function resetProjectForm(): void {
-		projectForm = { imageUrl: '', title: '', brief: '', link: '' };
-		projectEditingIndex = null;
+		projectForm = { id: '', title: '', brief: '', link: '' };
 	}
 
-	function saveProject(event: SubmitEvent): void {
-		event.preventDefault();
-		if (!projectForm.title.trim()) {
-			return;
-		}
-
-		if (projectEditingIndex === null) {
-			projects = [...projects, { ...projectForm }];
-		} else {
-			projects[projectEditingIndex] = { ...projectForm };
-			projects = [...projects];
-		}
-		resetProjectForm();
-	}
-
-	function editProject(index: number): void {
-		projectForm = { ...projects[index] };
-		projectEditingIndex = index;
-	}
-
-	function removeProject(index: number): void {
-		projects = projects.filter((_, i) => i !== index);
-		if (projectEditingIndex === index) {
-			resetProjectForm();
-		}
+	function editProject(project: Project): void {
+		projectForm = {
+			id: project.id,
+			title: project.title ?? '',
+			brief: project.brief ?? '',
+			link: project.link ?? ''
+		};
 	}
 </script>
 
 <div class="mt-6 grid gap-6 lg:grid-cols-2">
-	<form onsubmit={saveProject} class="space-y-3 rounded border p-4">
-		<h2 class="text-lg font-medium">
-			{projectEditingIndex === null ? 'Add Project' : 'Edit Project'}
-		</h2>
-		<input class="w-full rounded border p-2" placeholder="Title" bind:value={projectForm.title} />
-		<input
-			class="w-full rounded border p-2"
-			placeholder="Image URL"
-			bind:value={projectForm.imageUrl}
-		/>
-		<input
-			class="w-full rounded border p-2"
-			placeholder="Project Link"
-			bind:value={projectForm.link}
-		/>
-		<textarea
-			class="w-full rounded border p-2"
-			placeholder="Brief"
-			rows="4"
-			bind:value={projectForm.brief}
-		></textarea>
+	<form method="POST" action="?/saveProject" enctype="multipart/form-data" class="space-y-3 rounded border p-4">
+		<h2 class="text-lg font-medium">{projectForm.id ? 'Edit Project' : 'Add Project'}</h2>
+		<input type="hidden" name="id" value={projectForm.id} />
+		<input class="w-full rounded border p-2" name="title" placeholder="Title" bind:value={projectForm.title} required />
+		<input class="w-full rounded border p-2" name="imageUrl" type="file" accept="image/*" />
+		<input class="w-full rounded border p-2" name="link" placeholder="Project Link" bind:value={projectForm.link} />
+		<textarea class="w-full rounded border p-2" name="brief" placeholder="Brief" rows="4" bind:value={projectForm.brief}></textarea>
 		<div class="flex gap-2">
-			<button class="rounded border px-4 py-2" type="submit">
-				{projectEditingIndex === null ? 'Add' : 'Update'}
-			</button>
-			{#if projectEditingIndex !== null}
-				<button class="rounded border px-4 py-2" type="button" onclick={resetProjectForm}>
-					Cancel
-				</button>
+			<button class="rounded border px-4 py-2" type="submit">{projectForm.id ? 'Update' : 'Add'}</button>
+			{#if projectForm.id}
+				<button class="rounded border px-4 py-2" type="button" onclick={resetProjectForm}>Cancel</button>
 			{/if}
 		</div>
 	</form>
 
 	<div class="space-y-2 rounded border p-4">
 		<h2 class="text-lg font-medium">Current Projects</h2>
-		{#each projects as item, index (item.title + index)}
+		{#each projects as item (item.id)}
 			<div class="rounded border p-3">
 				<p class="font-medium">{item.title}</p>
 				<p class="text-muted-foreground text-sm">{item.link}</p>
 				<div class="mt-2 flex gap-2">
-					<button class="rounded border px-3 py-1 text-sm" onclick={() => editProject(index)}>
-						Edit
-					</button>
-					<button class="rounded border px-3 py-1 text-sm" onclick={() => removeProject(index)}>
-						Delete
-					</button>
+					<button class="rounded border px-3 py-1 text-sm" type="button" onclick={() => editProject(item)}>Edit</button>
+					<form method="POST" action="?/deleteProject">
+						<input type="hidden" name="id" value={item.id} />
+						<button class="rounded border px-3 py-1 text-sm" type="submit">Delete</button>
+					</form>
 				</div>
 			</div>
 		{/each}
+		{#if projects.length === 0}
+			<p class="text-muted-foreground text-sm">No projects yet.</p>
+		{/if}
 	</div>
 </div>

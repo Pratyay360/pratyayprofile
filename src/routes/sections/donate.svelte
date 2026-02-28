@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import DonationCard from '$lib/components/normaluicomponents/donation.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
-	import PocketBase from 'pocketbase';
+	import PocketBase, { type RecordModel } from 'pocketbase';
 
 	interface DonationRecord {
 		id: string;
@@ -16,11 +16,24 @@
 	let loading = true;
 	let donations: DonationRecord[] = [];
 
+	function toMediaUrl(record: RecordModel, field: string): string {
+		const value = record[field];
+		if (typeof value !== 'string' || !value) return '';
+		if (value.startsWith('http://') || value.startsWith('https://') || value.startsWith('/')) {
+			return value;
+		}
+		return pb.files.getURL(record, value);
+	}
+
 	onMount(async () => {
 		try {
-			donations = await pb
-				.collection('donations')
-				.getFullList<DonationRecord>({ });
+			const records = await pb.collection('donations').getFullList<RecordModel>({});
+			donations = records.map((record) => ({
+				id: record.id,
+				name: typeof record.name === 'string' ? record.name : '',
+				image: toMediaUrl(record, 'image'),
+				link: typeof record.link === 'string' ? record.link : ''
+			}));
 		} catch (error) {
 			console.error(error);
 		} finally {

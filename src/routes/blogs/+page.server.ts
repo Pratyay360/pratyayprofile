@@ -4,7 +4,7 @@ const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE!);
 
 export const load = async () => {
   try {
-    const posts = await pb.collection("posts").getFullList({  });
+    const posts = await pb.collection("posts").getFullList({});
     return { posts };
   } catch {
     return { posts: [] };

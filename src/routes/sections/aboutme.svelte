@@ -1,14 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import PocketBase from 'pocketbase';
-
-	interface AboutMeRecord {
-		id: string;
-		name?: string;
-		image?: string;
-		description?: string;
-		title?: string;
-	}
+	import PocketBase, { type RecordModel } from 'pocketbase';
 
 	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE);
 	let name = 'Pratyay Mustafi';
@@ -16,19 +8,26 @@
 	let description = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.';
 	let titles: string[] = [];
 
+	function toMediaUrl(record: RecordModel, field: string): string {
+		const value = record[field];
+		if (typeof value !== 'string' || !value) return '';
+		if (value.startsWith('http://') || value.startsWith('https://') || value.startsWith('/')) {
+			return value;
+		}
+		return pb.files.getURL(record, value);
+	}
+
 	onMount(async () => {
 		try {
-			const records = await pb
-				.collection('aboutme')
-				.getFullList<AboutMeRecord>({ });
+			const records = await pb.collection('aboutme').getFullList<RecordModel>({});
 			if (records.length > 0) {
 				const first = records[0];
-				name = first.name ?? name;
-				image = first.image ?? image;
-				description = first.description ?? description;
+				name = typeof first.name === 'string' ? first.name : name;
+				image = toMediaUrl(first, 'image') || image;
+				description = typeof first.description === 'string' ? first.description : description;
 				titles = records
-					.map((record) => record.title)
-					.filter((title): title is string => Boolean(title));
+					.map((record) => (typeof record.title === 'string' ? record.title : ''))
+					.filter(Boolean);
 			}
 		} catch (error) {
 			console.error(error);
