@@ -55,17 +55,17 @@
 			{donationEditingIndex === null ? 'Add Donation Link' : 'Edit Donation Link'}
 		</h2>
 		<input
-			class="w-full rounded border p-2 "
+			class="w-full rounded border p-2"
 			placeholder="Name (e.g. Buy Me a Coffee)"
 			bind:value={donationForm.name}
 		/>
 		<input
-			class="w-full rounded border p-2 "
+			class="w-full rounded border p-2"
 			placeholder="Icon/Image URL"
 			bind:value={donationForm.image}
 		/>
 		<input
-			class="w-full rounded border p-2 "
+			class="w-full rounded border p-2"
 			placeholder="Donation Link"
 			bind:value={donationForm.link}
 		/>

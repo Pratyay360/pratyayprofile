@@ -2,9 +2,7 @@
 	import { onMount } from 'svelte';
 	import BlogCard from '$lib/components/normaluicomponents/blogCard.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
-	import { hashnodeHostStore } from '$lib/data/content-store';
-
-	const ENDPOINT = 'https://gql.hashnode.com';
+	
 
 	type PostNode = {
 		url: string;
@@ -18,21 +16,7 @@
 
 	onMount(async () => {
 		const query = `
-			query Publication {
-				publication(host: "${$hashnodeHostStore}") {
-					posts(first: 4) {
-						edges {
-							node {
-								coverImage { url }
-								title
-								brief
-								url
-							}
-						}
-					}
-				}
-			}
-		`;
+		
 
 		try {
 			const response = await fetch(ENDPOINT, {

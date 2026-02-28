@@ -1,10 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
-	import { initContentStore, resetContentStore } from '$lib/data/content-store';
-	import { authorized, currentSection, setStatus, setSection } from './admin-store';
-	import { statusMessage } from './admin-store';
-
 	import ProfileSection from './components/profile-section.svelte';
 	import ProjectsSection from './components/projects-section.svelte';
 	import CertificatesSection from './components/certificates-section.svelte';

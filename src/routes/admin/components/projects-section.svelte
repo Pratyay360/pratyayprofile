@@ -55,23 +55,19 @@
 		<h2 class="text-lg font-medium">
 			{projectEditingIndex === null ? 'Add Project' : 'Edit Project'}
 		</h2>
+		<input class="w-full rounded border p-2" placeholder="Title" bind:value={projectForm.title} />
 		<input
-			class="w-full rounded border p-2 "
-			placeholder="Title"
-			bind:value={projectForm.title}
-		/>
-		<input
-			class="w-full rounded border p-2 "
+			class="w-full rounded border p-2"
 			placeholder="Image URL"
 			bind:value={projectForm.imageUrl}
 		/>
 		<input
-			class="w-full rounded border p-2 "
+			class="w-full rounded border p-2"
 			placeholder="Project Link"
 			bind:value={projectForm.link}
 		/>
 		<textarea
-			class="w-full rounded border p-2 "
+			class="w-full rounded border p-2"
 			placeholder="Brief"
 			rows="4"
 			bind:value={projectForm.brief}

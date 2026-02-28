@@ -57,27 +57,27 @@
 			{educationEditingIndex === null ? 'Add Education' : 'Edit Education'}
 		</h2>
 		<input
-			class="w-full rounded border p-2 "
+			class="w-full rounded border p-2"
 			placeholder="Degree"
 			bind:value={educationForm.degree}
 		/>
 		<input
-			class="w-full rounded border p-2 "
+			class="w-full rounded border p-2"
 			placeholder="Institution"
 			bind:value={educationForm.institution}
 		/>
 		<input
-			class="w-full rounded border p-2 "
+			class="w-full rounded border p-2"
 			placeholder="Location"
 			bind:value={educationForm.location}
 		/>
 		<input
-			class="w-full rounded border p-2 "
+			class="w-full rounded border p-2"
 			placeholder="Period (e.g. 2021 - 2023)"
 			bind:value={educationForm.period}
 		/>
 		<textarea
-			class="w-full rounded border p-2 "
+			class="w-full rounded border p-2"
 			placeholder="Description"
 			rows="4"
 			bind:value={educationForm.description}

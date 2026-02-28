@@ -55,17 +55,17 @@
 			{socialEditingIndex === null ? 'Add Social Link' : 'Edit Social Link'}
 		</h2>
 		<input
-			class="w-full rounded border p-2 "
+			class="w-full rounded border p-2"
 			placeholder="Name (e.g. GitHub)"
 			bind:value={socialForm.name}
 		/>
 		<input
-			class="w-full rounded border p-2 "
+			class="w-full rounded border p-2"
 			placeholder="Icon/Image URL"
 			bind:value={socialForm.image}
 		/>
 		<input
-			class="w-full rounded border p-2 "
+			class="w-full rounded border p-2"
 			placeholder="Profile Link"
 			bind:value={socialForm.link}
 		/>

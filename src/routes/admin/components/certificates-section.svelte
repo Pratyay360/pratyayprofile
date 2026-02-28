@@ -58,32 +58,28 @@
 			{certificateEditingIndex === null ? 'Add Certificate' : 'Edit Certificate'}
 		</h2>
 		<input
-			class="w-full rounded border p-2 "
+			class="w-full rounded border p-2"
 			placeholder="Title"
 			bind:value={certificateForm.title}
 		/>
 		<input
-			class="w-full rounded border p-2 "
+			class="w-full rounded border p-2"
 			placeholder="Issuer"
 			bind:value={certificateForm.issuer}
 		/>
+		<input class="w-full rounded border p-2" placeholder="Date" bind:value={certificateForm.date} />
 		<input
-			class="w-full rounded border p-2 "
-			placeholder="Date"
-			bind:value={certificateForm.date}
-		/>
-		<input
-			class="w-full rounded border p-2 "
+			class="w-full rounded border p-2"
 			placeholder="Image URL"
 			bind:value={certificateForm.imageSrc}
 		/>
 		<input
-			class="w-full rounded border p-2 "
+			class="w-full rounded border p-2"
 			placeholder="Certificate Link"
 			bind:value={certificateForm.link}
 		/>
 		<textarea
-			class="w-full rounded border p-2 "
+			class="w-full rounded border p-2"
 			placeholder="Description"
 			rows="4"
 			bind:value={certificateForm.description}
@@ -105,7 +101,7 @@
 		{#each $certificatesStore as item, index (item.title + index)}
 			<div class="rounded border p-3">
 				<p class="font-medium">{item.title}</p>
-				<p class="text-muted-foreground text-sm ">{item.date}</p>
+				<p class="text-muted-foreground text-sm">{item.date}</p>
 				<div class="mt-2 flex gap-2">
 					<button class="rounded border px-3 py-1 text-sm" onclick={() => editCertificate(index)}>
 						Edit

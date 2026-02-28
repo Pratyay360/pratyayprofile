@@ -1,51 +1,38 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { goto } from '$app/navigation';
-	import { authorized, setStatus, statusMessage } from '../admin-store';
-
-	const pass = import.meta.env.VITE_PASS ?? '';
-	let input = '';
-
-	onMount(() => {
-		// Check if already authorized
-		const stored = localStorage.getItem('pass') ?? '';
-		const isAuthorized = pass !== '' && stored === pass;
-		authorized.set(isAuthorized);
-
-		// Redirect to admin dashboard if already authorized
-		if (isAuthorized) {
-			goto('/admin');
-		}
-	});
-
-	function handleSubmit(event: SubmitEvent): void {
-		event.preventDefault();
-		localStorage.setItem('pass', input);
-		const isAuthorized = pass !== '' && input === pass;
-		authorized.set(isAuthorized);
-		setStatus(isAuthorized ? 'Authorized.' : 'Invalid password.');
-
-		if (isAuthorized) {
-			goto('/admin');
-		}
+	let otpModal = false;
+	let email = '';
+	const reqotp = () => {
+		const req = pb.collection('users').requestOTP(email);
+		otpModal = true;
 	}
 </script>
 
 <div class="container mx-auto px-6 py-8">
 	<h1 class="text-2xl font-semibold">Admin Login</h1>
-	<form onsubmit={handleSubmit} class="mt-6 max-w-sm space-y-3">
-		<label for="pass" class="block text-sm font-medium">Password</label>
+	<form class="mt-6 max-w-sm space-y-3">
+		<label for="email" class="block text-sm font-medium">Email</label>
 		<input
-			id="pass"
-			type="password"
+			id="email"
+			type="email"
 			class="w-full rounded border p-2 text-black"
-			bind:value={input}
+			bind:value={email}
 			required
 		/>
-		<button class="rounded-md border px-4 py-2" type="submit">Login</button>
-		<p class="text-muted-foreground text-sm">Login to manage portfolio content.</p>
-		{#if $statusMessage}
-			<p class="text-sm">{$statusMessage}</p>
-		{/if}
+		<button class="rounded-md border px-4 py-2" onclick={reqotp}>Request Otp</button>
+	
 	</form>
+	{#if otpModal}
+	<Dialog.Root>
+ <Dialog.Trigger>Open</Dialog.Trigger>
+ <Dialog.Content>
+  <Dialog.Header>
+   <Dialog.Title>Are you sure absolutely sure?</Dialog.Title>
+   <Dialog.Description>
+    This action cannot be undone. This will permanently delete your account
+    and remove your data from our servers.
+   </Dialog.Description>
+  </Dialog.Header>
+ </Dialog.Content>
+</Dialog.Root>
+	{#fi}
 </div>

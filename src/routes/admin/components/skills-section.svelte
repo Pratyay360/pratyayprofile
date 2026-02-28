@@ -65,12 +65,12 @@
 			{skillEditingIndex === null ? 'Add Skill Category' : 'Edit Skill Category'}
 		</h2>
 		<input
-			class="w-full rounded border p-2 "
+			class="w-full rounded border p-2"
 			placeholder="Category"
 			bind:value={skillForm.category}
 		/>
 		<textarea
-			class="w-full rounded border p-2 "
+			class="w-full rounded border p-2"
 			placeholder="Items (comma separated)"
 			rows="4"
 			bind:value={skillItemsInput}
