@@ -1,8 +1,8 @@
 <script lang="ts">
 	import ProjectCard from '$lib/components/normaluicomponents/projectCard.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
-	import { photoStore, projectsStore } from '$lib/data/content-store';
-
+	import PocketBase from 'pocketbase';
+	const pb = new PocketBase(import.meta.env.VITE_POCKETBASE_URL);
 	let loading = false;
 </script>
 

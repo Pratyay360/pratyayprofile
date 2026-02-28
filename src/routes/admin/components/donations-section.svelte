@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { donationsStore, setDonations } from '$lib/data/content-store';
-	import type { Donation } from '$lib/data/content-types';
 	import { setStatus } from '../admin-store';
 
 	let donationForm: Donation = {

@@ -1,7 +1,8 @@
 <script lang="ts">
 	import ImageCard from '$lib/components/normaluicomponents/imageCard.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
-	import { socialLinksStore } from '$lib/data/content-store';
+	import PocketBase from 'pocketbase';
+	const pb = new PocketBase(import.meta.env.VITE_POCKETBASE_URL);
 
 	let loading = false;
 </script>

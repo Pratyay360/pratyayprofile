@@ -1,8 +1,4 @@
 <script lang="ts">
-	import { setSocialLinks, socialLinksStore } from '$lib/data/content-store';
-	import type { SocialLink } from '$lib/data/content-types';
-	import { setStatus } from '../admin-store';
-
 	let socialForm: SocialLink = {
 		name: '',
 		image: '',

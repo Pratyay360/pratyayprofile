@@ -1,8 +1,8 @@
 <script lang="ts">
 	import CertificateCard from '$lib/components/normaluicomponents/certificateCard.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
-	import { certificatesStore } from '$lib/data/content-store';
-
+	import PocketBase from 'pocketbase';
+	const pb = new PocketBase('https://pratyayprofile.pockethost.io');
 	let loading = false;
 </script>
 

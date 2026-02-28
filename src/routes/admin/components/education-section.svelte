@@ -1,8 +1,4 @@
 <script lang="ts">
-	import { educationStore, setEducation } from '$lib/data/content-store';
-	import type { EducationEntry } from '$lib/data/content-types';
-	import { setStatus } from '../admin-store';
-
 	let educationForm: EducationEntry = {
 		degree: '',
 		institution: '',
@@ -20,34 +16,20 @@
 	function saveEducation(event: SubmitEvent): void {
 		event.preventDefault();
 		if (!educationForm.degree.trim()) {
-			setStatus('Degree is required.');
 			return;
 		}
 
-		const next = [...$educationStore];
-		if (educationEditingIndex === null) {
-			next.push({ ...educationForm });
-			setStatus('Education entry added.');
-		} else {
-			next[educationEditingIndex] = { ...educationForm };
-			setStatus('Education entry updated.');
-		}
-		setEducation(next);
 		resetEducationForm();
 	}
 
 	function editEducation(index: number): void {
-		educationForm = { ...$educationStore[index] };
 		educationEditingIndex = index;
-		setStatus('Editing education entry.');
 	}
 
 	function removeEducation(index: number): void {
-		setEducation($educationStore.filter((_, i) => i !== index));
 		if (educationEditingIndex === index) {
 			resetEducationForm();
 		}
-		setStatus('Education entry removed.');
 	}
 </script>
 

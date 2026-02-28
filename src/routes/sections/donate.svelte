@@ -1,7 +1,8 @@
 <script lang="ts">
 	import DonationCard from '$lib/components/normaluicomponents/donation.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
-	import { donationsStore } from '$lib/data/content-store';
+	import PocketBase from 'pocketbase';
+	const pb = new PocketBase(import.meta.env.VITE_POCKETBASE_URL);
 
 	let loading = false;
 </script>

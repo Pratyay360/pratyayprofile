@@ -1,9 +1,22 @@
 <script lang="ts">
 	import CertificateCard from '$lib/components/normaluicomponents/certificateCard.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
-	import { certificatesStore } from '$lib/data/content-store';
+	import PocketBase from 'pocketbase';
+	const pb = new PocketBase(import.meta.env.VITE_POCKETBASE_URL);
 
 	let loading = false;
+
+	onMount(async () => {
+		try {
+			const res = await pb.collection('certificates').getFullList({ sort: '-created' });
+			certificates = res;
+		} catch (e) {
+			console.error(e);
+			failed = true;
+		} finally {
+			loading = false;
+		}
+	});
 </script>
 
 <section class="container mx-auto px-6 py-12">

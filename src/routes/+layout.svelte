@@ -4,13 +4,9 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import { ModeWatcher } from 'mode-watcher';
 	import Navbar from '$lib/components/navbar/navbar.svelte';
-	import { initContentStore } from '$lib/data/content-store';
 
 	let { children } = $props();
 
-	onMount(() => {
-		initContentStore();
-	});
 </script>
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>

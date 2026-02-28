@@ -1,8 +1,4 @@
 <script lang="ts">
-	import { projectsStore, setProjects } from '$lib/data/content-store';
-	import type { Project } from '$lib/data/content-types';
-	import { setStatus } from '../admin-store';
-
 	let projectForm: Project = {
 		imageUrl: '',
 		title: '',
@@ -19,34 +15,21 @@
 	function saveProject(event: SubmitEvent): void {
 		event.preventDefault();
 		if (!projectForm.title.trim()) {
-			setStatus('Project title is required.');
 			return;
 		}
 
-		const next = [...$projectsStore];
-		if (projectEditingIndex === null) {
-			next.push({ ...projectForm });
-			setStatus('Project added.');
-		} else {
-			next[projectEditingIndex] = { ...projectForm };
-			setStatus('Project updated.');
-		}
-		setProjects(next);
 		resetProjectForm();
 	}
 
 	function editProject(index: number): void {
 		projectForm = { ...$projectsStore[index] };
 		projectEditingIndex = index;
-		setStatus('Editing project.');
 	}
 
 	function removeProject(index: number): void {
-		setProjects($projectsStore.filter((_, i) => i !== index));
 		if (projectEditingIndex === index) {
 			resetProjectForm();
 		}
-		setStatus('Project removed.');
 	}
 </script>
 

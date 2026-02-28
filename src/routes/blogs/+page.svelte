@@ -2,49 +2,16 @@
 	import { onMount } from 'svelte';
 	import BlogCard from '$lib/components/normaluicomponents/blogCard.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
-	import { hashnodeHostStore, photoStore } from '$lib/data/content-store';
-
-	const ENDPOINT = 'https://gql.hashnode.com';
-
-	type PostNode = {
-		url: string;
-		coverImage: { url: string } | null;
-		title: string;
-		brief: string;
-	};
-
-	let posts: PostNode[] = [];
-	let failed = false;
-	let loading = true;
+	import PocketBase from 'pocketbase';
+	const pb = new PocketBase('https://pratyayprofile.pockethost.io');
+	let posts = $state<PostNode[]>([]);
+	let failed = $state(false);
+	let loading = $state(true);
 
 	onMount(async () => {
-		const query = `
-			query Publication {
-				publication(host: "${$hashnodeHostStore}") {
-					posts(first: 50) {
-						edges {
-							node {
-								coverImage { url }
-								title
-								brief
-								url
-							}
-						}
-					}
-				}
-			}
-		`;
-
 		try {
-			const res = await fetch(ENDPOINT, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ query })
-			});
-
-			const json = await res.json();
-			if (json.errors) throw json.errors;
-			posts = json.data?.publication?.posts?.edges.map((e: { node: PostNode }) => e.node) ?? [];
+			const res = await pb.collection('posts').getFullList({ sort: '-created' });
+			posts = res;
 		} catch (e) {
 			console.error(e);
 			failed = true;

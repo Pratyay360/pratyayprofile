@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { certificatesStore, setCertificates } from '$lib/data/content-store';
-	import type { Certificate } from '$lib/data/content-types';
 	import { setStatus } from '../admin-store';
 
 	let certificateForm: Certificate = {

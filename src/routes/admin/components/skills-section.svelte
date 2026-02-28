@@ -1,8 +1,4 @@
 <script lang="ts">
-	import { setSkills, skillsStore } from '$lib/data/content-store';
-	import type { SkillCategory } from '$lib/data/content-types';
-	import { setStatus } from '../admin-store';
-
 	let skillForm: SkillCategory = {
 		category: '',
 		items: []
@@ -31,31 +27,16 @@
 				.filter(Boolean)
 		};
 
-		const next = [...$skillsStore];
-		if (skillEditingIndex === null) {
-			next.push(payload);
-			setStatus('Skill category added.');
-		} else {
-			next[skillEditingIndex] = payload;
-			setStatus('Skill category updated.');
-		}
-		setSkills(next);
+		
 		resetSkillForm();
 	}
 
 	function editSkill(index: number): void {
-		skillForm = { ...$skillsStore[index] };
-		skillItemsInput = $skillsStore[index].items.join(', ');
 		skillEditingIndex = index;
-		setStatus('Editing skill category.');
 	}
 
 	function removeSkill(index: number): void {
-		setSkills($skillsStore.filter((_, i) => i !== index));
-		if (skillEditingIndex === index) {
-			resetSkillForm();
-		}
-		setStatus('Skill category removed.');
+	
 	}
 </script>
 
