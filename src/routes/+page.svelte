@@ -1,23 +1,14 @@
 <script lang="ts">
-	import Photo from './sections/photo.svelte';
-	import AboutMe from './sections/aboutme.svelte';
 	import Education from './sections/education.svelte';
 	import Skills from './sections/skills.svelte';
 	import Certificates from './certificates/preview.svelte';
 	import Projects from './projects/preview.svelte';
 	import BlogsPreview from './blogs/preview.svelte';
-	import Resume from './sections/resume.svelte';
 	import Donate from './sections/donate.svelte';
 	import Contact from './sections/contact.svelte';
 </script>
 
 <div>
-	<section id="photo" class="snap-center justify-center">
-		<Photo />
-	</section>
-	<section id="aboutme" class="snap-center justify-center pt-20">
-		<AboutMe />
-	</section>
 	<section id="education" class="snap-center justify-center pt-20">
 		<Education />
 	</section>

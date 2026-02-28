@@ -1,22 +1,5 @@
 <script lang="ts">
-	import PocketBase from 'pocketbase';
-	const pb = new PocketBase(import.meta.env.VITE_POCKETBASE_URL);
-
-	let loading = $state(false);
-	let resumeUrl = $state<string>('');
-	let failed = $state(false);
-
-	onMount(async () => {
-		try {
-			const res = await pb.collection('resume').getFirstListItem({ sort: '-created' });
-			resumeUrl = res.resumeUrl;
-		} catch (e) {
-			console.error(e);
-			failed = true;
-		} finally {
-			loading = false;
-		}
-	});
+	let resumeUrl = import.meta.env.VITE_RESUME_URL! || '';
 </script>
 
 <section class="container mx-auto px-6 py-12">

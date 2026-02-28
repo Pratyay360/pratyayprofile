@@ -6,18 +6,6 @@
 	let loading = $state(false);
 	let skills = $state<PostNode[]>([]);
 	let failed = $state(false);
-
-	onMount(async () => {
-		try {
-			const res = await pb.collection('skills').getFullList({ sort: '-created' });
-			skills = res;
-		} catch (e) {
-			console.error(e);
-			failed = true;
-		} finally {
-			loading = false;
-		}
-	});
 </script>
 
 <section class="container mx-auto px-6 py-12">

@@ -1,28 +1,49 @@
 <script lang="ts">
-	import ImageCard from '$lib/components/normaluicomponents/imageCard.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import PocketBase from 'pocketbase';
 	const pb = new PocketBase(import.meta.env.VITE_POCKETBASE_URL);
+	let social = $state<PostNode[]>([]);
+	let loading = $state(false);
+	let failed = $state(false);
 
-	let loading = false;
+	async function loadSocial() {
+		loading.set(true);
+		try {
+			social.set(await pb.records('social').getFullList());
+		} catch (error) {
+			failed.set(true);
+		} finally {
+			loading.set(false);
+		}
+	}
+
+	onMount(() => {
+		loadSocial();
+	});
 </script>
 
 <section class="container mx-auto px-6 py-12">
 	<h1 class="text-center text-3xl font-bold tracking-[0.2em]">CONTACT ME</h1>
 
-	{#if loading}
+	{#if failed}
+		<div class="mt-8 text-center text-red-500">
+			<p>Unable to load social links at the moment. Please try again later.</p>
+		</div>
+	{/if}
+
+	{#if loading && !failed}
 		<div class="mt-8">
 			<Skeleton class="h-10 w-full" />
 		</div>
 	{/if}
 
 	<div class="mt-10 flex flex-wrap items-center justify-center gap-4">
-		{#each $socialLinksStore as item (item.name)}
+		{#each $social as item}
 			<div class="rounded-lg bg-black/5 p-3 dark:bg-white/10">
-				<ImageCard image={item.image} link={item.link} name={item.name} />
+				<enhanced:image src={item.image} href={item.link} alt={item.name} />
 			</div>
 		{/each}
-		{#if $socialLinksStore.length === 0 && !loading}
+		{#if $social.length === 0 && !loading}
 			<p class="text-muted-foreground text-sm">Add your social links to show them here.</p>
 		{/if}
 	</div>
