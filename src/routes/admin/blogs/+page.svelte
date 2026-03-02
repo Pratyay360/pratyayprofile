@@ -29,6 +29,7 @@
 	let previewHtml = $state('');
 	let previewLoading = $state(false);
 	let editor = $state<HTMLTextAreaElement | null>(null);
+	let contentImageInput = $state<HTMLInputElement | null>(null);
 	let previewTimeout = $state<ReturnType<typeof setTimeout> | null>(null);
 
 	function resetBlogForm(): void {
@@ -81,6 +82,31 @@
 
 	function insertTemplate(template: string): void {
 		withSelection((selected) => (selected ? `${selected}\n\n${template}` : template));
+	}
+
+	function pickContentImage(): void {
+		contentImageInput?.click();
+	}
+
+	function sanitizeAltText(value: string): string {
+		return value.replace(/[[\]]/g, '').trim() || 'image';
+	}
+
+	function handleContentImageChange(event: Event): void {
+		const input = event.currentTarget as HTMLInputElement;
+		const file = input.files?.[0];
+		if (!file) return;
+
+		const reader = new FileReader();
+		reader.onload = () => {
+			const result = typeof reader.result === 'string' ? reader.result : '';
+			if (!result) return;
+			const alt = sanitizeAltText(file.name.replace(/\.[^/.]+$/, ''));
+			insertTemplate(`![${alt}](${result})`);
+		};
+		reader.readAsDataURL(file);
+
+		input.value = '';
 	}
 
 	function handleEditorKeydown(event: KeyboardEvent): void {
@@ -187,9 +213,17 @@
 				<button
 					class="rounded border px-2 py-1 text-xs"
 					type="button"
-					onclick={() => insertTemplate('![alt text](https://example.com/image.jpg)')}>Image</button
+					onclick={pickContentImage}>Image Upload</button
 				>
 			</div>
+			<input
+				name="contentImage"
+				type="file"
+				accept="image/*"
+				class="hidden"
+				bind:this={contentImageInput}
+				onchange={handleContentImageChange}
+			/>
 
 			<div class="bg-muted flex items-center gap-2 rounded p-1 text-sm">
 				<button
