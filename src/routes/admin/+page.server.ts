@@ -31,16 +31,27 @@ async function requireAdminPocketBase(cookies: import("@sveltejs/kit").Cookies) 
 export const load: PageServerLoad = async ({ cookies }) => {
   const pb = await requireAdminPocketBase(cookies);
 
-  const [profiles, projects, certificates, skills, education, socials, donations] =
-    await Promise.all([
-      pb.collection("aboutme").getFullList({ sort: "-created" }),
-      pb.collection("projects").getFullList({ sort: "-created" }),
-      pb.collection("certificates").getFullList({ sort: "-created" }),
-      pb.collection("skills").getFullList({ sort: "-created" }),
-      pb.collection("education").getFullList({ sort: "-created" }),
-      pb.collection("social").getFullList({ sort: "-created" }),
-      pb.collection("donations").getFullList({ sort: "-created" }),
-    ]);
+  const [
+    profiles,
+    projects,
+    certificates,
+    skills,
+    education,
+    social_link,
+    donations,
+    blogs,
+    messages,
+  ] = await Promise.all([
+    pb.collection("me").getFullList({}),
+    pb.collection("project").getFullList({}),
+    pb.collection("certificate").getFullList({}),
+    pb.collection("skill").getFullList({}),
+    pb.collection("education").getFullList({}),
+    pb.collection("social_link").getFullList({}),
+    pb.collection("donation").getFullList({}),
+    pb.collection("blogs").getFullList({}),
+    pb.collection("messages").getFullList({ sort: "-created" }),
+  ]);
 
   return {
     profiles,
@@ -48,8 +59,10 @@ export const load: PageServerLoad = async ({ cookies }) => {
     certificates,
     skills,
     education,
-    socials,
+    social_link,
     donations,
+    blogs,
+    messages,
   };
 };
 
@@ -80,9 +93,9 @@ export const actions: Actions = {
 
     try {
       if (id) {
-        await pb.collection("aboutme").update(id, payload);
+        await pb.collection("me").update(id, payload);
       } else {
-        await pb.collection("aboutme").create(payload);
+        await pb.collection("me").create(payload);
       }
       return { success: true };
     } catch {
@@ -97,7 +110,7 @@ export const actions: Actions = {
     if (!id) return fail(400, { error: "Profile id is required." });
 
     try {
-      await pb.collection("aboutme").delete(id);
+      await pb.collection("me").delete(id);
       return { success: true };
     } catch {
       return fail(500, { error: "Could not delete profile." });
@@ -125,9 +138,9 @@ export const actions: Actions = {
 
     try {
       if (id) {
-        await pb.collection("projects").update(id, payload);
+        await pb.collection("project").update(id, payload);
       } else {
-        await pb.collection("projects").create(payload);
+        await pb.collection("project").create(payload);
       }
       return { success: true };
     } catch {
@@ -142,7 +155,7 @@ export const actions: Actions = {
     if (!id) return fail(400, { error: "Project id is required." });
 
     try {
-      await pb.collection("projects").delete(id);
+      await pb.collection("project").delete(id);
       return { success: true };
     } catch {
       return fail(500, { error: "Could not delete project." });
@@ -172,9 +185,9 @@ export const actions: Actions = {
 
     try {
       if (id) {
-        await pb.collection("certificates").update(id, payload);
+        await pb.collection("certificate").update(id, payload);
       } else {
-        await pb.collection("certificates").create(payload);
+        await pb.collection("certificate").create(payload);
       }
       return { success: true };
     } catch {
@@ -189,7 +202,7 @@ export const actions: Actions = {
     if (!id) return fail(400, { error: "Certificate id is required." });
 
     try {
-      await pb.collection("certificates").delete(id);
+      await pb.collection("certificate").delete(id);
       return { success: true };
     } catch {
       return fail(500, { error: "Could not delete certificate." });
@@ -213,9 +226,9 @@ export const actions: Actions = {
 
     try {
       if (id) {
-        await pb.collection("skills").update(id, { category, items });
+        await pb.collection("skill").update(id, { category, items });
       } else {
-        await pb.collection("skills").create({ category, items });
+        await pb.collection("skill").create({ category, items });
       }
       return { success: true };
     } catch {
@@ -230,7 +243,7 @@ export const actions: Actions = {
     if (!id) return fail(400, { error: "Skill id is required." });
 
     try {
-      await pb.collection("skills").delete(id);
+      await pb.collection("skill").delete(id);
       return { success: true };
     } catch {
       return fail(500, { error: "Could not delete skill category." });
@@ -295,9 +308,9 @@ export const actions: Actions = {
 
     try {
       if (id) {
-        await pb.collection("social").update(id, payload);
+        await pb.collection("social_link").update(id, payload);
       } else {
-        await pb.collection("social").create(payload);
+        await pb.collection("social_link").create(payload);
       }
       return { success: true };
     } catch {
@@ -312,7 +325,7 @@ export const actions: Actions = {
     if (!id) return fail(400, { error: "Social id is required." });
 
     try {
-      await pb.collection("social").delete(id);
+      await pb.collection("social_link").delete(id);
       return { success: true };
     } catch {
       return fail(500, { error: "Could not delete social link." });
@@ -338,9 +351,9 @@ export const actions: Actions = {
 
     try {
       if (id) {
-        await pb.collection("donations").update(id, payload);
+        await pb.collection("donation").update(id, payload);
       } else {
-        await pb.collection("donations").create(payload);
+        await pb.collection("donation").create(payload);
       }
       return { success: true };
     } catch {
@@ -355,10 +368,70 @@ export const actions: Actions = {
     if (!id) return fail(400, { error: "Donation id is required." });
 
     try {
-      await pb.collection("donations").delete(id);
+      await pb.collection("donation").delete(id);
       return { success: true };
     } catch {
       return fail(500, { error: "Could not delete donation link." });
+    }
+  },
+
+  saveBlog: async ({ request, cookies }) => {
+    const pb = await requireAdminPocketBase(cookies);
+    const data = await request.formData();
+    const id = readText(data, "id");
+    const title = readText(data, "title");
+    const content = readText(data, "content") || readText(data, "brief");
+    const url = readText(data, "url");
+    const imageFile = readOptionalFile(data, "coverImage");
+
+    if (!title) {
+      return fail(400, { error: "Blog title is required." });
+    }
+
+    function buildPayload(contentField: "content" | "brief"): FormData {
+      const payload = new FormData();
+      payload.set("title", title);
+      payload.set(contentField, content);
+      payload.set("url", url);
+      if (imageFile) payload.set("coverImage", imageFile);
+      return payload;
+    }
+
+    try {
+      const saveWithField = async (field: "content" | "brief") => {
+        const payload = buildPayload(field);
+        if (id) {
+          await pb.collection("blogs").update(id, payload);
+        } else {
+          await pb.collection("blogs").create(payload);
+        }
+      };
+
+      try {
+        await saveWithField("content");
+      } catch {
+        // Backward compatibility for existing schemas that still use "brief"
+        await saveWithField("brief");
+      }
+
+      return { success: true };
+    } catch (e) {
+      console.error(e);
+      return fail(500, { error: "Could not save blog post." });
+    }
+  },
+
+  deleteBlog: async ({ request, cookies }) => {
+    const pb = await requireAdminPocketBase(cookies);
+    const data = await request.formData();
+    const id = readText(data, "id");
+    if (!id) return fail(400, { error: "Blog id is required." });
+
+    try {
+      await pb.collection("blogs").delete(id);
+      return { success: true };
+    } catch {
+      return fail(500, { error: "Could not delete blog post." });
     }
   },
 };

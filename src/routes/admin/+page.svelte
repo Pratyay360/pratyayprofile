@@ -7,19 +7,20 @@
 	import EducationSection from './components/education-section.svelte';
 	import SocialsSection from './components/socials-section.svelte';
 	import DonationsSection from './components/donations-section.svelte';
-
+	import ViewMessages from './components/view-messages.svelte';
+	import Button from '$lib/components/ui/button/button.svelte';
 	export let data: PageData;
-
 	type AdminSection =
-		| 'profile'
+		| 'me'
 		| 'projects'
 		| 'certificates'
 		| 'skills'
 		| 'education'
 		| 'socials'
-		| 'donations';
+		| 'donations'
+		| 'messages';
 
-	let currentSection: AdminSection = 'profile';
+	let currentSection: AdminSection = 'me';
 
 	function setSection(section: AdminSection): void {
 		currentSection = section;
@@ -30,68 +31,79 @@
 	<h1 class="text-2xl font-semibold">Admin</h1>
 
 	<div class="mt-6 flex flex-wrap gap-2">
-		<button
-			class="rounded border px-3 py-1 {currentSection === 'profile'
+		<Button
+			class="rounded border px-3 py-1 {currentSection === 'me'
 				? 'bg-primary text-primary-foreground'
 				: ''}"
-			onclick={() => setSection('profile')}
+			onclick={() => setSection('me')}
 		>
 			Profile
-		</button>
-		<button
+		</Button>
+		<Button
 			class="rounded border px-3 py-1 {currentSection === 'projects'
 				? 'bg-primary text-primary-foreground'
 				: ''}"
 			onclick={() => setSection('projects')}
 		>
 			Projects
-		</button>
-		<button
+		</Button>
+		<a href="/admin/blogs">
+			<Button class="bg-primary text-primary-foreground rounded border px-3 py-1">Blogs</Button>
+		</a>
+		<Button
 			class="rounded border px-3 py-1 {currentSection === 'certificates'
 				? 'bg-primary text-primary-foreground'
 				: ''}"
 			onclick={() => setSection('certificates')}
 		>
 			Certificates
-		</button>
-		<button
+		</Button>
+		<Button
 			class="rounded border px-3 py-1 {currentSection === 'skills'
 				? 'bg-primary text-primary-foreground'
 				: ''}"
 			onclick={() => setSection('skills')}
 		>
 			Skills
-		</button>
-		<button
+		</Button>
+		<Button
 			class="rounded border px-3 py-1 {currentSection === 'education'
 				? 'bg-primary text-primary-foreground'
 				: ''}"
 			onclick={() => setSection('education')}
 		>
 			Education
-		</button>
-		<button
+		</Button>
+		<Button
 			class="rounded border px-3 py-1 {currentSection === 'socials'
 				? 'bg-primary text-primary-foreground'
 				: ''}"
 			onclick={() => setSection('socials')}
 		>
 			Socials
-		</button>
-		<button
+		</Button>
+		<Button
 			class="rounded border px-3 py-1 {currentSection === 'donations'
 				? 'bg-primary text-primary-foreground'
 				: ''}"
 			onclick={() => setSection('donations')}
 		>
 			Donations
-		</button>
+		</Button>
+		<Button
+			class="rounded border px-3 py-1 {currentSection === 'messages'
+				? 'bg-primary text-primary-foreground'
+				: ''}"
+			onclick={() => setSection('messages')}
+		>
+			Messages
+		</Button>
 		<form method="POST" action="?/logout" class="inline">
-			<button class="rounded border px-3 py-1" type="submit">Logout</button>
+			<Button class="rounded border px-3 py-1" type="submit">Logout</Button>
 		</form>
 	</div>
 
-	{#if currentSection === 'profile'}
+	{#if currentSection === 'me'}
 		<ProfileSection profiles={data.profiles} />
 	{:else if currentSection === 'projects'}
 		<ProjectsSection projects={data.projects} />
@@ -102,8 +114,10 @@
 	{:else if currentSection === 'education'}
 		<EducationSection education={data.education} />
 	{:else if currentSection === 'socials'}
-		<SocialsSection socials={data.socials} />
+		<SocialsSection socials={data.social_link} />
 	{:else if currentSection === 'donations'}
 		<DonationsSection donations={data.donations} />
+	{:else if currentSection === 'messages'}
+		<ViewMessages messages={data.messages} />
 	{/if}
 </div>

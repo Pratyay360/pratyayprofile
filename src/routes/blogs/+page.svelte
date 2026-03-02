@@ -13,7 +13,6 @@
 	}
 
 	interface ProfileRecord {
-		id: string;
 		name?: string;
 	}
 
@@ -26,7 +25,7 @@
 	onMount(async () => {
 		try {
 			const [postResult, profileResult] = await Promise.all([
-				pb.collection('posts').getFullList<BlogRecord>({}),
+				pb.collection('blogs').getFullList<BlogRecord>({}),
 				pb.collection('aboutme').getFirstListItem<ProfileRecord>('')
 			]);
 			posts = postResult;

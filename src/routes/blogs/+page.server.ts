@@ -1,10 +1,11 @@
 import PocketBase from "pocketbase";
+import type { PageServerLoad } from "./$types";
 
 const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE!);
 
-export const load = async () => {
+export const load: PageServerLoad = async () => {
   try {
-    const posts = await pb.collection("posts").getFullList({});
+    const posts = await pb.collection("blogs").getFullList({});
     return { posts };
   } catch {
     return { posts: [] };

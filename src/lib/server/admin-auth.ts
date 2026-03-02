@@ -2,14 +2,13 @@ import type { Cookies } from "@sveltejs/kit";
 import { dev } from "$app/environment";
 import PocketBase from "pocketbase";
 
-export const AUTH_COOKIE =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2xsZWN0aW9uSWQiOiJwYmNfMTUxMzcwMjAzNiIsImV4cCI6MTc3MjkxNzI2MiwiaWQiOiJ0ZWR4OW54bHdyNmFieHciLCJyZWZyZXNoYWJsZSI6ZmFsc2UsInR5cGUiOiJhdXRoIn0.wsmNFV8qLzAagXTmct_wAFcTM0XqRym6wnFxTp4cAig";
+export const AUTH_COOKIE = "admin_auth";
 
 function cookieOptions() {
   return {
     path: "/",
     httpOnly: true,
-    sameSite: "lax" as const,
+    sameSite: "strict" as const,
     secure: !dev,
     maxAge: 60 * 60 * 24 * 7,
   };
@@ -24,7 +23,7 @@ export async function verifyUserToken(token: string) {
   pb.authStore.save(token, null);
 
   try {
-    await pb.collection("user").authRefresh();
+    await pb.collection("_superusers").authRefresh();
     if (!pb.authStore.isValid) {
       pb.authStore.clear();
       return null;

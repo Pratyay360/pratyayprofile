@@ -18,7 +18,7 @@
 
 	onMount(async () => {
 		try {
-			posts = await pb.collection('posts').getFullList<BlogRecord>({ });
+			posts = await pb.collection('blogs').getFullList<BlogRecord>({ });
 		} catch (error) {
 			console.error(error);
 		} finally {
@@ -39,7 +39,7 @@
 	<div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 		{#each posts.slice(0, 3) as post (post.id)}
 			<BlogCard
-				link={post.url}
+				link={`/blogs/${post.id}`}
 				imageUrl={post.coverImage?.url ?? ''}
 				title={post.title}
 				brief={post.brief}

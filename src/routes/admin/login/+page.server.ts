@@ -32,7 +32,7 @@ export const actions = {
 
     const pb = createPocketBaseClient();
     try {
-      const otpResponse = await pb.collection("user").requestOTP(email);
+      const otpResponse = await pb.collection("_superusers").requestOTP(email);
       return {
         stage: "otp" as const,
         email,
@@ -70,14 +70,14 @@ export const actions = {
 
     const pb = createPocketBaseClient();
     try {
-      await pb.collection("user").authWithOTP(otpId, otp);
+      await pb.collection("_superusers").authWithOTP(otpId, otp);
 
       if (!pb.authStore.isValid) {
         return fail(403, {
           stage: "otp" as const,
           email,
           otpId,
-          error: "Authenticated account is not a user.",
+          error: "Authenticated account is not a _superusers.",
         });
       }
 
