@@ -3,14 +3,15 @@ import { dev } from "$app/environment";
 import PocketBase from "pocketbase";
 
 export const AUTH_COOKIE = "admin_auth";
+export const PENDING_AUTH_COOKIE = "admin_pending_auth";
 
-function cookieOptions() {
+function cookieOptions(maxAge = 60 * 60 * 24 * 7) {
   return {
     path: "/",
     httpOnly: true,
     sameSite: "strict" as const,
     secure: !dev,
-    maxAge: 60 * 60 * 24 * 7,
+    maxAge,
   };
 }
 
@@ -41,4 +42,12 @@ export function setAuthCookie(cookies: Cookies, token: string) {
 
 export function clearAuthCookie(cookies: Cookies) {
   cookies.delete(AUTH_COOKIE, { path: "/" });
+}
+
+export function setPendingAuthCookie(cookies: Cookies, token: string) {
+  cookies.set(PENDING_AUTH_COOKIE, token, cookieOptions(60 * 5));
+}
+
+export function clearPendingAuthCookie(cookies: Cookies) {
+  cookies.delete(PENDING_AUTH_COOKIE, { path: "/" });
 }

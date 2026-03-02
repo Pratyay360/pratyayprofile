@@ -243,7 +243,7 @@
 
 			{#if activeTab === 'write'}
 				<textarea
-					class="min-h-[360px] w-full rounded border p-3 font-mono text-sm"
+					class="min-h-90 w-full rounded border p-3 font-mono text-sm"
 					name="content"
 					placeholder="Write markdown here..."
 					bind:value={blogForm.content}
