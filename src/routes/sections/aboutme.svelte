@@ -4,7 +4,7 @@
 
 	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE);
 	let name = 'Pratyay Mustafi';
-	let image = 'https://img.placeholder.com/500*500';
+	let image = '/images/profile-placeholder.svg';
 	let description = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.';
 	let titles: string[] = [];
 

@@ -7,18 +7,7 @@ import webfontDownload from "vite-plugin-webfont-dl";
 
 export default defineConfig({
   server: {
-    cors: true,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET'
-    },
-    proxy: {
-      '*': {
-        target: 'https://*.qzz.io',
-        changeOrigin: true,
-        secure: false
-      }
-    }
+    cors: true
   },
   plugins: [
     tailwindcss(),

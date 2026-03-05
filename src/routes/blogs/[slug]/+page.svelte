@@ -44,7 +44,6 @@
 			<img
 				src={coverImage}
 				alt={blog.title}
-				crossorigin="anonymous"
 				class="w-full rounded-lg object-cover"
 			/>
 		</figure>
