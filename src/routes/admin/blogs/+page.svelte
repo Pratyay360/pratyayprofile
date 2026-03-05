@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { tick } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import type { PageData } from './$types';
 
 	type BlogItem = {
@@ -31,6 +31,7 @@
 	let editor = $state<HTMLTextAreaElement | null>(null);
 	let contentImageInput = $state<HTMLInputElement | null>(null);
 	let previewTimeout = $state<ReturnType<typeof setTimeout> | null>(null);
+	let refreshPreview: ((markdown: string) => Promise<void>) | null = null;
 
 	function resetBlogForm(): void {
 		blogForm = { id: '', title: '', content: '', url: '' };
@@ -125,31 +126,37 @@
 		}
 	}
 
-	async function refreshPreview(markdown: string): Promise<void> {
-		if (typeof window === 'undefined') return;
-		previewLoading = true;
-		try {
-			const response = await fetch('/admin/blogs/preview', {
-				method: 'POST',
-				headers: { 'content-type': 'application/json' },
-				body: JSON.stringify({ markdown })
-			});
-			if (!response.ok) {
+	onMount(() => {
+		refreshPreview = async (markdown: string): Promise<void> => {
+			previewLoading = true;
+			try {
+				const response = await fetch('/admin/blogs/preview', {
+					method: 'POST',
+					headers: { 'content-type': 'application/json' },
+					body: JSON.stringify({ markdown })
+				});
+				if (!response.ok) {
+					previewHtml = '<p>Could not generate preview.</p>';
+					return;
+				}
+				const payload = (await response.json()) as { html?: string };
+				previewHtml = payload.html ?? '';
+			} catch {
 				previewHtml = '<p>Could not generate preview.</p>';
-				return;
+			} finally {
+				previewLoading = false;
 			}
-			const payload = (await response.json()) as { html?: string };
-			previewHtml = payload.html ?? '';
-		} catch {
-			previewHtml = '<p>Could not generate preview.</p>';
-		} finally {
-			previewLoading = false;
-		}
-	}
+		};
+
+		return () => {
+			refreshPreview = null;
+		};
+	});
 
 	$effect(() => {
 		if (previewTimeout) clearTimeout(previewTimeout);
 		previewTimeout = setTimeout(() => {
+			if (!refreshPreview) return;
 			void refreshPreview(blogForm.content);
 		}, 220);
 		return () => {
@@ -251,7 +258,7 @@
 					onkeydown={handleEditorKeydown}
 				></textarea>
 			{:else}
-				<div class="prose prose-neutral dark:prose-invert min-h-[360px] max-w-none rounded border p-4">
+				<div class="prose prose-neutral dark:prose-invert min-h-90 max-w-none rounded border p-4">
 					{#if previewLoading}
 						<p class="text-muted-foreground text-sm">Rendering preview...</p>
 					{:else}

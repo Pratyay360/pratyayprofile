@@ -6,10 +6,10 @@
 	interface SkillRecord {
 		id: string;
 		category: string;
-		items: string[];
+		items: string;
 	}
 
-	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE);
+	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE!);
 
 	let loading = true;
 	let skills: SkillRecord[] = [];
@@ -17,7 +17,7 @@
 
 	onMount(async () => {
 		try {
-			skills = await pb.collection('skills').getFullList<SkillRecord>({ });
+			skills = await pb.collection('skill').getFullList<SkillRecord>({ });
 		} catch (error) {
 			console.error(error);
 			failed = true;
@@ -42,23 +42,24 @@
 		</div>
 	{/if}
 
-	{#if !loading && !failed}
+	<!-- {#if !loading && !failed} -->
 		<div class="mt-10 space-y-8">
-			{#each skills as category (category.id)}
+			{#each skills as skill (skill.id)}
 				<div class="border-primary border-l-4 pl-4">
-					<h2 class="mb-3 text-xl font-semibold">{category.category}</h2>
+					<h2 class="mb-3 text-xl font-semibold">{skill.category}</h2>
 					<div class="flex flex-wrap gap-2">
-						{#each category.items as item (item)}
-							<span class="bg-primary/10 text-primary rounded-full px-3 py-1 text-sm">
-								{item}
-							</span>
-						{/each}
+					
+					<span class="bg-primary/10 text-primary rounded-full px-3 py-1 text-sm">
+					{skill.items}
+					</span>
+						
 					</div>
 				</div>
-			{/each}
-			{#if skills.length === 0}
-				<p class="text-muted-foreground text-sm">Add your skills to display them here.</p>
-			{/if}
+			{/each} 
+			<!-- {#if skills.length >= 0} -->
+
+			<!-- {/if} --> 
+
 		</div>
-	{/if}
+	<!-- {/if} -->
 </section>

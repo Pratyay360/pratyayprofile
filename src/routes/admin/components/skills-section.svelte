@@ -2,7 +2,7 @@
 	interface SkillCategory {
 		id: string;
 		category?: string;
-		items?: string[];
+		items?: string;
 	}
 
 	export let skills: SkillCategory[] = [];
@@ -25,7 +25,7 @@
 		skillForm = {
 			id: skill.id,
 			category: skill.category ?? '',
-			items: (skill.items ?? []).join(', ')
+			items: skill.items ?? ''
 		};
 	}
 </script>
@@ -49,7 +49,7 @@
 		{#each skills as item (item.id)}
 			<div class="rounded border p-3">
 				<p class="font-medium">{item.category}</p>
-				<p class="text-muted-foreground text-sm">{(item.items ?? []).join(', ')}</p>
+				<p class="text-muted-foreground text-sm">{item.items}</p>
 				<div class="mt-2 flex gap-2">
 					<button class="rounded border px-3 py-1 text-sm" type="button" onclick={() => editSkill(item)}>Edit</button>
 					<form method="POST" action="?/deleteSkill">

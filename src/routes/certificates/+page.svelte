@@ -20,15 +20,12 @@
 	function toMediaUrl(record: RecordModel, field: string): string {
 		const value = record[field];
 		if (typeof value !== 'string' || !value) return '';
-		if (value.startsWith('http://') || value.startsWith('https://') || value.startsWith('/')) {
-			return value;
-		}
 		return pb.files.getURL(record, value);
 	}
 
 	onMount(async () => {
 		try {
-			const records = await pb.collection('certificates').getFullList<RecordModel>({});
+			const records = await pb.collection('certificate').getFullList<RecordModel>({});
 			certificates = records.map((record) => ({
 				id: record.id,
 				title: typeof record.title === 'string' ? record.title : '',
@@ -47,12 +44,12 @@
 
 <main class="min-h-screen px-4 py-24">
 	<h1 class="text-center text-3xl font-bold tracking-[0.2em] lg:text-5xl">Certificates</h1>
-
+<!-- 
 	{#if loading}
 		<div class="mt-10">
 			<Skeleton class="h-64 w-full" />
 		</div>
-	{/if}
+	{/if} -->
 
 	<section class="mx-auto mt-12 max-w-6xl">
 		<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -66,8 +63,8 @@
 				/>
 			{/each}
 		</div>
-		{#if certificates.length === 0 && !loading}
+		<!-- {#if certificates.length === 0 && !loading}
 			<p class="text-muted-foreground mt-8 text-center text-sm">Add your certificates to display them here.</p>
-		{/if}
+		{/if} -->
 	</section>
 </main>

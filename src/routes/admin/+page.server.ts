@@ -77,7 +77,6 @@ export const actions: Actions = {
     const data = await request.formData();
     const id = readText(data, "id");
     const name = readText(data, "name");
-    const title = readText(data, "title");
     const description = readText(data, "description");
     const imageFile = readOptionalFile(data, "image");
 
@@ -87,7 +86,6 @@ export const actions: Actions = {
 
     const payload = new FormData();
     payload.set("name", name);
-    payload.set("title", title);
     payload.set("description", description);
     if (imageFile) payload.set("image", imageFile);
 

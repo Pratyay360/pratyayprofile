@@ -29,7 +29,7 @@
 
 	onMount(async () => {
 		try {
-			const records = await pb.collection('certificates').getFullList<RecordModel>({});
+			const records = await pb.collection('certificate').getFullList<RecordModel>({});
 			certificates = records.map((record) => ({
 				id: record.id,
 				title: typeof record.title === 'string' ? record.title : '',

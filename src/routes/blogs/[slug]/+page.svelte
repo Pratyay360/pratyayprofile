@@ -1,15 +1,58 @@
 <script lang="ts">
-	import type { PageData } from './$types';
-
+	import type { PageData } from "./$types";
 	let { data }: { data: PageData } = $props();
 	const blog = $derived(data.blog);
 	const renderedContent = $derived(data.renderedContent);
+	const coverImage = $derived(data.coverImage);
 </script>
 
+<svelte:head>
+	<title>{blog.title}</title>
+	<meta name="description" content={blog.excerpt || blog.title} />
+	{#if coverImage}
+		<meta property="og:image" content={coverImage} />
+	{/if}
+</svelte:head>
+
 <article class="mx-auto w-full max-w-4xl px-4 py-16">
-	<h1 class="mb-4 text-4xl font-bold tracking-tight">{blog.title}</h1>
-	<p class="text-muted-foreground mb-10 text-sm">
-		Created on: {blog.created} Last updated: {blog.updated} by {blog.author}
-	</p>
-	<div class="prose prose-neutral dark:prose-invert max-w-none">{@html renderedContent}</div>
+	<header class="mb-10">
+		<h1
+			class="mb-4 text-4xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100"
+		>
+			{blog.title}
+		</h1>
+
+		<div
+			class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-neutral-600 dark:text-neutral-400"
+		>
+			<time datetime={blog.created}>
+				Created: {new Date(blog.created).toLocaleDateString()}
+			</time>
+			{#if blog.updated !== blog.created}
+				<span>•</span>
+				<time datetime={blog.updated}>
+					Updated: {new Date(blog.updated).toLocaleDateString()}
+				</time>
+			{/if}
+			<span>•</span>
+			<span>By {blog.author}</span>
+		</div>
+	</header>
+
+	{#if coverImage}
+		<figure class="mb-10">
+			<img
+				src={coverImage}
+				alt={blog.title}
+				crossorigin="anonymous"
+				class="w-full rounded-lg object-cover"
+			/>
+		</figure>
+	{/if}
+
+	<div
+		class="prose prose-neutral dark:prose-invert max-w-none prose-headings:font-semibold prose-a:text-blue-600 dark:prose-a:text-blue-400"
+	>
+		{@html renderedContent}
+	</div>
 </article>

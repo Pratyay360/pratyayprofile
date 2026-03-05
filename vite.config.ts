@@ -6,6 +6,20 @@ import oxlintPlugin from "vite-plugin-oxlint";
 import webfontDownload from "vite-plugin-webfont-dl";
 
 export default defineConfig({
+  server: {
+    cors: true,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET'
+    },
+    proxy: {
+      '*': {
+        target: 'https://*.qzz.io',
+        changeOrigin: true,
+        secure: false
+      }
+    }
+  },
   plugins: [
     tailwindcss(),
     sveltekit(),
@@ -14,6 +28,8 @@ export default defineConfig({
     webfontDownload([
       "https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap",
       "https://fonts.googleapis.com/css2?family=Fira+Code&display=swap",
+
+      
     ]),
   ],
 });

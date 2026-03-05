@@ -10,6 +10,16 @@ import {
   verifyUserToken,
 } from "$lib/server/admin-auth";
 
+function extractErrorText(error: unknown): string {
+  if (error instanceof Error) return error.message.toLowerCase();
+  if (typeof error === "string") return error.toLowerCase();
+  if (error && typeof error === "object") {
+    const maybeMessage = (error as { message?: unknown }).message;
+    if (typeof maybeMessage === "string") return maybeMessage.toLowerCase();
+  }
+  return "";
+}
+
 export const load = async ({ cookies }) => {
   const token = cookies.get(AUTH_COOKIE);
   if (!token) return {};
@@ -42,23 +52,24 @@ export const actions = {
 
     const pb = createPocketBaseClient();
     try {
-      await pb.collection("_superusers").authWithPassword(email, password);
-      if (!pb.authStore.isValid) {
-        return fail(403, {
-          stage: "request" as const,
-          error: "Invalid email or password.",
-        });
-      }
-
-      const otpResponse = await pb.collection("_superusers").requestOTP(email);
-      setPendingAuthCookie(cookies, pb.authStore.token);
+      const otpResponse = await pb.collection("_superusers").requestVerification(email);
+      setPendingAuthCookie(cookies, otpResponse.otpId);
       return {
         stage: "otp" as const,
         email,
-        otpId: otpResponse.otpId,
         message: "OTP sent to your email.",
-      };
-    } catch {
+        otpId: otpResponse.otpId,
+      };  
+    } catch (error) {
+      const errorText = extractErrorText(error);
+      if (errorText.includes("mfa")) {
+        return fail(400, {
+          stage: "request" as const,
+          error:
+            "PocketBase MFA is enabled for this account. Disable MFA for the superuser (or switch to PocketBase MFA login) before using this OTP flow.",
+        });
+      }
+
       return fail(400, {
         stage: "request" as const,
         error: "Could not request OTP for this email.",
@@ -68,23 +79,19 @@ export const actions = {
   verifyOtp: async ({ request, cookies }) => {
     const data = await request.formData();
     const email = data.get("email");
-    const otpId = data.get("otpId");
     const otp = data.get("otp");
     const pendingToken = cookies.get(PENDING_AUTH_COOKIE);
 
     if (
       typeof email !== "string" ||
-      typeof otpId !== "string" ||
       typeof otp !== "string" ||
       email.length === 0 ||
-      otpId.length === 0 ||
       otp.length === 0
     ) {
       return fail(400, {
         stage: "otp" as const,
         email: typeof email === "string" ? email : "",
-        otpId: typeof otpId === "string" ? otpId : "",
-        error: "Email, OTP ID and OTP are required.",
+        error: "Email and OTP are required.",
       });
     }
 
@@ -114,13 +121,11 @@ export const actions = {
 
     const pb = createPocketBaseClient();
     try {
-      await pb.collection("_superusers").authWithOTP(otpId, otp);
-
+      await pb.collection("_superusers").authWithOTP(pendingToken, otp);
       if (!pb.authStore.isValid || pb.authStore.record?.email !== email) {
         return fail(403, {
           stage: "otp" as const,
           email,
-          otpId,
           error: "Authenticated account does not match the sign-in user.",
         });
       }
@@ -132,7 +137,6 @@ export const actions = {
       return fail(400, {
         stage: "otp" as const,
         email,
-        otpId,
         error: "Invalid OTP or expired OTP.",
       });
     }

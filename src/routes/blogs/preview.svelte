@@ -30,11 +30,6 @@
 <section class="container mx-auto px-6 py-12">
 	<h1 class="text-center text-3xl font-bold tracking-[0.2em]">BLOGS</h1>
 
-	{#if loading}
-		<div class="mt-10">
-			<Skeleton class="h-64 w-full" />
-		</div>
-	{/if}
 
 	<div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 		{#each posts.slice(0, 3) as post (post.id)}
