@@ -11,11 +11,7 @@
 	export let image: string = '';
 	export let link: string = '';
 	export let name: string = '';
-
-	/**
-	 * Open the provided link in a new tab/window using noopener,noreferrer for safety.
-	 * Using a button to trigger open avoids href linting for unresolved routes.
-	 */
+	import { Image } from "@unpic/svelte";
 	function openLink(): void {
 		if (!link) return;
 		if (typeof window === 'undefined') return;
@@ -35,7 +31,7 @@
 		aria-label={name ? `Open ${name}` : 'Open image'}
 	>
 		{#if image}
-			<enhanced:img src={image} alt={name || ''} sizes="40px" class="rounded-md object-cover" />
+			<Image src={image} alt={name || ''} sizes="40px" class="rounded-md object-cover" />
 		{:else}
 			<div
 				class="h-10 w-10 rounded-md bg-gray-200"
@@ -46,7 +42,7 @@
 	</button>
 {:else if image}
 	<div class="inline-block" aria-label={name ? name : 'image'}>
-		<enhanced:img src={image} alt={name || ''} sizes="40" class="rounded-md object-cover" />
+		<Image src={image} alt={name || ''} sizes="40" class="rounded-md object-cover" />
 	</div>
 {:else}
 	<div

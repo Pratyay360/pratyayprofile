@@ -1,17 +1,19 @@
 <script lang="ts">
 	import type { PageData } from "./$types";
+	import { Image } from "@unpic/svelte";
+
 	let { data }: { data: PageData } = $props();
 	const blog = $derived(data.blog);
 	const renderedContent = $derived(data.renderedContent);
-	const coverImage = $derived(data.coverImage);
+
 </script>
 
 <svelte:head>
 	<title>{blog.title}</title>
 	<meta name="description" content={blog.excerpt || blog.title} />
-	{#if coverImage}
-		<meta property="og:image" content={coverImage} />
-	{/if}
+	<!-- {#if data.coverImage}
+		<meta property="og:image" content={data.coverImage} />
+	{/if} -->
 </svelte:head>
 
 <article class="mx-auto w-full max-w-4xl px-4 py-16">
@@ -39,14 +41,13 @@
 		</div>
 	</header>
 
-	{#if coverImage}
-		<figure class="mb-10">
-			<img
-				src={coverImage}
+	{#if data.coverImage}
+		<div class="mb-10">
+			<Image
+				src="{data.coverImage}"
 				alt={blog.title}
-				class="w-full rounded-lg object-cover"
-			/>
-		</figure>
+				class="w-full rounded-lg object-cover"/>
+		</div>
 	{/if}
 
 	<div

@@ -9,6 +9,8 @@
 </script>
 
 <script lang="ts">
+  import { Image } from "@unpic/svelte";
+
 	import {
 		Card,
 		CardContent,
@@ -38,7 +40,7 @@
 		<div class="relative">
 			<AspectRatio ratio={16 / 9}>
 				{#if imageUrl}
-					<enhanced:img
+					<Image
 						src={imageUrl}
 						alt={title || 'project image'}
 						class="object-cover"

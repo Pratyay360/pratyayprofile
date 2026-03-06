@@ -14,7 +14,7 @@
     "format": "oxfmt . --write"
   },
   "dependencies": {
-    "@sveltejs/enhanced-img": "^0.10.3",
+    "@unpic/svelte": "^1.0.1",
     "mdsvex": "^0.12.6",
     "pocketbase": "^0.26.8",
     "vite-plugin-oxlint": "^1.7.0",
