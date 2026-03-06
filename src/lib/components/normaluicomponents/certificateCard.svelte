@@ -13,7 +13,6 @@
 	import { Card, CardHeader, CardTitle, CardDescription } from '$lib/components/ui/card';
 	import { AspectRatio } from '$lib/components/ui/aspect-ratio';
 	import { Skeleton } from '$lib/components/ui/skeleton/index';
-  	import { Image } from "@unpic/svelte";
 	export let imageSrc: string = '';
 	export let title: string = '';
 	export let description: string = '';
@@ -31,7 +30,8 @@
 	<Card class="group relative h-full overflow-hidden transition-transform hover:scale-105">
 		<AspectRatio ratio={16 / 10}>
 			{#if imageSrc}
-				<Image
+				<enhanced:img
+
 					src={imageSrc}
 					alt={title || 'certificate image'}
 					class="object-cover"

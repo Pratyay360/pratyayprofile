@@ -1,7 +1,5 @@
 <script lang="ts">
 	import type { PageData } from "./$types";
-	import { Image } from "@unpic/svelte";
-
 	let { data }: { data: PageData } = $props();
 	const blog = $derived(data.blog);
 	const renderedContent = $derived(data.renderedContent);
@@ -43,8 +41,8 @@
 
 	{#if data.coverImage}
 		<div class="mb-10">
-			<Image
-				src="{data.coverImage}"
+			<enhanced:img
+				src={data.coverImage}
 				alt={blog.title}
 				class="w-full rounded-lg object-cover"/>
 		</div>

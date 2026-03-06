@@ -2,8 +2,9 @@
 	import { onMount } from 'svelte';
 	import EducationCard from '$lib/components/normaluicomponents/education.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
-	import PocketBase from 'pocketbase';
-	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE!);
+	import { createClient } from '$lib/pocketbase';
+
+const pb = createClient(import.meta.env.VITE_POCKET_BASE!);
 
 	let education = {} ;
 	onMount(async () => {

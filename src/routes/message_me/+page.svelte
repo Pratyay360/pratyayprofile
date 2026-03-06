@@ -10,9 +10,9 @@
 		CardHeader,
 		CardTitle
 	} from '$lib/components/ui/card';
-	import PocketBase from 'pocketbase';
+	import { createClient } from '$lib/pocketbase';
 
-	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE!);
+	const pb = createClient(import.meta.env.VITE_POCKET_BASE!);
 	
 
 	let name = '';

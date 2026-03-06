@@ -40,7 +40,8 @@
 		<div class="relative">
 			<AspectRatio ratio={16 / 9}>
 				{#if imageUrl}
-					<Image
+					<enhanced:img
+
 						src={imageUrl}
 						alt={title || 'project image'}
 						class="object-cover"

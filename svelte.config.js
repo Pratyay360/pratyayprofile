@@ -7,8 +7,8 @@ const config = {
   kit: {
     adapter: adapter(),
     csrf: {
-      trustedOrigins: ['*.qzz.io', 'localhost']
-    }
+      trustedOrigins: ["pocketbase.pratyay.qzz.io", "localhost"],
+    },
   },
   preprocess: [mdsvex(), preprocessor()],
   extensions: [".svelte", ".svx"],

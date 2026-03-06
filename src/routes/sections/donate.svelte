@@ -2,7 +2,8 @@
 	import { onMount } from 'svelte';
 	import DonationCard from '$lib/components/normaluicomponents/donation.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
-	import PocketBase, { type RecordModel } from 'pocketbase';
+	import { createClient } from '$lib/pocketbase';
+	import { type RecordModel } from 'pocketbase';
 
 	interface DonationRecord {
 		id: string;
@@ -11,7 +12,7 @@
 		link: string;
 	}
 
-	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE);
+	const pb = createClient(import.meta.env.VITE_POCKET_BASE);
 
 	let loading = true;
 	let donations: DonationRecord[] = [];

@@ -1,7 +1,7 @@
-import PocketBase from "pocketbase";
+import { createClient } from "$lib/pocketbase";
 import type { PageServerLoad } from "./$types";
 
-const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE!);
+const pb = createClient(import.meta.env.VITE_POCKET_BASE!);
 
 export const load: PageServerLoad = async () => {
   try {

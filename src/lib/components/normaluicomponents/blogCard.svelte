@@ -17,7 +17,6 @@
 		CardDescription
 	} from '$lib/components/ui/card';
 	import { AspectRatio } from '$lib/components/ui/aspect-ratio';
-	import { Image } from "@unpic/svelte";
 	export let imageUrl: string = '';
 	export let link: string = '';
 	export let title: string = '';
@@ -28,7 +27,7 @@
 	<Card class="group relative h-full overflow-hidden transition-transform hover:scale-105">
 		<div class="relative">
 			<AspectRatio ratio={16 / 9}>
-				<Image
+				<enhanced:img
 					src={imageUrl}
 					alt={title}
 					class="object-cover"

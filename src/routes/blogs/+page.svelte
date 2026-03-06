@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import BlogCard from '$lib/components/normaluicomponents/blogCard.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
-	import PocketBase from 'pocketbase';
+	import { createClient } from '$lib/pocketbase';
 
 	interface BlogRecord {
 		id: string;
@@ -16,7 +16,7 @@
 		name?: string;
 	}
 
-	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE);
+	const pb = createClient(import.meta.env.VITE_POCKET_BASE);
 	let posts: BlogRecord[] = [];
 	let failed = false;
 	let loading = true;

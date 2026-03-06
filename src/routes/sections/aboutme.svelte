@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import PocketBase, { type RecordModel } from 'pocketbase';
+	import { createClient } from '$lib/pocketbase';
+	import { type RecordModel } from 'pocketbase';
 
-	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE);
+	const pb = createClient(import.meta.env.VITE_POCKET_BASE);
 	let name = 'Pratyay Mustafi';
 	let image = '/images/profile-placeholder.svg';
 	let description = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.';

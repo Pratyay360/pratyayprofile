@@ -1,6 +1,6 @@
 import type { Cookies } from "@sveltejs/kit";
 import { dev } from "$app/environment";
-import PocketBase from "pocketbase";
+import { createClient } from "$lib/pocketbase";
 
 export const AUTH_COOKIE = "admin_auth";
 export const PENDING_AUTH_COOKIE = "admin_pending_auth";
@@ -16,7 +16,7 @@ function cookieOptions(maxAge = 60 * 60 * 24 * 7) {
 }
 
 export function createPocketBaseClient() {
-  return new PocketBase(import.meta.env.VITE_POCKET_BASE!);
+  return createClient(import.meta.env.VITE_POCKET_BASE!);
 }
 
 export async function verifyUserToken(token: string) {

@@ -2,7 +2,8 @@
 	import { onMount } from 'svelte';
 	import ProjectCard from '$lib/components/normaluicomponents/projectCard.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
-	import PocketBase, { type RecordModel } from 'pocketbase';
+	import { createClient } from '$lib/pocketbase';
+	import { type RecordModel } from 'pocketbase';
 
 	interface ProjectRecord {
 		id: string;
@@ -12,7 +13,7 @@
 		link: string;
 	}
 
-	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE);
+	const pb = createClient(import.meta.env.VITE_POCKET_BASE);
 	let loading = true;
 	let projects: ProjectRecord[] = [];
 

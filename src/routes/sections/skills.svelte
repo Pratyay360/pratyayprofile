@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
-	import PocketBase from 'pocketbase';
+	import { createClient } from '$lib/pocketbase';
 
 	interface SkillRecord {
 		id: string;
@@ -9,7 +9,7 @@
 		items: string;
 	}
 
-	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE!);
+	const pb = createClient(import.meta.env.VITE_POCKET_BASE!);
 
 	let loading = true;
 	let skills: SkillRecord[] = [];

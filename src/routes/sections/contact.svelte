@@ -2,7 +2,8 @@
 	import { onMount } from 'svelte';
 	import ImageCard from '$lib/components/normaluicomponents/imageCard.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
-	import PocketBase, { type RecordModel } from 'pocketbase';
+	import { createClient } from '$lib/pocketbase';
+	import { type RecordModel } from 'pocketbase';
 
 	interface SocialRecord {
 		id: string;
@@ -11,7 +12,7 @@
 		link: string;
 	}
 
-	const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE);
+	const pb = createClient(import.meta.env.VITE_POCKET_BASE);
 	let social: SocialRecord[] = [];
 	let loading = false;
 	let failed = false;

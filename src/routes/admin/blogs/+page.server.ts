@@ -1,8 +1,8 @@
-import PocketBase from "pocketbase";
+import { createClient } from "$lib/pocketbase";
 import { fail } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 
-const pb = new PocketBase(import.meta.env.VITE_POCKET_BASE!);
+const pb = createClient(import.meta.env.VITE_POCKET_BASE!);
 
 function readText(data: FormData, key: string): string {
   const value = data.get(key);

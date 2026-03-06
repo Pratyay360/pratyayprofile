@@ -59,7 +59,7 @@ export const actions = {
         email,
         message: "OTP sent to your email.",
         otpId: otpResponse.otpId,
-      };  
+      };
     } catch (error) {
       const errorText = extractErrorText(error);
       if (errorText.includes("mfa")) {
