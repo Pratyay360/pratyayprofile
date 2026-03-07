@@ -52,14 +52,15 @@ export const actions = {
 
     const pb = createPocketBaseClient();
     try {
-      const otpResponse = await pb.collection("_superusers").requestVerification(email);
-      setPendingAuthCookie(cookies, otpResponse.otpId);
-      return {
-        stage: "otp" as const,
-        email,
-        message: "OTP sent to your email.",
-        otpId: otpResponse.otpId,
-      };
+      const passwordAuth = await pb.collection("_superusers").authWithPassword(email, password);
+      // const otpResponse = await pb.collection("_superusers").requestOTP(email);
+      setPendingAuthCookie(cookies, passwordAuth.token);
+      // return {
+      //   stage: "otp" as const,
+      //   email,
+      //   message: "OTP sent to your email.",
+      //   otpId: otpResponse.otpId,
+      // };
     } catch (error) {
       const errorText = extractErrorText(error);
       if (errorText.includes("mfa")) {
@@ -79,13 +80,16 @@ export const actions = {
   verifyOtp: async ({ request, cookies }) => {
     const data = await request.formData();
     const email = data.get("email");
+    const otpId = data.get("otpId");
     const otp = data.get("otp");
     const pendingToken = cookies.get(PENDING_AUTH_COOKIE);
 
     if (
       typeof email !== "string" ||
+      typeof otpId !== "string" ||
       typeof otp !== "string" ||
       email.length === 0 ||
+      otpId.length === 0 ||
       otp.length === 0
     ) {
       return fail(400, {
@@ -121,7 +125,7 @@ export const actions = {
 
     const pb = createPocketBaseClient();
     try {
-      await pb.collection("_superusers").authWithOTP(pendingToken, otp);
+      await pb.collection("_superusers").authWithOTP(otpId, otp);
       if (!pb.authStore.isValid || pb.authStore.record?.email !== email) {
         return fail(403, {
           stage: "otp" as const,

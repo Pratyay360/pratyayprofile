@@ -3,13 +3,14 @@
 	import BlogCard from '$lib/components/normaluicomponents/blogCard.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { createClient } from '$lib/pocketbase';
+	import { type RecordModel } from 'pocketbase';
 
 	interface BlogRecord {
 		id: string;
 		url: string;
 		title: string;
 		brief: string;
-		coverImage?: { url?: string };
+		coverImage?: string;
 	}
 
 	interface ProfileRecord {
@@ -22,13 +23,28 @@
 	let loading = true;
 	let profileName = 'Pratyay';
 
+	function toMediaUrl(record: RecordModel, field: string): string {
+		const value = record[field];
+		if (typeof value !== 'string' || !value) return '';
+		if (value.startsWith('http://') || value.startsWith('https://') || value.startsWith('/')) {
+			return value;
+		}
+		return pb.files.getURL(record, value);
+	}
+
 	onMount(async () => {
 		try {
 			const [postResult, profileResult] = await Promise.all([
-				pb.collection('blogs').getFullList<BlogRecord>({}),
+				pb.collection('blogs').getFullList<RecordModel>({}),
 				pb.collection('aboutme').getFirstListItem<ProfileRecord>('')
 			]);
-			posts = postResult;
+			posts = postResult.map((record) => ({
+				id: record.id,
+				url: typeof record.url === 'string' ? record.url : '',
+				title: typeof record.title === 'string' ? record.title : '',
+				brief: typeof record.brief === 'string' ? record.brief : '',
+				coverImage: toMediaUrl(record, 'coverImage')
+			}));
 			profileName = profileResult?.name ?? profileName;
 		} catch (e) {
 			console.error(e);
@@ -69,10 +85,10 @@
 
 	{#if posts.length > 0}
 		<section class="mx-auto grid max-w-6xl gap-8 md:grid-cols-2 lg:grid-cols-3">
-			{#each posts.filter((p) => p.coverImage?.url) as post (post.id)}
+			{#each posts.filter((p) => p.coverImage) as post (post.id)}
 				<BlogCard
 					link={post.url}
-					imageUrl={post.coverImage?.url ?? ''}
+					imageUrl={post.coverImage ?? ''}
 					title={post.title}
 					brief={post.brief}
 				/>
