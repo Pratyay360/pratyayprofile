@@ -23,7 +23,7 @@
 	export let brief: string = '';
 </script>
 
-<a href={link} target="_blank" rel="noopener noreferrer" class="block">
+<a href={link} rel="noopener noreferrer" class="block">
 	<Card class="group relative h-full overflow-hidden transition-transform hover:scale-105">
 		<div class="relative">
 			<AspectRatio ratio={16 / 9}>

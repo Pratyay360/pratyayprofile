@@ -29,9 +29,9 @@
 
 	onMount(async () => {
 		try {
-			const [projectsResult, profileResult] = await Promise.all([
+			const [projectsResult, profileRecords] = await Promise.all([
 				pb.collection('projects').getFullList<RecordModel>({}),
-				pb.collection('aboutme').getFirstListItem<RecordModel>('')
+				pb.collection('aboutme').getFullList<RecordModel>({})
 			]);
 			projects = projectsResult.map((record) => ({
 				id: record.id,
@@ -40,7 +40,8 @@
 				brief: typeof record.brief === 'string' ? record.brief : '',
 				link: typeof record.link === 'string' ? record.link : ''
 			}));
-			profileName = typeof profileResult?.name === 'string' ? profileResult.name : profileName;
+			const profileRecord = profileRecords[0];
+			profileName = typeof profileRecord?.name === 'string' ? profileRecord.name : profileName;
 		} catch (error) {
 			console.error(error);
 		} finally {

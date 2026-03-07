@@ -31,6 +31,15 @@
 				value={email}
 				required
 			/>
+			<label for="password" class="block text-sm font-medium">Password</label>
+			<input
+				id="password"
+				name="password"
+				type="password"
+				class="w-full rounded border p-2"
+				autocomplete="current-password"
+				required
+			/>
 			<button class="rounded-md border px-4 py-2" type="submit">Request OTP</button>
 		</form>
 	{:else}

@@ -4,14 +4,15 @@
 	const blog = $derived(data.blog);
 	const renderedContent = $derived(data.renderedContent);
 
+	
 </script>
 
 <svelte:head>
 	<title>{blog.title}</title>
 	<meta name="description" content={blog.excerpt || blog.title} />
-	<!-- {#if data.coverImage}
+	{#if data.coverImage}
 		<meta property="og:image" content={data.coverImage} />
-	{/if} -->
+	{/if}
 </svelte:head>
 
 <article class="mx-auto w-full max-w-4xl px-4 py-16">
