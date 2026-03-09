@@ -2,9 +2,12 @@ import PocketBase from "pocketbase";
 
 export function createClient(url: string) {
   const pb = new PocketBase(url);
+  const clientWithFetch = pb as PocketBase & {
+    _fetch?: (url: string, options?: RequestInit) => Promise<Response>;
+  };
 
   // Configure custom fetch to avoid Cloudflare 403 blocks
-  pb["_fetch"] = async function (url: string, options?: RequestInit) {
+  clientWithFetch._fetch = async function (url: string, options?: RequestInit) {
     if (!options) {
       options = {};
     }

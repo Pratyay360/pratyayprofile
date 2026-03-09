@@ -21,19 +21,22 @@
 	let loading = false;
 
 	async function handleSubmit(): Promise<void> {
+		loading = true;
 		const data = {
 			name,
 			email,
 			message
 		};
-		const record = await pb.collection('messages').create(data);
-		if(record){
+		try {
+			await pb.collection('messages').create(data);
 			toast.success('Message sent successfully');
 			name = '';
 			email = '';
 			message = '';
-		}else{
+		} catch {
 			toast.error('Failed to send message');
+		} finally {
+			loading = false;
 		}
 	}
 </script>

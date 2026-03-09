@@ -6,7 +6,7 @@
 	interface SkillRecord {
 		id: string;
 		category: string;
-		items: string;
+		items: string[];
 	}
 
 	const pb = createClient(import.meta.env.VITE_POCKET_BASE!);
@@ -17,7 +17,23 @@
 
 	onMount(async () => {
 		try {
-			skills = await pb.collection('skill').getFullList<SkillRecord>({ });
+			const records = await pb.collection('skill').getFullList<Record<string, unknown>>({});
+			skills = records.map((record) => {
+				const rawItems = record.items;
+				const items = Array.isArray(rawItems)
+					? rawItems.filter((item): item is string => typeof item === 'string')
+					: typeof rawItems === 'string'
+						? rawItems
+								.split(',')
+								.map((item) => item.trim())
+								.filter(Boolean)
+						: [];
+				return {
+					id: typeof record.id === 'string' ? record.id : '',
+					category: typeof record.category === 'string' ? record.category : '',
+					items
+				};
+			});
 		} catch (error) {
 			console.error(error);
 			failed = true;
@@ -48,11 +64,11 @@
 				<div class="border-primary border-l-4 pl-4">
 					<h2 class="mb-3 text-xl font-semibold">{skill.category}</h2>
 					<div class="flex flex-wrap gap-2">
-					
-					<span class="bg-primary/10 text-primary rounded-full px-3 py-1 text-sm">
-					{skill.items}
-					</span>
-						
+						{#each skill.items as item (item)}
+							<span class="bg-primary/10 text-primary rounded-full px-3 py-1 text-sm">
+								{item}
+							</span>
+						{/each}
 					</div>
 				</div>
 			{/each} 

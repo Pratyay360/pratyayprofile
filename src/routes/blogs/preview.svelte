@@ -1,24 +1,38 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import BlogCard from '$lib/components/normaluicomponents/blogCard.svelte';
-	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { createClient } from '$lib/pocketbase';
+	import type { RecordModel } from 'pocketbase';
 
 	interface BlogRecord {
 		id: string;
-		url: string;
 		title: string;
-		brief: string;
-		coverImage?: { url?: string };
+		content: string;
+		coverImage: string;
 	}
 
 	const pb = createClient(import.meta.env.VITE_POCKET_BASE);
 	let posts: BlogRecord[] = [];
 	let loading = true;
 
+	function toMediaUrl(record: RecordModel, field: string): string {
+		const value = record[field];
+		if (typeof value !== 'string' || !value) return '';
+		if (value.startsWith('http://') || value.startsWith('https://') || value.startsWith('/')) {
+			return value;
+		}
+		return pb.files.getURL(record, value);
+	}
+
 	onMount(async () => {
 		try {
-			posts = await pb.collection('blogs').getFullList<BlogRecord>({ });
+			const records = await pb.collection('blogs').getFullList<RecordModel>({});
+			posts = records.map((record) => ({
+				id: record.id,
+				title: typeof record.title === 'string' ? record.title : '',
+				content: typeof record.content === 'string' ? record.content : '',
+				coverImage: toMediaUrl(record, 'coverImage')
+			}));
 		} catch (error) {
 			console.error(error);
 		} finally {
@@ -35,9 +49,9 @@
 		{#each posts.slice(0, 3) as post (post.id)}
 			<BlogCard
 				link={`/blogs/${post.id}`}
-				imageUrl={post.coverImage?.url ?? ''}
+				imageUrl={post.coverImage}
 				title={post.title}
-				brief={post.brief}
+				brief={post.content.substring(0, 120)}
 			/>
 		{/each}
 	</div>

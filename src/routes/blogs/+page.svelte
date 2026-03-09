@@ -1,27 +1,16 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import BlogCard from '$lib/components/normaluicomponents/blogCard.svelte';
-	import { Skeleton } from '$lib/components/ui/skeleton';
-	import { createClient } from '$lib/pocketbase';
-	import { type RecordModel } from 'pocketbase';
+	import { createClient } from "$lib/pocketbase";
+	import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte';
+	import { onMount } from 'svelte';
+	import type { RecordModel } from 'pocketbase';
 
-	interface BlogRecord {
-		id: string;
-		url: string;
-		title: string;
-		brief: string;
-		coverImage?: string;
-	}
+	const pb = createClient(import.meta.env.VITE_POCKET_BASE!);
+	pb.autoCancellation(false);
 
-	interface ProfileRecord {
-		name?: string;
-	}
-
-	const pb = createClient(import.meta.env.VITE_POCKET_BASE);
-	let posts: BlogRecord[] = [];
-	let failed = false;
+	let blogList: RecordModel[] = [];
 	let loading = true;
-	let profileName = 'Pratyay';
+	let failed = false;
 
 	function toMediaUrl(record: RecordModel, field: string): string {
 		const value = record[field];
@@ -34,20 +23,8 @@
 
 	onMount(async () => {
 		try {
-			const [postResult, profileResult] = await Promise.all([
-				pb.collection('blogs').getFullList<RecordModel>({}),
-				pb.collection('aboutme').getFirstListItem<ProfileRecord>('')
-			]);
-			posts = postResult.map((record) => ({
-				id: record.id,
-				url: typeof record.url === 'string' ? record.url : '',
-				title: typeof record.title === 'string' ? record.title : '',
-				brief: typeof record.brief === 'string' ? record.brief : '',
-				coverImage: toMediaUrl(record, 'coverImage')
-			}));
-			profileName = profileResult?.name ?? profileName;
-		} catch (e) {
-			console.error(e);
+			blogList = await pb.collection("blogs").getFullList<RecordModel>({});
+		} catch {
 			failed = true;
 		} finally {
 			loading = false;
@@ -57,14 +34,8 @@
 
 <main class="bg-background min-h-screen px-4 py-24">
 	<h1 class="mb-16 text-center text-4xl font-bold tracking-wider md:text-5xl">
-		Blogs by {profileName}
+		Blogs.
 	</h1>
-
-	{#if failed}
-		<div class="text-destructive text-center">
-			<p class="text-xl">Couldn&apos;t fetch posts. Try again later.</p>
-		</div>
-	{/if}
 
 	{#if loading && !failed}
 		<div class="mx-auto grid max-w-6xl gap-8 md:grid-cols-2 lg:grid-cols-3">
@@ -79,18 +50,17 @@
 		</div>
 	{/if}
 
-	{#if !loading && !failed && posts.length === 0}
-		<p class="text-muted-foreground text-center text-sm">No posts yet.</p>
-	{/if}
-
-	{#if posts.length > 0}
+	{#if !loading && blogList.length > 0}
 		<section class="mx-auto grid max-w-6xl gap-8 md:grid-cols-2 lg:grid-cols-3">
-			{#each posts.filter((p) => p.coverImage) as post (post.id)}
+			{#each blogList as post (post.id)}
+				{@const content = typeof post.content === "string" ? post.content : ""}
+				{@const excerpt = content.substring(0, 120)}
+				{@const coverImage = toMediaUrl(post, 'coverImage')}
 				<BlogCard
-					link={post.url}
-					imageUrl={post.coverImage ?? ''}
-					title={post.title}
-					brief={post.brief}
+					link={`/blogs/${post.id}`}
+					imageUrl={coverImage}
+					title={typeof post.title === 'string' ? post.title : ''}
+					brief={excerpt}
 				/>
 			{/each}
 		</section>
