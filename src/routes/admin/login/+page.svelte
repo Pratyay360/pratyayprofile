@@ -1,48 +1,45 @@
 <script lang="ts">
 	type LoginFormState = {
-		stage?: 'request' | 'otp';
 		email?: string;
-		otpId?: string;
 		message?: string;
 		error?: string;
 	};
 
 	let { form } = $props<{ form?: LoginFormState }>();
-
-	const stage = $derived(form?.stage ?? 'request');
 	const email = $derived(form?.email ?? '');
-	const otpId = $derived(form?.otpId ?? '');
 </script>
 
 <div class="container mx-auto px-6 py-8">
 	<h1 class="text-2xl font-semibold">Admin Login</h1>
 	<p class="text-muted-foreground mt-2 text-sm">
-		Authenticate with email + password, then verify OTP (admin only).
+		Authenticate with email and password.
 	</p>
 
-	{#if stage === 'request'}
-		<form method="POST" action="?/requestOtp" class="mt-6 max-w-sm space-y-3">
-			<label for="email" class="block text-sm font-medium">Email</label>
-			<input
-				id="email"
-				name="email"
-				type="email"
-				class="w-full rounded border p-2"
-				value={email}
-				required
-			/>
-			<label for="password" class="block text-sm font-medium">Password</label>
-			<input
-				id="password"
-				name="password"
-				type="password"
-				class="w-full rounded border p-2"
-				autocomplete="current-password"
-				required
-			/>
-			<button class="rounded-md border px-4 py-2" type="submit">Request OTP</button>
-		</form>
-	{:else}
+	<form method="POST" action="?/login" class="mt-6 max-w-sm space-y-3">
+		<label for="email" class="block text-sm font-medium">Email</label>
+		<input
+			id="email"
+			name="email"
+			type="email"
+			class="w-full rounded border p-2"
+			value={email}
+			required
+		/>
+		<label for="password" class="block text-sm font-medium">Password</label>
+		<input
+			id="password"
+			name="password"
+			type="password"
+			class="w-full rounded border p-2"
+			autocomplete="current-password"
+			required
+		/>
+		<button class="rounded-md border px-4 py-2" type="submit">Login</button>
+	</form>
+
+	<!-- Commented out OTP verification form -->
+	<!-- 
+	{#if stage === 'otp'}
 		<form method="POST" action="?/verifyOtp" class="mt-6 max-w-sm space-y-3">
 			<input type="hidden" name="email" value={email} />
 			<input type="hidden" name="otpId" value={otpId} />
@@ -63,6 +60,7 @@
 			<button class="rounded-md border px-4 py-2" type="submit">Verify OTP</button>
 		</form>
 	{/if}
+	-->
 
 	{#if form?.message}
 		<p class="mt-4 text-sm text-green-700 dark:text-green-400">{form.message}</p>

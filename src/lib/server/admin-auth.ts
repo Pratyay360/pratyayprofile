@@ -24,13 +24,14 @@ export async function verifyUserToken(token: string) {
   pb.authStore.save(token, null);
 
   try {
-    await pb.collection("_superusers").authRefresh();
-    if (!pb.authStore.isValid) {
+    const authData = await pb.collection("_superusers").authRefresh();
+    if (!pb.authStore.isValid || !authData) {
       pb.authStore.clear();
       return null;
     }
     return pb;
-  } catch {
+  } catch (error) {
+    console.error("Auth verification failed:", error);
     pb.authStore.clear();
     return null;
   }
