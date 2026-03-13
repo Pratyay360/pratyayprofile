@@ -30,7 +30,7 @@
 	let previewLoading = $state(false);
 	let editor = $state<HTMLTextAreaElement | null>(null);
 	let contentImageInput = $state<HTMLInputElement | null>(null);
-	let previewTimeout = $state<ReturnType<typeof setTimeout> | null>(null);
+	let previewTimeout: ReturnType<typeof setTimeout> | null = null; // Not a $state
 	let refreshPreview: ((markdown: string) => Promise<void>) | null = null;
 
 	function resetBlogForm(): void {
@@ -154,6 +154,9 @@
 	});
 
 	$effect(() => {
+		// Only run preview refresh on client side
+		if (typeof window === 'undefined') return;
+		
 		if (previewTimeout) clearTimeout(previewTimeout);
 		previewTimeout = setTimeout(() => {
 			if (!refreshPreview) return;

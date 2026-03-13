@@ -31,47 +31,58 @@ async function requireAdminPocketBase(cookies: import("@sveltejs/kit").Cookies) 
 export const load: PageServerLoad = async ({ cookies }) => {
   const pb = await requireAdminPocketBase(cookies);
 
-  try {
-    const [
-      profiles,
-      projects,
-      certificates,
-      skills,
-      education,
-      social_link,
-      donations,
-      blogs,
-      messages,
-    ] = await Promise.all([
-      pb.collection("me").getFullList({}),
-      pb.collection("project").getFullList({}),
-      pb.collection("certificate").getFullList({}),
-      pb.collection("skill").getFullList({}),
-      pb.collection("education").getFullList({}),
-      pb.collection("social_link").getFullList({}),
-      pb.collection("donation").getFullList({}),
-      pb.collection("blogs").getFullList({}),
-      pb.collection("messages").getFullList({ sort: "-created" }),
-    ]);
-
-    return {
-      profiles,
-      projects,
-      certificates,
-      skills,
-      education,
-      social_link,
-      donations,
-      blogs,
-      messages,
-    };
-  } catch (error) {
-    console.error("Failed to load admin data:", error);
-    console.error("Auth store valid:", pb.authStore.isValid);
-    console.error("Auth store token:", pb.authStore.token ? "present" : "missing");
-    console.error("Auth store record:", pb.authStore.record);
-    throw error;
+  // Helper to safely fetch collection data
+  async function safeGetCollection<T>(collectionName: string): Promise<T[]> {
+    try {
+      return await pb.collection(collectionName).getFullList({});
+    } catch (error: any) {
+      console.warn(`Collection "${collectionName}" not accessible:`, error?.message || error);
+      return [];
+    }
   }
+
+  async function safeGetCollectionSorted<T>(collectionName: string, sort: string): Promise<T[]> {
+    try {
+      return await pb.collection(collectionName).getFullList({ sort });
+    } catch (error: any) {
+      console.warn(`Collection "${collectionName}" not accessible:`, error?.message || error);
+      return [];
+    }
+  }
+
+  const [
+    profiles,
+    projects,
+    certificates,
+    skills,
+    education,
+    social_link,
+    donations,
+    blogs,
+    messages,
+  ] = await Promise.all([
+    safeGetCollection("me"),
+    safeGetCollection("project"),
+    safeGetCollection("certificate"),
+    safeGetCollection("skill"),
+    safeGetCollection("education"),
+    safeGetCollection("social_link"),
+    safeGetCollection("donation"),
+    safeGetCollection("blogs"),
+    safeGetCollectionSorted("messages", "-created"),
+  ]);
+
+  return {
+    profiles,
+    projects,
+    certificates,
+    skills,
+    education,
+    social_link,
+    donations,
+    blogs,
+    messages,
+  };
 };
 
 export const actions: Actions = {
