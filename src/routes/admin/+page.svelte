@@ -86,7 +86,7 @@
 			class="rounded border px-3 py-1 {currentSection === 'donations'
 				? 'bg-primary text-primary-foreground'
 				: ''}"
-			onclick={() => setSection('donations')}
+			onclick={() => setSection('donation')}
 		>
 			Donations
 		</Button>
@@ -116,7 +116,7 @@
 	{:else if currentSection === 'socials'}
 		<SocialsSection socials={data.social_link} />
 	{:else if currentSection === 'donations'}
-		<DonationsSection donations={data.donations} />
+		<DonationsSection donations={data.donation} />
 	{:else if currentSection === 'messages'}
 		<ViewMessages messages={data.messages} />
 	{/if}

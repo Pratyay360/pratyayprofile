@@ -24,13 +24,13 @@
 		if (value.startsWith('http://') || value.startsWith('https://') || value.startsWith('/')) {
 			return value;
 		}
-		return pb.files.getURL(record, value);
+		return pb.files.getURL(record, record.imageUrl, {token : null});
 	}
 
 	onMount(async () => {
 		try {
 			const [projectsResult, profileRecords] = await Promise.all([
-				pb.collection('projects').getFullList<RecordModel>({}),
+				pb.collection('project').getFullList<RecordModel>({}),
 				pb.collection('aboutme').getFullList<RecordModel>({})
 			]);
 			projects = projectsResult.map((record) => ({

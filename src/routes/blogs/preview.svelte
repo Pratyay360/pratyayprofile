@@ -4,15 +4,10 @@
 	import { createClient } from '$lib/pocketbase';
 	import type { RecordModel } from 'pocketbase';
 
-	interface BlogRecord {
-		id: string;
-		title: string;
-		content: string;
-		coverImage: string;
-	}
-
 	const pb = createClient(import.meta.env.VITE_POCKET_BASE);
-	let posts: BlogRecord[] = [];
+	pb.autoCancellation(false);
+
+	let posts: RecordModel[] = [];
 	let loading = true;
 
 	function toMediaUrl(record: RecordModel, field: string): string {
@@ -21,20 +16,16 @@
 		if (value.startsWith('http://') || value.startsWith('https://') || value.startsWith('/')) {
 			return value;
 		}
-		return pb.files.getURL(record, value);
+		return pb.files.getURL(value, value.coverImage, { token: null });
+
 	}
 
 	onMount(async () => {
 		try {
-			const records = await pb.collection('blogs').getFullList<RecordModel>({});
-			posts = records.map((record) => ({
-				id: record.id,
-				title: typeof record.title === 'string' ? record.title : '',
-				content: typeof record.content === 'string' ? record.content : '',
-				coverImage: toMediaUrl(record, 'coverImage')
-			}));
+			posts = await pb.collection('blogs').getFullList<RecordModel>({});
+			console.log('Loaded posts:', posts);
 		} catch (error) {
-			console.error(error);
+			console.error('Error loading blogs:', error);
 		} finally {
 			loading = false;
 		}
@@ -47,12 +38,15 @@
 
 	<div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 		{#each posts.slice(0, 3) as post (post.id)}
-			<BlogCard
-				link={`/blogs/${post.id}`}
-				imageUrl={post.coverImage}
-				title={post.title}
-				brief={post.content.substring(0, 120)}
-			/>
+				{@const content = typeof post.content === "string" ? post.content : ""}
+				{@const excerpt = content.substring(0, 120)}
+				{@const coverImage = toMediaUrl(post, 'coverImage')}
+				<BlogCard
+					link={`/blogs/${post.id}`}
+					imageUrl={coverImage}
+					title={typeof post.title === 'string' ? post.title : ''}
+					brief={excerpt}
+				/>
 		{/each}
 	</div>
 

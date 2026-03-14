@@ -28,7 +28,7 @@
 
 	onMount(async () => {
 		try {
-			const records = await pb.collection('donations').getFullList<RecordModel>({});
+			const records = await pb.collection('donation').getFullList<RecordModel>({});
 			donations = records.map((record) => ({
 				id: record.id,
 				name: typeof record.name === 'string' ? record.name : '',

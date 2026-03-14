@@ -57,7 +57,7 @@ export const load: PageServerLoad = async ({ cookies }) => {
     skills,
     education,
     social_link,
-    donations,
+    donation,
     blogs,
     messages,
   ] = await Promise.all([
@@ -79,7 +79,7 @@ export const load: PageServerLoad = async ({ cookies }) => {
     skills,
     education,
     social_link,
-    donations,
+    donation,
     blogs,
     messages,
   };

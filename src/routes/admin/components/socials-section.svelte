@@ -4,7 +4,7 @@
 		name?: string;
 		link?: string;
 	}
-
+	
 	export let socials: SocialLink[] = [];
 
 	let socialForm: {

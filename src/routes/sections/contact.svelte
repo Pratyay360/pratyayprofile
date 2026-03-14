@@ -23,13 +23,13 @@
 		if (value.startsWith('http://') || value.startsWith('https://') || value.startsWith('/')) {
 			return value;
 		}
-		return pb.files.getURL(record, value);
+		return pb.files.getURL(record, record.image, { token:  null });
 	}
 
 	async function loadSocial() {
 		loading = true;
 		try {
-			const records = await pb.collection('social').getFullList<RecordModel>({});
+			const records = await pb.collection('social_links').getFullList<RecordModel>({});
 			social = records.map((record) => ({
 				id: record.id,
 				name: typeof record.name === 'string' ? record.name : '',

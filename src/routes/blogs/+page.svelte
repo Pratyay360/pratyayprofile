@@ -18,7 +18,7 @@
 		if (value.startsWith('http://') || value.startsWith('https://') || value.startsWith('/')) {
 			return value;
 		}
-		return pb.files.getURL(record, value);
+		return pb.files.getURL(value, value.coverImage, { token: null });
 	}
 
 	onMount(async () => {
