@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount, tick } from 'svelte';
 	import type { PageData } from './$types';
-
+	
 	type BlogItem = {
 		id: string;
 		title?: string;

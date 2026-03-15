@@ -1,8 +1,5 @@
 <script lang="ts">
-	import Pocketbase from "pocketbase";
-	const pb = new Pocketbase(import.meta.env.VITE_POCKET_BASE!);	
-	pb.autoCancellation(false);
-	import { onMount } from "svelte";	
+	import { Trash } from "@lucide/svelte";
 
 	interface MessageRecord {
 		id: string;
@@ -12,15 +9,6 @@
 		created?: string;
 	}
 
-	async function deleteMessage(id: string) {
-		const deleteMessage= (id:string) => {
-		pb.collection("messages").delete(id, {
-			token: pb.authStore.token	
-		});
-		toast.success("Message deleted");
-	};
-	
-}
 	export let messages: MessageRecord[] = [];
 </script>
 
@@ -29,15 +17,18 @@
 	<div class="mt-10 space-y-6">
 		{#each messages as message (message.id)}
 			<div class="flex">
-				<article class="rounded border p-4">
+				<article class="rounded border p-4 w-full">
 					<p class="font-medium">{message.name ?? 'Unknown'}</p>
 					<p class="text-muted-foreground text-sm">{message.email ?? ''}</p>
 					<p class="mt-3 whitespace-pre-wrap">{message.message ?? ''}</p>
 					<p class="text-muted-foreground mt-2 text-xs">{message.created ?? ''}</p>
-			</article>
-			<button class="rounded border bg-destructive p-2 text-white" on:click={deleteMessage(message.id)} >
-				<Trash />
-			</button>
+					<form method="POST" action="?/deleteMessage" class="mt-2">
+						<input type="hidden" name="id" value={message.id} />
+						<button type="submit" class="rounded border bg-destructive p-2 text-white h-10 w-10 flex items-center justify-center">
+							<Trash class="h-4 w-4" />
+						</button>
+					</form>
+				</article>
 			</div>
 		{/each}
 		{#if messages.length === 0}

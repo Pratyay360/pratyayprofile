@@ -54,7 +54,7 @@ export const actions = {
     const pb = createPocketBaseClient();
     try {
       const authData = await pb.collection("_superusers").authWithPassword(email, password);
-      
+
       if (!pb.authStore.isValid || !authData || !authData.token) {
         return fail(403, { error: "Authentication failed." });
       }
@@ -75,7 +75,7 @@ export const actions = {
       });
     }
   },
-  
+
   // Commented out OTP-related actions
   // requestOtp: async ({ request, cookies }) => {
   //   const data = await request.formData();
