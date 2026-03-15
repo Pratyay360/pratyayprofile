@@ -2,8 +2,6 @@ import { createClient } from "$lib/pocketbase";
 import { fail } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 
-const pb = createClient(import.meta.env.VITE_POCKET_BASE!);
-
 function readText(data: FormData, key: string): string {
   const value = data.get(key);
   return typeof value === "string" ? value.trim() : "";
@@ -16,18 +14,20 @@ function readOptionalFile(data: FormData, key: string): File | null {
 }
 
 export const load: PageServerLoad = async () => {
+  const pb = createClient(import.meta.env.VITE_POCKET_BASE);
   const blogs = await pb.collection("blogs").getFullList({ sort: "-created" });
   return { blogs };
 };
 
 export const actions: Actions = {
   saveBlog: async ({ request }) => {
+    const pb = createClient(import.meta.env.VITE_POCKET_BASE);
     const data = await request.formData();
     const id = readText(data, "id");
     const title = readText(data, "title");
     const content = readText(data, "content");
-    const url = readText(data, "url");
     const imageFile = readOptionalFile(data, "coverImage");
+    const author = readText(data, "author");
 
     if (!title) {
       return fail(400, { error: "Blog title is required." });
@@ -36,7 +36,7 @@ export const actions: Actions = {
     const payload = new FormData();
     payload.set("title", title);
     payload.set("content", content);
-    payload.set("url", url);
+    payload.set("author", author);
     if (imageFile) payload.set("coverImage", imageFile);
 
     try {
@@ -52,6 +52,7 @@ export const actions: Actions = {
   },
 
   deleteBlog: async ({ request }) => {
+    const pb = createClient(import.meta.env.VITE_POCKET_BASE);
     const data = await request.formData();
     const id = readText(data, "id");
     if (!id) return fail(400, { error: "Blog id is required." });

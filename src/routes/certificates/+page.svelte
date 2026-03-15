@@ -3,6 +3,7 @@
 	import CertificateCard from '$lib/components/normaluicomponents/certificateCard.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { createClient } from '$lib/pocketbase';
+	import { readString, resolveMediaUrl } from '$lib/content';
 	import { type RecordModel } from 'pocketbase';
 
 	interface CertificateRecord {
@@ -16,27 +17,23 @@
 
 	const pb = createClient(import.meta.env.VITE_POCKET_BASE);
 	let loading = true;
+	let failed = false;
 	let certificates: CertificateRecord[] = [];
-
-	function toMediaUrl(record: RecordModel, field: string): string {
-		const value = record[field];
-		if (typeof value !== 'string' || !value) return '';
-		return pb.files.getURL(record, value);
-	}
 
 	onMount(async () => {
 		try {
 			const records = await pb.collection('certificate').getFullList<RecordModel>({});
 			certificates = records.map((record) => ({
 				id: record.id,
-				title: typeof record.title === 'string' ? record.title : '',
-				description: typeof record.description === 'string' ? record.description : '',
-				date: typeof record.date === 'string' ? record.date : '',
-				imageSrc: toMediaUrl(record, 'imageSrc'),
-				link: typeof record.link === 'string' ? record.link : ''
+				title: readString(record, 'title'),
+				description: readString(record, 'description'),
+				date: readString(record, 'date'),
+				imageSrc: resolveMediaUrl(pb, record, 'imageSrc'),
+				link: readString(record, 'link')
 			}));
 		} catch (error) {
 			console.error(error);
+			failed = true;
 		} finally {
 			loading = false;
 		}
@@ -52,6 +49,10 @@
 		</div>
 	{/if}
 
+	{#if failed}
+		<p class="text-destructive mt-8 text-center text-sm">Unable to load certificates.</p>
+	{/if}
+
 	<section class="mx-auto mt-12 max-w-6xl">
 		<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 			{#each certificates as cert (cert.id)}
@@ -64,7 +65,7 @@
 				/>
 			{/each}
 		</div>
-		{#if certificates.length === 0 && !loading}
+		{#if certificates.length === 0 && !loading && !failed}
 			<p class="text-muted-foreground mt-8 text-center text-sm">Add your certificates to display them here.</p>
 		{/if}
 	</section>

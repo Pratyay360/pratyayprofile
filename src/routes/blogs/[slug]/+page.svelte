@@ -42,7 +42,7 @@
 
 	{#if data.coverImage}
 		<div class="mb-10">
-			<enhanced:img
+			<img
 				src={data.coverImage}
 				alt={blog.title}
 				class="w-full rounded-lg object-cover"/>

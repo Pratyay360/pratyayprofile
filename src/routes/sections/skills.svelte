@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { createClient } from '$lib/pocketbase';
+	import { readString, readStringArray } from '$lib/content';
 
 	interface SkillRecord {
 		id: string;
@@ -18,22 +19,11 @@
 	onMount(async () => {
 		try {
 			const records = await pb.collection('skill').getFullList<Record<string, unknown>>({});
-			skills = records.map((record) => {
-				const rawItems = record.items;
-				const items = Array.isArray(rawItems)
-					? rawItems.filter((item): item is string => typeof item === 'string')
-					: typeof rawItems === 'string'
-						? rawItems
-								.split(',')
-								.map((item) => item.trim())
-								.filter(Boolean)
-						: [];
-				return {
-					id: typeof record.id === 'string' ? record.id : '',
-					category: typeof record.category === 'string' ? record.category : '',
-					items
-				};
-			});
+			skills = records.map((record) => ({
+				id: readString(record, 'id'),
+				category: readString(record, 'category'),
+				items: readStringArray(record, 'items')
+			}));
 		} catch (error) {
 			console.error(error);
 			failed = true;

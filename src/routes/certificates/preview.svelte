@@ -3,6 +3,7 @@
 	import CertificateCard from '$lib/components/normaluicomponents/certificateCard.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { createClient } from '$lib/pocketbase';
+	import { readString, resolveMediaUrl } from '$lib/content';
 	import { type RecordModel } from 'pocketbase';
 
 	interface CertificateRecord {
@@ -19,25 +20,16 @@
 	let failed = false;
 	let certificates: CertificateRecord[] = [];
 
-	function toMediaUrl(record: RecordModel, field: string): string {
-		const value = record[field];
-		if (typeof value !== 'string' || !value) return '';
-		if (value.startsWith('http://') || value.startsWith('https://') || value.startsWith('/')) {
-			return value;
-		}
-		return pb.files.getURL(record, value);
-	}
-
 	onMount(async () => {
 		try {
 			const records = await pb.collection('certificate').getFullList<RecordModel>({});
 			certificates = records.map((record) => ({
 				id: record.id,
-				title: typeof record.title === 'string' ? record.title : '',
-				description: typeof record.description === 'string' ? record.description : '',
-				date: typeof record.date === 'string' ? record.date : '',
-				imageSrc: toMediaUrl(record, 'imageSrc'),
-				link: typeof record.link === 'string' ? record.link : ''
+				title: readString(record, 'title'),
+				description: readString(record, 'description'),
+				date: readString(record, 'date'),
+				imageSrc: resolveMediaUrl(pb, record, 'imageSrc'),
+				link: readString(record, 'link')
 			}));
 		} catch (e) {
 			console.error(e);

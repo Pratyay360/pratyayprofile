@@ -7,8 +7,6 @@
 </script>
 
 <script lang="ts">
-  import { Image } from "@unpic/svelte";
-
 	export let link: string = '';
 	export let name: string = '';
 	export let image: string = '';

@@ -1,35 +1,47 @@
 <script lang="ts">
-	import BlogCard from '$lib/components/normaluicomponents/blogCard.svelte';
+		import { onMount } from "svelte";
+	import BlogCard from "$lib/components/normaluicomponents/blogCard.svelte";
+	import { Skeleton } from "$lib/components/ui/skeleton";
 	import { createClient } from "$lib/pocketbase";
-	import Skeleton from '$lib/components/ui/skeleton/skeleton.svelte';
-	import { onMount } from 'svelte';
-	import type { RecordModel } from 'pocketbase';
-
-	const pb = createClient(import.meta.env.VITE_POCKET_BASE!);
-	pb.autoCancellation(false);
-
-	let blogList: RecordModel[] = [];
-	let loading = true;
-	let failed = false;
-
-	function toMediaUrl(record: RecordModel, field: string): string {
-		const value = record[field];
-		if (typeof value !== 'string' || !value) return '';
-		if (value.startsWith('http://') || value.startsWith('https://') || value.startsWith('/')) {
-			return value;
-		}
-		return pb.files.getURL(value, value.coverImage, { token: null });
+	import { readString, resolveMediaUrl } from "$lib/content";
+	import { type RecordModel } from "pocketbase";
+	
+	interface BlogRecord {
+		id: string;
+		coverImage: string;
+		title: string;
+		brief: string;
+		author: string;
+		updated: string;
+		created: string;
+		link: string;
 	}
 
+	const pb = createClient(import.meta.env.VITE_POCKET_BASE);
+	let loading = true;
+	let failed = false;
+	let posts: BlogRecord[] = [];
 	onMount(async () => {
 		try {
-			blogList = await pb.collection("blogs").getFullList<RecordModel>({});
-		} catch {
+			const records = await pb.collection('blogs').getFullList<RecordModel>({});
+			posts = records.map((record) => ({
+				id: record.id,
+				title: readString(record, "title"),
+				brief: readString(record, "content"),
+				author: readString(record, "author"),
+				updated: readString(record, "updated"),
+				created: readString(record, "created"),
+				coverImage: resolveMediaUrl(pb, record, "coverImage", { token: null }),
+				link: `/blogs/${record.id}`,
+			}));
+		} catch (e) {
+			console.error(e);
 			failed = true;
 		} finally {
 			loading = false;
 		}
 	});
+
 </script>
 
 <main class="bg-background min-h-screen px-4 py-24">
@@ -53,14 +65,14 @@
 	{#if !loading && blogList.length > 0}
 		<section class="mx-auto grid max-w-6xl gap-8 md:grid-cols-2 lg:grid-cols-3">
 			{#each blogList as post (post.id)}
-				{@const content = typeof post.content === "string" ? post.content : ""}
-				{@const excerpt = content.substring(0, 120)}
-				{@const coverImage = toMediaUrl(post, 'coverImage')}
 				<BlogCard
-					link={`/blogs/${post.id}`}
-					imageUrl={coverImage}
-					title={typeof post.title === 'string' ? post.title : ''}
-					brief={excerpt}
+					link={post.link}
+					coverImage={post.coverImage}
+					title={post.title}
+					author={post.author}
+					updated={post.updated}
+					created={post.created}
+					brief={post.content}
 				/>
 			{/each}
 		</section>

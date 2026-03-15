@@ -1,4 +1,5 @@
 <script lang="ts">
+	import AboutMe from './sections/aboutme.svelte'
 	import Education from './sections/education.svelte';
 	import Skills from './sections/skills.svelte';
 	import Certificates from './certificates/preview.svelte';
@@ -10,6 +11,9 @@
 </script>
 
 <div>
+	<section id="profile" class="snap-center justify-center pt-20">
+		<AboutMe />
+	</section>
 	<section id="education" class="snap-center justify-center pt-20">
 		<Education />
 	</section>

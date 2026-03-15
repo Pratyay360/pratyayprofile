@@ -3,6 +3,7 @@
 	import ImageCard from '$lib/components/normaluicomponents/imageCard.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { createClient } from '$lib/pocketbase';
+	import { readString, resolveMediaUrl } from '$lib/content';
 	import { type RecordModel } from 'pocketbase';
 
 	interface SocialRecord {
@@ -14,17 +15,8 @@
 
 	const pb = createClient(import.meta.env.VITE_POCKET_BASE);
 	let social: SocialRecord[] = [];
-	let loading = false;
+	let loading = true;
 	let failed = false;
-
-	function toMediaUrl(record: RecordModel, field: string): string {
-		const value = record[field];
-		if (typeof value !== 'string' || !value) return '';
-		if (value.startsWith('http://') || value.startsWith('https://') || value.startsWith('/')) {
-			return value;
-		}
-		return pb.files.getURL(record, record.image, { token:  null });
-	}
 
 	async function loadSocial() {
 		loading = true;
@@ -32,9 +24,9 @@
 			const records = await pb.collection('social_links').getFullList<RecordModel>({});
 			social = records.map((record) => ({
 				id: record.id,
-				name: typeof record.name === 'string' ? record.name : '',
-				image: toMediaUrl(record, 'image'),
-				link: typeof record.link === 'string' ? record.link : ''
+				name: readString(record, 'name'),
+				image: resolveMediaUrl(pb, record, 'image', { token: null }),
+				link: readString(record, 'link')
 			}));
 		} catch (error) {
 			console.error(error);

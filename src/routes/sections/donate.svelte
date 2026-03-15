@@ -3,6 +3,7 @@
 	import DonationCard from '$lib/components/normaluicomponents/donation.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { createClient } from '$lib/pocketbase';
+	import { readString, resolveMediaUrl } from '$lib/content';
 	import { type RecordModel } from 'pocketbase';
 
 	interface DonationRecord {
@@ -15,28 +16,21 @@
 	const pb = createClient(import.meta.env.VITE_POCKET_BASE);
 
 	let loading = true;
+	let failed = false;
 	let donations: DonationRecord[] = [];
-
-	function toMediaUrl(record: RecordModel, field: string): string {
-		const value = record[field];
-		if (typeof value !== 'string' || !value) return '';
-		if (value.startsWith('http://') || value.startsWith('https://') || value.startsWith('/')) {
-			return value;
-		}
-		return pb.files.getURL(record, value);
-	}
 
 	onMount(async () => {
 		try {
 			const records = await pb.collection('donation').getFullList<RecordModel>({});
 			donations = records.map((record) => ({
 				id: record.id,
-				name: typeof record.name === 'string' ? record.name : '',
-				image: toMediaUrl(record, 'image'),
-				link: typeof record.link === 'string' ? record.link : ''
+				name: readString(record, 'name'),
+				image: resolveMediaUrl(pb, record, 'image'),
+				link: readString(record, 'link')
 			}));
 		} catch (error) {
 			console.error(error);
+			failed = true;
 		} finally {
 			loading = false;
 		}
@@ -52,13 +46,17 @@
 		</div>
 	{/if}
 
+	{#if failed}
+		<p class="text-destructive mt-8 text-center text-sm">Unable to load donation links.</p>
+	{/if}
+
 	<div class="mt-10 flex flex-wrap justify-center gap-6">
 		{#each donations as donation (donation.id)}
 			<div class="w-full md:w-1/3">
 				<DonationCard name={donation.name} image={donation.image} link={donation.link} />
 			</div>
 		{/each}
-		{#if donations.length === 0 && !loading}
+		{#if donations.length === 0 && !loading && !failed}
 			<p class="text-muted-foreground text-sm">Add donation links to display them here.</p>
 		{/if}
 	</div>

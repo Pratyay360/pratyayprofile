@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import EducationCard from '$lib/components/normaluicomponents/education.svelte';
 	import { createClient } from '$lib/pocketbase';
+	import { readString } from '$lib/content';
 	import type { RecordModel } from 'pocketbase';
 
 	interface EducationRecord {
@@ -14,26 +15,34 @@
 	}
 
 	const pb = createClient(import.meta.env.VITE_POCKET_BASE!);
+	let loading = true;
+	let failed = false;
 	let education: EducationRecord[] = [];
 	onMount(async () => {
 		try {
 			const records = await pb.collection('education').getFullList<RecordModel>({});
 			education = records.map((record) => ({
 				id: record.id,
-				degree: typeof record.degree === 'string' ? record.degree : '',
-				category: typeof record.category === 'string' ? record.category : '',
-				date_from: typeof record.date_from === 'string' ? record.date_from : '',
-				date_to: typeof record.date_to === 'string' ? record.date_to : '',
-				description: typeof record.description === 'string' ? record.description : ''
+				degree: readString(record, 'degree'),
+				category: readString(record, 'category'),
+				date_from: readString(record, 'date_from'),
+				date_to: readString(record, 'date_to'),
+				description: readString(record, 'description')
 			}));
 		} catch (e) {
-			console.log(e);
+			console.error(e);
+			failed = true;
+		} finally {
+			loading = false;
 		}
 	});
 </script>
 
 <section class="container mx-auto px-6 py-12">
 	<h1 class="text-center text-3xl font-bold tracking-[0.2em]">EDUCATION</h1>
+	{#if failed}
+		<p class="text-destructive mt-8 text-center text-sm">Unable to load education.</p>
+	{/if}
 	<div class="mt-10 space-y-6">
 		{#each education as edu (edu.id)}
 			<EducationCard
@@ -44,5 +53,8 @@
 				description={edu.description}
 			/>
 		{/each}
+		{#if education.length === 0 && !loading && !failed}
+			<p class="text-muted-foreground text-center text-sm">Add your education history to display it here.</p>
+		{/if}
 	</div>
 </section>

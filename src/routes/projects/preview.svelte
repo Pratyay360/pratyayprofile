@@ -3,6 +3,7 @@
 	import ProjectCard from '$lib/components/normaluicomponents/projectCard.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { createClient } from '$lib/pocketbase';
+	import { readString, resolveMediaUrl } from '$lib/content';
 	import { type RecordModel } from 'pocketbase';
 
 	interface ProjectRecord {
@@ -15,29 +16,22 @@
 
 	const pb = createClient(import.meta.env.VITE_POCKET_BASE);
 	let loading = true;
+	let failed = false;
 	let projects: ProjectRecord[] = [];
-
-	function toMediaUrl(record: RecordModel, field: string): string {
-		const value = record[field];
-		if (typeof value !== 'string' || !value) return '';
-		if (value.startsWith('http://') || value.startsWith('https://') || value.startsWith('/')) {
-			return value;
-		}
-		return pb.files.getURL(value, value.imageUrl, { token: null });
-	}
 
 	onMount(async () => {
 		try {
 			const records = await pb.collection('project').getFullList<RecordModel>({});
 			projects = records.map((record) => ({
 				id: record.id,
-				imageUrl: toMediaUrl(record, 'imageUrl'),
-				title: typeof record.title === 'string' ? record.title : '',
-				brief: typeof record.brief === 'string' ? record.brief : '',
-				link: typeof record.link === 'string' ? record.link : ''
+				imageUrl: resolveMediaUrl(pb, record, 'imageUrl', { token: null }),
+				title: readString(record, 'title'),
+				brief: readString(record, 'brief'),
+				link: readString(record, 'link')
 			}));
 		} catch (error) {
 			console.error(error);
+			failed = true;
 		} finally {
 			loading = false;
 		}
@@ -51,6 +45,10 @@
 		<div class="mt-10">
 			<Skeleton class="h-64 w-full" />
 		</div>
+	{/if}
+
+	{#if failed}
+		<p class="text-destructive mt-8 text-center text-sm">Unable to load projects.</p>
 	{/if}
 
 	<div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -71,7 +69,7 @@
 			</a>
 		</div>
 	{/if}
-	{#if projects.length === 0 && !loading}
+	{#if projects.length === 0 && !loading && !failed}
 		<p class="text-muted-foreground mt-8 text-center text-sm">Add your projects to display them here.</p>
 	{/if}
 </div>

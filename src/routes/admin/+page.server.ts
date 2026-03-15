@@ -56,7 +56,7 @@ export const load: PageServerLoad = async ({ cookies }) => {
     certificates,
     skills,
     education,
-    social_link,
+    social_links,
     donation,
     blogs,
     messages,
@@ -66,7 +66,7 @@ export const load: PageServerLoad = async ({ cookies }) => {
     safeGetCollection("certificate"),
     safeGetCollection("skill"),
     safeGetCollection("education"),
-    safeGetCollection("social_link"),
+    safeGetCollection("social_links"),
     safeGetCollection("donation"),
     safeGetCollection("blogs"),
     safeGetCollectionSorted("messages", "-created"),
@@ -78,7 +78,7 @@ export const load: PageServerLoad = async ({ cookies }) => {
     certificates,
     skills,
     education,
-    social_link,
+    social_links, 
     donation,
     blogs,
     messages,
@@ -325,9 +325,9 @@ export const actions: Actions = {
 
     try {
       if (id) {
-        await pb.collection("social_link").update(id, payload);
+        await pb.collection("social_links").update(id, payload);
       } else {
-        await pb.collection("social_link").create(payload);
+        await pb.collection("social_links").create(payload);
       }
       return { success: true };
     } catch {
@@ -342,7 +342,7 @@ export const actions: Actions = {
     if (!id) return fail(400, { error: "Social id is required." });
 
     try {
-      await pb.collection("social_link").delete(id);
+      await pb.collection("social_links").delete(id);
       return { success: true };
     } catch {
       return fail(500, { error: "Could not delete social link." });

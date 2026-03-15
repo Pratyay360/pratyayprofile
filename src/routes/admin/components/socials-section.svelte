@@ -1,4 +1,7 @@
 <script lang="ts">
+	import {createClient} from '$lib/pocketbase';
+	const pb = createClient(import.meta.env.VITE_POCKET_BASE!);
+	import {onMount} from 'svelte';
 	interface SocialLink {
 		id: string;
 		name?: string;
@@ -6,7 +9,10 @@
 	}
 	
 	export let socials: SocialLink[] = [];
-
+	onMount(async () => {
+		const res = await pb.collection('social_links').getFullList({}, 100);
+		socials = res.items;
+	});
 	let socialForm: {
 		id: string;
 		name: string;

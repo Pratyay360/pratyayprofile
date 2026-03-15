@@ -114,7 +114,7 @@
 	{:else if currentSection === 'education'}
 		<EducationSection education={data.education} />
 	{:else if currentSection === 'socials'}
-		<SocialsSection socials={data.social_link} />
+		<SocialsSection socials={data.social_links} />
 	{:else if currentSection === 'donations'}
 		<DonationsSection donations={data.donation} />
 	{:else if currentSection === 'messages'}

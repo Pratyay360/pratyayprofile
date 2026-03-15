@@ -1,45 +1,66 @@
 <script lang="ts" context="module">
-	// Typed shape for consumers who want to import the interface
 	export interface Props {
-		imageUrl?: string;
 		title?: string;
 		brief?: string;
+		author?: string;
+		updated?: string;
+		coverImage?: string;
+		created?: string;
 		link?: string;
 	}
 </script>
 
 <script lang="ts">
-	import {
-		Card,
-		CardContent,
-		CardHeader,
-		CardTitle,
-		CardDescription
-	} from '$lib/components/ui/card';
+	import { Card, CardTitle, CardDescription, CardContent, CardHeader } from '$lib/components/ui/card';
 	import { AspectRatio } from '$lib/components/ui/aspect-ratio';
-	export let imageUrl: string = '';
+	import { Skeleton } from '$lib/components/ui/skeleton';
+	import { CalendarDaysIcon } from '@lucide/svelte';
+
+	export let coverImage: string = '';
 	export let link: string = '';
 	export let title: string = '';
+	export let author: string = '';
 	export let brief: string = '';
+	export let updated: string = '';
+	export let created: string = '';
+
+	$: displayDate = updated || created || '';
 </script>
 
-<a href={link} rel="noopener noreferrer" class="block">
-	<Card class="group relative h-full overflow-hidden transition-transform hover:scale-105">
+<a
+	href={link}
+	target="_blank"
+	rel="noopener noreferrer"
+	class="block"
+	aria-label={title ? `Open blog: ${title}` : 'Open blog'}
+>
+	<Card class="group relative h-full overflow-hidden transition-transform duration-300 hover:scale-[1.02]">
 		<div class="relative">
 			<AspectRatio ratio={16 / 9}>
-				<enhanced:img
-					src={imageUrl}
-					alt={title}
-					class="object-cover"
-					sizes="(max-width: 768px) 100vw, 50vw"
-				/>
+				{#if coverImage}
+					<img src={coverImage} alt={title || 'Blog post cover'} class="h-full w-full object-cover" />
+				{:else}
+					<Skeleton class="h-full w-full" />
+				{/if}
 			</AspectRatio>
 		</div>
-		<CardContent class="p-4">
+
+		<CardContent class="flex flex-col gap-2 pt-4">
 			<CardHeader>
-				<CardTitle class="line-clamp-2 text-lg">{title}</CardTitle>
-				<CardDescription class="line-clamp-3">{brief}</CardDescription>
+				<CardTitle class="line-clamp-2 text-lg font-semibold leading-tight">{title}</CardTitle>
+				<div class="mt-auto flex flex-col gap-1 pt-2">
+					<p class="text-xs font-medium text-muted-foreground">By {author}</p>
+					{#if displayDate}
+						<div class="flex items-center gap-1.5 text-muted-foreground">
+							<CalendarDaysIcon class="h-3.5 w-3.5" />
+							<span class="text-xs">{displayDate}</span>
+						</div>
+					{/if}
+				</div>
 			</CardHeader>
+			<CardDescription class="line-clamp-3 text-sm leading-relaxed">
+				{brief}
+			</CardDescription>
 		</CardContent>
 	</Card>
 </a>

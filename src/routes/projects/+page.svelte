@@ -3,6 +3,7 @@
 	import ProjectCard from '$lib/components/normaluicomponents/projectCard.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { createClient } from '$lib/pocketbase';
+	import { readString, resolveMediaUrl } from '$lib/content';
 	import { type RecordModel } from 'pocketbase';
 
 	interface ProjectRecord {
@@ -15,17 +16,9 @@
 
 	const pb = createClient(import.meta.env.VITE_POCKET_BASE);
 	let loading = true;
+	let failed = false;
 	let projects: ProjectRecord[] = [];
 	let profileName = 'Pratyay';
-
-	function toMediaUrl(record: RecordModel, field: string): string {
-		const value = record[field];
-		if (typeof value !== 'string' || !value) return '';
-		if (value.startsWith('http://') || value.startsWith('https://') || value.startsWith('/')) {
-			return value;
-		}
-		return pb.files.getURL(record, record.imageUrl, {token : null});
-	}
 
 	onMount(async () => {
 		try {
@@ -35,15 +28,16 @@
 			]);
 			projects = projectsResult.map((record) => ({
 				id: record.id,
-				imageUrl: toMediaUrl(record, 'imageUrl'),
-				title: typeof record.title === 'string' ? record.title : '',
-				brief: typeof record.brief === 'string' ? record.brief : '',
-				link: typeof record.link === 'string' ? record.link : ''
+				imageUrl: resolveMediaUrl(pb, record, 'imageUrl', { token: null }),
+				title: readString(record, 'title'),
+				brief: readString(record, 'brief'),
+				link: readString(record, 'link')
 			}));
 			const profileRecord = profileRecords[0];
-			profileName = typeof profileRecord?.name === 'string' ? profileRecord.name : profileName;
+			profileName = profileRecord ? readString(profileRecord, 'name') || profileName : profileName;
 		} catch (error) {
 			console.error(error);
+			failed = true;
 		} finally {
 			loading = false;
 		}
@@ -59,6 +53,10 @@
 		</div>
 	{/if}
 
+	{#if failed}
+		<p class="text-destructive mt-8 text-center text-sm">Unable to load projects.</p>
+	{/if}
+
 	<section class="mx-auto mt-12 max-w-6xl">
 		<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 			{#each projects as project (project.id)}
@@ -70,7 +68,7 @@
 				/>
 			{/each}
 		</div>
-		{#if projects.length === 0 && !loading}
+		{#if projects.length === 0 && !loading && !failed}
 			<p class="text-muted-foreground mt-8 text-center text-sm">Add your projects to display them here.</p>
 		{/if}
 	</section>

@@ -7,7 +7,7 @@
 		title?: string;
 		content?: string;
 		brief?: string;
-		url?: string;
+		author?: string;
 	};
 
 	let { data }: { data: PageData } = $props();
@@ -17,12 +17,12 @@
 		id: string;
 		title: string;
 		content: string;
-		url: string;
+		author: string;
 	}>({
 		id: '',
 		title: '',
 		content: '',
-		url: ''
+		author: ''
 	});
 
 	let activeTab = $state<'write' | 'preview'>('write');
@@ -34,7 +34,7 @@
 	let refreshPreview: ((markdown: string) => Promise<void>) | null = null;
 
 	function resetBlogForm(): void {
-		blogForm = { id: '', title: '', content: '', url: '' };
+		blogForm = { id: '', title: '', content: '', author: '' };
 		activeTab = 'write';
 	}
 
@@ -43,7 +43,7 @@
 			id: blog.id,
 			title: blog.title ?? '',
 			content: blog.content ?? blog.brief ?? '',
-			url: blog.url ?? ''
+			author: blog.author ?? ''
 		};
 		activeTab = 'write';
 	}
@@ -187,9 +187,9 @@
 		/>
 		<input
 			class="w-full rounded border p-2"
-			name="url"
-			placeholder="Blog URL"
-			bind:value={blogForm.url}
+			name="author"
+			placeholder="Blog author"
+			bind:value={blogForm.author}
 		/>
 		<input class="w-full rounded border p-2" name="coverImage" type="file" accept="image/*" />
 
@@ -285,7 +285,7 @@
 			<div class="rounded border p-3">
 				<p class="font-medium">{item.title}</p>
 				<p class="text-muted-foreground mt-1 line-clamp-2 text-sm">{item.content ?? item.brief}</p>
-				<p class="text-muted-foreground truncate text-sm">{item.url}</p>
+				<p class="text-muted-foreground truncate text-sm">{item.author}</p>
 				<div class="mt-2 flex gap-2">
 					<button class="rounded border px-3 py-1 text-sm" type="button" onclick={() => editBlog(item)}
 						>Edit</button

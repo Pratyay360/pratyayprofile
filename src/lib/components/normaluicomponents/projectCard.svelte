@@ -9,8 +9,6 @@
 </script>
 
 <script lang="ts">
-  import { Image } from "@unpic/svelte";
-
 	import {
 		Card,
 		CardContent,
@@ -21,7 +19,6 @@
 	import { AspectRatio } from '$lib/components/ui/aspect-ratio/index';
 	import { Skeleton } from '$lib/components/ui/skeleton/index';
 
-	// Individual Svelte props (use `export let` so parent can pass values)
 	export let imageUrl: string = '';
 	export let link: string = '';
 	export let title: string = '';
@@ -36,12 +33,10 @@
 	aria-label={title ? `Open project: ${title}` : 'Open project'}
 >
 	<Card class="group relative h-full overflow-hidden transition-transform hover:scale-105">
-		<!-- cover image -->
 		<div class="relative">
 			<AspectRatio ratio={16 / 9}>
 				{#if imageUrl}
 					<enhanced:img
-
 						src={imageUrl}
 						alt={title || 'project image'}
 						class="object-cover"
