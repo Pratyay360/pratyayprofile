@@ -24,156 +24,23 @@
 		content: '',
 		author: ''
 	});
-
-	let activeTab = $state<'write' | 'preview'>('write');
-	let previewHtml = $state('');
-	let previewLoading = $state(false);
-	let editor = $state<HTMLTextAreaElement | null>(null);
-	let contentImageInput = $state<HTMLInputElement | null>(null);
-	let previewTimeout: ReturnType<typeof setTimeout> | null = null; // Not a $state
-	let refreshPreview: ((markdown: string) => Promise<void>) | null = null;
-
-	function resetBlogForm(): void {
-		blogForm = { id: '', title: '', content: '', author: '' };
-		activeTab = 'write';
-	}
-
-	function editBlog(blog: BlogItem): void {
+	
+	const editBlog = (blog: BlogItem) => {
 		blogForm = {
 			id: blog.id,
 			title: blog.title ?? '',
 			content: blog.content ?? blog.brief ?? '',
 			author: blog.author ?? ''
 		};
-		activeTab = 'write';
 	}
 
-	function withSelection(transform: (selected: string) => string): void {
-		if (!editor) return;
-		const start = editor.selectionStart;
-		const end = editor.selectionEnd;
-		const before = blogForm.content.slice(0, start);
-		const selected = blogForm.content.slice(start, end);
-		const after = blogForm.content.slice(end);
-		const replaced = transform(selected);
-
-		blogForm = { ...blogForm, content: `${before}${replaced}${after}` };
-
-		void tick().then(() => {
-			if (!editor) return;
-			const cursor = start + replaced.length;
-			editor.focus();
-			editor.setSelectionRange(cursor, cursor);
-		});
-	}
-
-	function wrapSelection(prefix: string, suffix: string): void {
-		withSelection((selected) => `${prefix}${selected || 'text'}${suffix}`);
-	}
-
-	function prefixLines(prefix: string): void {
-		withSelection((selected) => {
-			const target = selected || 'item';
-			return target
-				.split('\n')
-				.map((line) => `${prefix}${line}`)
-				.join('\n');
-		});
-	}
-
-	function insertTemplate(template: string): void {
-		withSelection((selected) => (selected ? `${selected}\n\n${template}` : template));
-	}
-
-	function pickContentImage(): void {
-		contentImageInput?.click();
-	}
-
-	function sanitizeAltText(value: string): string {
-		return value.replace(/[[\]]/g, '').trim() || 'image';
-	}
-
-	function handleContentImageChange(event: Event): void {
-		const input = event.currentTarget as HTMLInputElement;
-		const file = input.files?.[0];
-		if (!file) return;
-
-		const reader = new FileReader();
-		reader.onload = () => {
-			const result = typeof reader.result === 'string' ? reader.result : '';
-			if (!result) return;
-			const alt = sanitizeAltText(file.name.replace(/\.[^/.]+$/, ''));
-			insertTemplate(`![${alt}](${result})`);
-		};
-		reader.readAsDataURL(file);
-
-		input.value = '';
-	}
-
-	function handleEditorKeydown(event: KeyboardEvent): void {
-		if (!(event.ctrlKey || event.metaKey)) return;
-
-		const key = event.key.toLowerCase();
-		if (key === 'b') {
-			event.preventDefault();
-			wrapSelection('**', '**');
-		} else if (key === 'i') {
-			event.preventDefault();
-			wrapSelection('*', '*');
-		} else if (key === 'k') {
-			event.preventDefault();
-			wrapSelection('[', '](https://example.com)');
-		}
-	}
-
-	onMount(() => {
-		refreshPreview = async (markdown: string): Promise<void> => {
-			previewLoading = true;
-			try {
-				const response = await fetch('/admin/blogs/preview', {
-					method: 'POST',
-					headers: { 'content-type': 'application/json' },
-					body: JSON.stringify({ markdown })
-				});
-				if (!response.ok) {
-					previewHtml = '<p>Could not generate preview.</p>';
-					return;
-				}
-				const payload = (await response.json()) as { html?: string };
-				previewHtml = payload.html ?? '';
-			} catch {
-				previewHtml = '<p>Could not generate preview.</p>';
-			} finally {
-				previewLoading = false;
-			}
-		};
-
-		return () => {
-			refreshPreview = null;
-		};
-	});
-
-	$effect(() => {
-		// Only run preview refresh on client side
-		if (typeof window === 'undefined') return;
-		
-		if (previewTimeout) clearTimeout(previewTimeout);
-		previewTimeout = setTimeout(() => {
-			if (!refreshPreview) return;
-			void refreshPreview(blogForm.content);
-		}, 220);
-		return () => {
-			if (previewTimeout) clearTimeout(previewTimeout);
-		};
-	});
 </script>
 
 <div class="mt-6 grid gap-6 xl:grid-cols-[1.4fr_1fr]">
 	<form
 		method="POST"
 		action="?/saveBlog"
-		enctype="multipart/form-data"
-		class="space-y-4 rounded border p-4"
+		enctype="multipart/form-data" class="space-y-4 rounded border p-4"
 	>
 		<h2 class="text-lg font-medium">{blogForm.id ? 'Edit Blog Post' : 'Add Blog Post'}</h2>
 
@@ -185,6 +52,7 @@
 			bind:value={blogForm.title}
 			required
 		/>
+		
 		<input
 			class="w-full rounded border p-2"
 			name="author"
@@ -193,90 +61,17 @@
 		/>
 		<input class="w-full rounded border p-2" name="coverImage" type="file" accept="image/*" />
 
-		<div class="space-y-2">
-			<div class="flex flex-wrap gap-2">
-				<button class="rounded border px-2 py-1 text-xs" type="button" onclick={() => wrapSelection('**', '**')}
-					>Bold</button
-				>
-				<button class="rounded border px-2 py-1 text-xs" type="button" onclick={() => wrapSelection('*', '*')}
-					>Italic</button
-				>
-				<button class="rounded border px-2 py-1 text-xs" type="button" onclick={() => wrapSelection('`', '`')}
-					>Code</button
-				>
-				<button class="rounded border px-2 py-1 text-xs" type="button" onclick={() => prefixLines('## ')}
-					>H2</button
-				>
-				<button class="rounded border px-2 py-1 text-xs" type="button" onclick={() => prefixLines('- ')}
-					>List</button
-				>
-				<button
-					class="rounded border px-2 py-1 text-xs"
-					type="button"
-					onclick={() => insertTemplate('```ts\nconsole.log("hello");\n```')}>Code Block</button
-				>
-				<button
-					class="rounded border px-2 py-1 text-xs"
-					type="button"
-					onclick={() => wrapSelection('[', '](https://example.com)')}>Link</button
-				>
-				<button
-					class="rounded border px-2 py-1 text-xs"
-					type="button"
-					onclick={pickContentImage}>Image Upload</button
-				>
-			</div>
-			<input
-				name="contentImage"
-				type="file"
-				accept="image/*"
-				class="hidden"
-				bind:this={contentImageInput}
-				onchange={handleContentImageChange}
-			/>
+		<textarea
+			class="h-64 w-full rounded border p-2"
+			name="content"
+			placeholder="blog content here ..."
+			bind:value={blogForm.content}
+		></textarea>
 
-			<div class="bg-muted flex items-center gap-2 rounded p-1 text-sm">
-				<button
-					class="rounded px-3 py-1 {activeTab === 'write' ? 'bg-background border' : ''}"
-					type="button"
-					onclick={() => (activeTab = 'write')}>Write</button
-				>
-				<button
-					class="rounded px-3 py-1 {activeTab === 'preview' ? 'bg-background border' : ''}"
-					type="button"
-					onclick={() => (activeTab = 'preview')}>Preview</button
-				>
-				<p class="text-muted-foreground ml-auto text-xs">
-					{blogForm.content.trim().split(/\s+/).filter(Boolean).length} words
-				</p>
-			</div>
 
-			{#if activeTab === 'write'}
-				<textarea
-					class="min-h-90 w-full rounded border p-3 font-mono text-sm"
-					name="content"
-					placeholder="Write markdown here..."
-					bind:value={blogForm.content}
-					bind:this={editor}
-					onkeydown={handleEditorKeydown}
-				></textarea>
-			{:else}
-				<div class="prose prose-neutral dark:prose-invert min-h-90 max-w-none rounded border p-4">
-					{#if previewLoading}
-						<p class="text-muted-foreground text-sm">Rendering preview...</p>
-					{:else}
-						{@html previewHtml}
-					{/if}
-				</div>
-			{/if}
-		</div>
 
-		<div class="flex gap-2">
-			<button class="rounded border px-4 py-2" type="submit">{blogForm.id ? 'Update' : 'Add'}</button>
-			{#if blogForm.id}
-				<button class="rounded border px-4 py-2" type="button" onclick={resetBlogForm}>Cancel</button>
-			{/if}
-		</div>
+		<button class="rounded border px-3 py-1 text-sm" type="submit">Save</button> 
+		<button class="rounded border px-3 py-1 text-sm" type="button" onclick={() => editBlog({})}>Cancel</button>
 	</form>
 
 	<div class="space-y-2 rounded border p-4">
@@ -290,9 +85,9 @@
 					<button class="rounded border px-3 py-1 text-sm" type="button" onclick={() => editBlog(item)}
 						>Edit</button
 					>
-					<form method="POST" action="?/deleteBlog">
+					<form method="POST" action="?/deleteBlog" enctype="multipart/form-data">
 						<input type="hidden" name="id" value={item.id} />
-						<button class="rounded border px-3 py-1 text-sm" type="submit">Delete</button>
+						<button class="rounded border px-3 py-1 text-sm red-500" type="submit">Delete</button>
 					</form>
 				</div>
 			</div>

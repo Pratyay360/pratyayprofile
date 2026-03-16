@@ -33,46 +33,36 @@ async function safeGetList<T>(pb: any, collection: string, options = {}): Promis
 }
 
 // Generic CRUD helpers
-async function createOrUpdate(
+const createOrUpdate = (
   pb: any,
   collection: string,
-  id: string | null,
+  id: string,
   data: FormData | Record<string, any>,
-) {
+) => {
   if (id) {
     return pb.collection(collection).update(id, data);
   }
   return pb.collection(collection).create(data);
-}
+};
 
-async function deleteRecord(pb: any, collection: string, id: string) {
+function deleteRecord(pb: any, collection: string, id: string) {
   return pb.collection(collection).delete(id);
 }
 
 export const load: PageServerLoad = async ({ cookies }) => {
   const pb = await requireAdminPocketBase(cookies);
 
-  const [
-    profiles,
-    projects,
-    certificates,
-    skills,
-    education,
-    social_links,
-    donation,
-    blogs,
-    messages,
-  ] = await Promise.all([
-    safeGetList(pb, "me"),
-    safeGetList(pb, "project"),
-    safeGetList(pb, "certificate"),
-    safeGetList(pb, "skill"),
-    safeGetList(pb, "education"),
-    safeGetList(pb, "social_links"),
-    safeGetList(pb, "donation"),
-    safeGetList(pb, "blogs"),
-    safeGetList(pb, "messages", { sort: "-created" }),
-  ]);
+  const [profiles, projects, certificates, skills, education, social_links, donation, messages] =
+    await Promise.all([
+      safeGetList(pb, "me"),
+      safeGetList(pb, "project"),
+      safeGetList(pb, "certificate"),
+      safeGetList(pb, "skill"),
+      safeGetList(pb, "education"),
+      safeGetList(pb, "social_links"),
+      safeGetList(pb, "donation"),
+      safeGetList(pb, "messages", { sort: "-created" }),
+    ]);
 
   return {
     profiles,
@@ -82,13 +72,12 @@ export const load: PageServerLoad = async ({ cookies }) => {
     education,
     social_links,
     donation,
-    blogs,
     messages,
   };
 };
 
 export const actions: Actions = {
-  logout: async ({ cookies }) => {
+  logout: ({ cookies }) => {
     clearAuthCookie(cookies);
     throw redirect(303, "/admin/login");
   },
@@ -97,9 +86,7 @@ export const actions: Actions = {
     const pb = await requireAdminPocketBase(cookies);
     const data = await request.formData();
     const name = readText(data, "name");
-
     if (!name) return fail(400, { error: "Name is required." });
-
     const payload = new FormData();
     payload.set("name", name);
     payload.set("description", readText(data, "description"));
@@ -107,7 +94,7 @@ export const actions: Actions = {
     if (image) payload.set("image", image);
 
     try {
-      await createOrUpdate(pb, "me", readText(data, "id") || null, payload);
+      await createOrUpdate(pb, "me", readText(data, "id"), payload);
       return { success: true };
     } catch {
       return fail(500, { error: "Could not save profile." });
@@ -142,7 +129,7 @@ export const actions: Actions = {
     if (image) payload.set("imageUrl", image);
 
     try {
-      await createOrUpdate(pb, "project", readText(data, "id") || null, payload);
+      await createOrUpdate(pb, "project", readText(data, "id"), payload);
       return { success: true };
     } catch {
       return fail(500, { error: "Could not save project." });
@@ -178,7 +165,7 @@ export const actions: Actions = {
     if (image) payload.set("imageSrc", image);
 
     try {
-      await createOrUpdate(pb, "certificate", readText(data, "id") || null, payload);
+      await createOrUpdate(pb, "certificate", readText(data, "id"), payload);
       return { success: true };
     } catch {
       return fail(500, { error: "Could not save certificate." });
@@ -211,7 +198,7 @@ export const actions: Actions = {
       .filter(Boolean);
 
     try {
-      await createOrUpdate(pb, "skill", readText(data, "id") || null, { category, items });
+      await createOrUpdate(pb, "skill", readText(data, "id"), { category, items });
       return { success: true };
     } catch {
       return fail(500, { error: "Could not save skill category." });
@@ -246,7 +233,7 @@ export const actions: Actions = {
     };
 
     try {
-      await createOrUpdate(pb, "education", readText(data, "id") || null, payload);
+      await createOrUpdate(pb, "education", readText(data, "id"), payload);
       return { success: true };
     } catch {
       return fail(500, { error: "Could not save education entry." });
@@ -280,7 +267,7 @@ export const actions: Actions = {
     if (image) payload.set("image", image);
 
     try {
-      await createOrUpdate(pb, "social_links", readText(data, "id") || null, payload);
+      await createOrUpdate(pb, "social_links", readText(data, "id"), payload);
       return { success: true };
     } catch {
       return fail(500, { error: "Could not save social link." });
@@ -314,7 +301,7 @@ export const actions: Actions = {
     if (image) payload.set("image", image);
 
     try {
-      await createOrUpdate(pb, "donation", readText(data, "id") || null, payload);
+      await createOrUpdate(pb, "donation", readText(data, "id"), payload);
       return { success: true };
     } catch {
       return fail(500, { error: "Could not save donation link." });
@@ -331,41 +318,6 @@ export const actions: Actions = {
       return { success: true };
     } catch {
       return fail(500, { error: "Could not delete donation link." });
-    }
-  },
-
-  saveBlog: async ({ request, cookies }) => {
-    const pb = await requireAdminPocketBase(cookies);
-    const data = await request.formData();
-    const title = readText(data, "title");
-
-    if (!title) return fail(400, { error: "Blog title is required." });
-
-    const payload = new FormData();
-    payload.set("title", title);
-    payload.set("content", readText(data, "content") || readText(data, "brief"));
-    payload.set("url", readText(data, "url"));
-    const image = readOptionalFile(data, "coverImage");
-    if (image) payload.set("coverImage", image);
-
-    try {
-      await createOrUpdate(pb, "blogs", readText(data, "id") || null, payload);
-      return { success: true };
-    } catch {
-      return fail(500, { error: "Could not save blog post." });
-    }
-  },
-
-  deleteBlog: async ({ request, cookies }) => {
-    const pb = await requireAdminPocketBase(cookies);
-    const id = readText(await request.formData(), "id");
-    if (!id) return fail(400, { error: "Blog id is required." });
-
-    try {
-      await deleteRecord(pb, "blogs", id);
-      return { success: true };
-    } catch {
-      return fail(500, { error: "Could not delete blog post." });
     }
   },
 

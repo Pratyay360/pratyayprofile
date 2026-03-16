@@ -62,9 +62,9 @@
 		</div>
 	{/if}
 
-	{#if !loading && blogList.length > 0}
+	{#if !loading && posts.length > 0}
 		<section class="mx-auto grid max-w-6xl gap-8 md:grid-cols-2 lg:grid-cols-3">
-			{#each blogList as post (post.id)}
+			{#each posts as post (post.id)}
 				<BlogCard
 					link={post.link}
 					coverImage={post.coverImage}

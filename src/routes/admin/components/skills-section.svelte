@@ -1,4 +1,9 @@
 <script lang="ts">
+	import { Button } from '$lib/components/ui/button';
+	import { Input } from '$lib/components/ui/input';
+	import { Textarea } from '$lib/components/ui/textarea';
+	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
+
 	interface SkillCategory {
 		id: string;
 		category?: string;
@@ -17,50 +22,79 @@
 		items: ''
 	};
 
-	function resetSkillForm(): void {
+	const resetSkillForm = () => {
 		skillForm = { id: '', category: '', items: '' };
-	}
+	};
 
-	function editSkill(skill: SkillCategory): void {
+	const editSkill = (skill: SkillCategory) => {
 		skillForm = {
 			id: skill.id,
 			category: skill.category ?? '',
 			items: skill.items ?? ''
 		};
-	}
+	};
 </script>
 
 <div class="mt-6 grid gap-6 lg:grid-cols-2">
-	<form method="POST" action="?/saveSkill" class="space-y-3 rounded border p-4">
-		<h2 class="text-lg font-medium">{skillForm.id ? 'Edit Skill Category' : 'Add Skill Category'}</h2>
-		<input type="hidden" name="id" value={skillForm.id} />
-		<input class="w-full rounded border p-2" name="category" placeholder="Category" bind:value={skillForm.category} required />
-		<textarea class="w-full rounded border p-2" name="items" placeholder="Items (comma separated)" rows="4" bind:value={skillForm.items}></textarea>
-		<div class="flex gap-2">
-			<button class="rounded border px-4 py-2" type="submit">{skillForm.id ? 'Update' : 'Add'}</button>
-			{#if skillForm.id}
-				<button class="rounded border px-4 py-2" type="button" onclick={resetSkillForm}>Cancel</button>
-			{/if}
-		</div>
-	</form>
-
-	<div class="space-y-2 rounded border p-4">
-		<h2 class="text-lg font-medium">Current Skill Categories</h2>
-		{#each skills as item (item.id)}
-			<div class="rounded border p-3">
-				<p class="font-medium">{item.category}</p>
-				<p class="text-muted-foreground text-sm">{item.items}</p>
-				<div class="mt-2 flex gap-2">
-					<button class="rounded border px-3 py-1 text-sm" type="button" onclick={() => editSkill(item)}>Edit</button>
-					<form method="POST" action="?/deleteSkill">
-						<input type="hidden" name="id" value={item.id} />
-						<button class="rounded border px-3 py-1 text-sm" type="submit">Delete</button>
-					</form>
+	<!-- Form Card -->
+	<Card>
+		<CardHeader>
+			<CardTitle>{skillForm.id ? 'Edit Skill Category' : 'Add Skill Category'}</CardTitle>
+		</CardHeader>
+		<CardContent>
+			<form method="POST" action="?/saveSkill" class="space-y-3">
+				<input type="hidden" name="id" value={skillForm.id} />
+				<Input
+					type="text"
+					name="category"
+					placeholder="Category"
+					bind:value={skillForm.category}
+					required
+				/>
+				<Textarea
+					name="items"
+					placeholder="Items (comma separated)"
+					rows="4"
+					bind:value={skillForm.items}
+				/>
+				<div class="flex gap-2">
+					<Button type="submit">{skillForm.id ? 'Update' : 'Add'}</Button>
+					{#if skillForm.id}
+						<Button type="button" variant="outline" on:click={resetSkillForm}>
+							Cancel
+						</Button>
+					{/if}
 				</div>
-			</div>
-		{/each}
-		{#if skills.length === 0}
-			<p class="text-muted-foreground text-sm">No skill categories yet.</p>
-		{/if}
-	</div>
+			</form>
+		</CardContent>
+	</Card>
+
+	<!-- Current Skill Categories Card -->
+	<Card>
+		<CardHeader>
+			<CardTitle>Current Skill Categories</CardTitle>
+		</CardHeader>
+		<CardContent class="space-y-2">
+			{#each skills as item (item.id)}
+				<div class="rounded-lg border p-3">
+					<p class="font-medium">{item.category}</p>
+					<p class="text-muted-foreground text-sm">{item.items}</p>
+					<div class="mt-2 flex gap-2">
+						<Button variant="outline" size="sm" on:click={() => editSkill(item)}>
+							Edit
+						</Button>
+						<form method="POST" action="?/deleteSkill">
+							<input type="hidden" name="id" value={item.id} />
+							<Button variant="destructive" size="sm" type="submit">
+								Delete
+							</Button>
+						</form>
+					</div>
+				</div>
+			{/each}
+			{#if skills.length === 0}
+				<p class="text-muted-foreground text-sm">No skill categories yet.</p>
+			{/if}
+		</CardContent>
+	</Card>
 </div>

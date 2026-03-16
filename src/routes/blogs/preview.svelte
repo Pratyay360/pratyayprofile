@@ -27,15 +27,15 @@
 			posts = records.map((record) => ({
 				id: record.id,
 				title: readString(record, "title"),
-				brief: readString(record, "content").replace(/<[^>]*>/g, "").trim(),
+				brief: readString(record, "content").replace(/#\s*<[^>]*>?/g, "").trim(),
 				author: readString(record, "author"),
 				updated: readString(record, "updated"),
 				created: readString(record, "created"),
 				coverImage: (() => {
 					const arr = readStringArray(record, "coverImage");
 					const filename = arr[0] ?? "";
-					const fakeRecord = { ...record, coverImage: filename };
-					return resolveMediaUrl(pb, fakeRecord as RecordModel, "coverImage", { token: null });
+					const rec = { ...record, coverImage: filename };
+					return resolveMediaUrl(pb, rec as RecordModel, "coverImage", { token: null });
 				})(),
 				link: `/blogs/${record.id}`,
 			}));

@@ -1,36 +1,28 @@
 <script lang="ts">
 	interface ProfileRecord {
-		id: string;
-		name?: string;
-		title?: string;
+		title?: string[];
 		description?: string;
 	}
 
 	export let profiles: ProfileRecord[] = [];
 
 	let profileForm: {
-		id: string;
-		name: string;
-		title: string;
+		title: string[];
 		description: string;
 	} = {
-		id: '',
-		name: '',
-		title: '',
+		title: [],
 		description: ''
 	};
 
-	function resetProfileForm(): void {
-		profileForm = { id: '', name: '', title: '', description: '' };
+	const resetProfileForm = () => {
+		profileForm = { title: [], description: '' };
 	}
 
-	function editProfile(profile: ProfileRecord): void {
+	const editProfile = (profile: ProfileRecord) => {
 		profileForm = {
-			id: profile.id,
-			name: profile.name ?? '',
-			title: profile.title ?? '',
+			title: profile.title ?? [], 
 			description: profile.description ?? ''
-		};
+		}
 	}
 </script>
 
@@ -40,23 +32,19 @@
 		<input type="hidden" name="id" value={profileForm.id} />
 		<div class="grid gap-4 md:grid-cols-2">
 			<div class="space-y-1">
-				<label for="profile-name" class="text-sm font-medium">Name</label>
-				<input
-					id="profile-name"
-					name="name"
-					class="w-full rounded border p-2"
-					required
-					bind:value={profileForm.name}
-				/>
-			</div>
-			<div class="space-y-1">
 				<label for="profile-title" class="text-sm font-medium">Title</label>
-				<input
-					id="profile-title"
-					name="title"
-					class="w-full rounded border p-2"
-					bind:value={profileForm.title}
-				/>
+				{#each profileForm.title as title, index}
+					<input
+						id="profile-title"
+						name="title"
+						class="w-full rounded border p-2"
+						bind:value={profileForm.title}
+					/>
+					{#if index < profileForm.title.length - 1}
+						<button class="rounded border px-2 py-1" type="button" onclick={() => profileForm.title.splice(index, 1)}>Remove</button>
+					{/if}
+				{/each}
+				<button class="rounded border px-2 py-1" type="button" onclick={() => profileForm.title.push('')}>Add</button>
 			</div>
 		</div>
 		<div class="space-y-1">

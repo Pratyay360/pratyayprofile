@@ -1,65 +1,92 @@
-import { createClient } from "$lib/pocketbase";
-import { fail } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
-const pb = createClient(import.meta.env.VITE_POCKET_BASE);
-function readText(data: FormData, key: string): string {
+import { AUTH_COOKIE, clearAuthCookie, verifyUserToken } from "$lib/server/admin-auth";
+
+const readText = (data: FormData, key: string): string => {
   const value = data.get(key);
   return typeof value === "string" ? value.trim() : "";
-}
+};
 
-function readOptionalFile(data: FormData, key: string): File | null {
+const readOptionalFile = (data: FormData, key: string): File | null => {
   const value = data.get(key);
-  if (!(value instanceof File) || value.size === 0) return null;
-  return value;
-}
+  return value instanceof File && value.size > 0 ? value : null;
+};
 
-export const load: PageServerLoad = async () => {
-  const pb = createClient(import.meta.env.VITE_POCKET_BASE);
-  const blogs = await pb.collection("blogs").getFullList({ sort: "-created" });
+const requireAdminPocketBase = async (cookies: any) => {
+  const token = cookies.get(AUTH_COOKIE);
+  if (!token) throw redirect(303, "/admin/login");
+
+  const pb = await verifyUserToken(token);
+  if (!pb) {
+    clearAuthCookie(cookies);
+    throw redirect(303, "/admin/login");
+  }
+  return pb;
+};
+
+const safeGetList = async <T>(pb: any, collection: string, options = {}): Promise<T[]> => {
+  try {
+    return await pb.collection(collection).getFullList(options);
+  } catch {
+    return [];
+  }
+};
+
+const createOrUpdate = (
+  pb: any,
+  collection: string,
+  id: string | null,
+  data: FormData | Record<string, any>,
+) => {
+  if (id) {
+    return pb.collection(collection).update(id, data);
+  }
+  return pb.collection(collection).create(data);
+};
+
+const deleteRecord = (pb: any, collection: string, id: string) => {
+  return pb.collection(collection).delete(id);
+};
+
+export const load: PageServerLoad = async ({ cookies }) => {
+  const pb = await requireAdminPocketBase(cookies);
+  const blogs = await safeGetList(pb, "blogs");
   return { blogs };
 };
 
 export const actions: Actions = {
-  saveBlog: async ({ request }) => {
+  saveBlog: async ({ request, cookies }) => {
+    const pb = await requireAdminPocketBase(cookies);
     const data = await request.formData();
-    const id = readText(data, "id");
     const title = readText(data, "title");
-    const content = readText(data, "content");
-    const imageFile = readOptionalFile(data, "coverImage");
-    const author = readText(data, "author");
 
-    if (!title) {
-      return fail(400, { error: "Blog title is required." });
-    }
+    if (!title) return fail(400, { error: "Blog title is required." });
 
     const payload = new FormData();
     payload.set("title", title);
-    payload.set("content", content);
-    payload.set("author", author);
-    payload.set("token", pb.authStore.token);
-    if (imageFile) payload.set("coverImage", imageFile);
+    payload.set("content", readText(data, "content") || readText(data, "brief"));
+    payload.set("url", readText(data, "url"));
+    const image = readOptionalFile(data, "coverImage");
+    if (image) payload.set("coverImage", image);
 
     try {
-      if (id) {
-        await pb.collection("blogs").update(id, payload, { token: pb.authStore.token });
-      } else {
-        await pb.collection("blogs").create(payload, { token: pb.authStore.token });
-      }
+      await createOrUpdate(pb, "blogs", readText(data, "id") || null, payload);
       return { success: true };
     } catch {
       return fail(500, { error: "Could not save blog post." });
     }
   },
 
-  deleteBlog: async ({ request }) => {
-    // const pb = getAuthenticatedClient(request);
-    const data = await request.formData();
-    const id = readText(data, "id");
+  deleteBlog: async ({ request, cookies }) => {
+    const pb = await requireAdminPocketBase(cookies);
+    const id = readText(await request.formData(), "id");
+    if (!id) return fail(400, { error: "Blog id is required." });
+
     try {
-      await pb.collection("blogs").delete(id, { token: pb.authStore.token });
+      await deleteRecord(pb, "blogs", id);
       return { success: true };
-    } catch (e) {
-      console.log(e);
+    } catch {
+      return fail(500, { error: "Could not delete blog post." });
     }
   },
 };
