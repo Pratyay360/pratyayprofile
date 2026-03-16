@@ -6,8 +6,8 @@
 
 	const pb = createClient(import.meta.env.VITE_POCKET_BASE);
 	let name = 'Pratyay Mustafi';
-	let image = '/images/profile-placeholder.svg';
-	let description = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.';
+	let image = '';
+	let aboutme = ''; 	
 	let titles: string[] = [];
 
 	onMount(async () => {
@@ -15,11 +15,10 @@
 			const records = await pb.collection('me').getFullList<RecordModel>({  });
 			if (records.length > 0) {
 				const first = records[0];
-				name = readString(first, 'name') || name;
 				image = resolveMediaUrl(pb, first, 'image') || image;
-				description = readString(first, 'description') || description;
+				description = readString(first, 'aboutme') || description;
 				titles = records
-					.map((record) => readString(record, 'title'))
+					.map((record) => readString(record, 'flash'))
 					.filter(Boolean);
 			}
 		} catch (error) {
@@ -30,11 +29,11 @@
 
 <section class="container mx-auto px-6 py-12">
 	<div class="text-muted-foreground mx-auto mt-8 max-w-3xl text-lg">
-		<img src={image} alt={name} />
+		<img src={image} />
 		<h1 class="text-center text-3xl font-bold tracking-[0.2em]">{name}</h1>
 		{#each titles as title (title)}
-			<p class="typewriter text-center">{title}</p>
+			<p class="animate-typing overflow-hidden whitespace-nowrap border-r-4 border-r-white pr-5 text-5xl dark:text-white  font-bold text-center">{title}</p>
 		{/each}
-		<p class="typewriter text-center">{description}</p>
+		<p class=" text-center">{description}</p>
 	</div>
 </section>

@@ -31,30 +31,56 @@
 	];
 
 	let open = $state(false);
+
+	// Helper to check if a nav item is active based on current URL hash
+	function isActive(href: string): boolean {
+		// Extract hash from href (e.g., '#aboutme')
+		const hash = href.split('#')[1];
+		// Compare with current page hash (without '#')
+		return $page.url.hash === `#${hash}`;
+	}
 </script>
 
-<header
-	class="bg-background/95 supports-backdrop-filter:bg-background/60 sticky top-0 z-50 w-full border-b backdrop-blur"
+<!-- Skip to main content link for accessibility -->
+<a
+	href="#main-content"
+	class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:bg-background focus:px-4 focus:py-2 focus:text-foreground focus:shadow-lg"
 >
-	<div class="container flex h-16 items-center justify-center">
+	Skip to content
+</a>
+
+<header
+	class="bg-background/95 supports-backdrop-filter:bg-background/90 sticky top-0 z-50 w-full border-b backdrop-blur"
+>
+	<div class="container flex h-16 items-center justify-between px-4 md:px-6">
+		<!-- Optional: Site logo or name -->
+		<div class="flex items-center">
+			<!-- <a href="/" class="text-xl font-bold text-foreground">Your Name</a> -->
+		</div>
+
+		<!-- Desktop Navigation -->
 		<NavigationMenu class="hidden flex-1 justify-center md:flex">
-			<NavigationMenuList class="gap-x-6">
+			<NavigationMenuList class="gap-x-1 lg:gap-x-2">
 				{#each navItems as { label, href } (label)}
 					<NavigationMenuItem>
 						<NavigationMenuLink
 							{href}
 							class={cn(
-								'relative px-2 py-1 text-sm font-medium transition-colors',
-								$page.url.pathname === href
-									? 'text-primary'
+								'relative rounded-md px-3 py-2 text-sm font-medium transition-all',
+								'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+								'hover:bg-accent hover:text-accent-foreground',
+								isActive(href)
+									? 'text-primary bg-primary/10'
 									: 'text-muted-foreground hover:text-primary'
 							)}
+							aria-current={isActive(href) ? 'page' : undefined}
 						>
 							{label}
+							<!-- Animated underline for active item -->
 							<span
 								class={cn(
-									'bg-primary absolute bottom-0 left-0 h-0.5 w-full scale-x-0 transition-transform duration-200',
-									$page.url.pathname === href && 'scale-x-100'
+									'absolute bottom-0 left-1/2 h-0.5 w-4/5 -translate-x-1/2 scale-x-0 rounded-full bg-primary transition-transform duration-200',
+									isActive(href) && 'scale-x-100'
 								)}
 							></span>
 						</NavigationMenuLink>
@@ -63,6 +89,7 @@
 			</NavigationMenuList>
 		</NavigationMenu>
 
+		<!-- Right side: Theme switcher and mobile menu button -->
 		<div class="flex items-center gap-2">
 			<Themer />
 
@@ -70,30 +97,45 @@
 				<Sheet bind:open>
 					<SheetTrigger>
 						{#snippet child({ props })}
-							<Button variant="ghost" size="icon" aria-label="Open menu" {...props}>
+							<Button
+								variant="ghost"
+								size="icon"
+								aria-label="Open menu"
+								{...props}
+								class="hover:bg-accent"
+							>
 								<Menu class="h-5 w-5" />
 							</Button>
 						{/snippet}
 					</SheetTrigger>
 
-					<SheetContent side="right" class="w-64">
-						<SheetHeader>
+					<SheetContent side="right" class="w-64 p-6">
+						<SheetHeader class="mb-6">
 							<SheetTitle>Menu</SheetTitle>
 						</SheetHeader>
 
-						<nav class="mt-6 flex flex-col space-y-3 text-gray-900 dark:text-gray-200">
+						<nav class="flex flex-col space-y-4">
 							{#each navItems as { label, href } (label)}
 								<a
 									{href}
 									onclick={() => (open = false)}
-									class="text-muted-foreground hover:text-primary text-sm font-medium transition-colors"
+									class={cn(
+										'block rounded-md px-3 py-2 text-sm font-medium transition-colors',
+										'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+										'hover:bg-accent hover:text-accent-foreground',
+										isActive(href)
+											? 'text-primary bg-primary/10'
+											: 'text-muted-foreground'
+									)}
+									aria-current={isActive(href) ? 'page' : undefined}
 								>
 									{label}
 								</a>
 							{/each}
 						</nav>
 
-						<div class="mt-8 border-t pt-4">
+						<div class="mt-8 border-t pt-6">
+							<p class="mb-2 text-sm text-muted-foreground">Theme</p>
 							<Themer />
 						</div>
 					</SheetContent>
