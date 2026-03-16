@@ -5,7 +5,7 @@
     let { data }: { data: PageData } = $props();
     const blog = $derived(data.blog);
     const renderedContent = $derived(data.renderedContent);
-    const result = md.render(renderedContent);
+    const result = $derived(renderedContent ? md.render(renderedContent) : "");
 </script>
 
 <svelte:head>

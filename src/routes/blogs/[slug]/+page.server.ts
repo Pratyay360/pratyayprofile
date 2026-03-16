@@ -5,10 +5,10 @@ import { error } from "@sveltejs/kit";
 const pb = createClient(import.meta.env.VITE_POCKET_BASE!);
 pb.autoCancellation(false);
 
-export const load: PageServerLoad = ({ params }) => {
+export const load: PageServerLoad = async ({ params }) => {
   try {
-    const blog = pb.collection("blogs").getOne(params.slug);
-    const renderedContent = blog?.content || "";
+    const blog = await pb.collection("blogs").getOne(params.slug);
+    const renderedContent = blog?.content;
     const coverImage = pb.files.getURL(blog, blog?.coverImage, { token: null });
     return { blog, coverImage, renderedContent };
   } catch (e) {
