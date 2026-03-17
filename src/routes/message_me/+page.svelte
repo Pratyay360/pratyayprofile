@@ -1,104 +1,116 @@
 <script lang="ts">
-	import { toast, Toaster } from 'svelte-sonner';
-	import { Button } from '$lib/components/ui/button';
-	import { Input } from '$lib/components/ui/input';
-	import { Textarea } from '$lib/components/ui/textarea';
+	import { toast, Toaster } from "svelte-sonner";
+	import { Button } from "$lib/components/ui/button";
+	import { Input } from "$lib/components/ui/input";
+	import { Textarea } from "$lib/components/ui/textarea";
 	import {
 		Card,
 		CardContent,
 		CardDescription,
 		CardHeader,
-		CardTitle
-	} from '$lib/components/ui/card';
-	import { createClient } from '$lib/pocketbase';
-
-	const pb = createClient(import.meta.env.VITE_POCKET_BASE!);
-	
-
-	let name = '';
-	let email = '';
-	let message = '';
-	let loading = false;
-
-	async function handleSubmit(): Promise<void> {
-		loading = true;
-		const data = {
-			name,
-			email,
-			message
-		};
-		try {
-			await pb.collection('messages').create(data);
-			toast.success('Message sent successfully');
-			name = '';
-			email = '';
-			message = '';
-		} catch {
-			toast.error('Failed to send message');
-		} finally {
-			loading = false;
-		}
+		CardTitle,
+	} from "$lib/components/ui/card";
+	import { createClient } from "$lib/pocketbase";
+	interface formData {
+		submissionStatus: string;
+		userName: string;
+		userEmail: string;
+		userMessage: string;
 	}
+
+	const submitRequest = async () => {
+		const pocketBaseClient = createClient(
+			import.meta.env.VITE_POCKET_BASE!
+		);
+
+		try {
+			submissionStatus = true;
+			await pocketBaseClient
+				.collection("messages")
+				.create({ userName, userEmail, userMessage });
+			toast.success("Message sent successfully");
+		} catch {
+			toast.error("Failed to send message");
+		} finally {
+			submissionStatus = false;
+		}
+	};
 </script>
 
 <main class="bg-background flex min-h-screen items-center justify-center p-4">
 	<Toaster />
-	<Card class="w-full max-w-2xl border-slate-200 shadow-xl dark:border-slate-700">
+	<Card
+		class="w-full max-w-2xl border-slate-200 shadow-xl dark:border-slate-700"
+	>
 		<CardHeader class="pb-4">
-			<CardTitle class="text-foreground text-center text-3xl font-bold">Get in Touch</CardTitle>
+			<CardTitle class="text-foreground text-center text-3xl font-bold"
+				>Contact Us</CardTitle
+			>
 			<CardDescription class="text-muted-foreground text-center">
-				Have a question or want to collaborate?
+				Got a query or wish to work together?
 			</CardDescription>
 		</CardHeader>
 
 		<CardContent>
-			<form on:submit|preventDefault={handleSubmit} class="space-y-6">
-				<div>
-					<label for="name" class="text-foreground text-sm font-medium">Name</label>
-					<Input
-						id="name"
-						name="Name"
-						bind:value={name}
-						placeholder="Your name"
-						required
-						class="border-slate-300 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-indigo-500 dark:border-slate-600 dark:placeholder:text-slate-500"
-					/>
-				</div>
-
-				<div>
-					<label for="email" class="text-foreground text-sm font-medium">Email</label>
-					<Input
-						id="email"
-						name="Email"
-						type="email"
-						bind:value={email}
-						placeholder="you@example.com"
-						required
-						class="border-slate-300 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-indigo-500 dark:border-slate-600 dark:placeholder:text-slate-500"
-					/>
-				</div>
-
-				<div>
-					<label for="message" class="text-foreground text-sm font-medium">Message</label>
-					<Textarea
-						id="message"
-						name="Message"
-						rows={5}
-						bind:value={message}
-						placeholder="Your message..."
-						required
-						class="resize-none border-slate-300 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-indigo-500 dark:border-slate-600 dark:placeholder:text-slate-500"
-					/>
-				</div>
-
-				<Button
-					type="submit"
-					disabled={loading}
-					class="w-full bg-indigo-800 font-semibold text-white shadow-md transition-all hover:bg-indigo-700"
+			<div>
+				<label
+					for="userName"
+					class="text-foreground text-sm font-medium">Name</label
 				>
-					{loading ? 'Sending...' : 'Send Message'}
-				</Button>
-			</form>
+				<Input
+					id="userName"
+					name="Name"
+					bind:value={form.userName}
+					placeholder="Your name"
+					required
+					class="border-slate-300 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-indigo-500 dark:border-slate-600 dark:placeholder:text-slate-500"
+				/>
+			</div>
+
+			<div>
+				<label
+					for="userEmail"
+					class="text-foreground text-sm font-medium">Email</label
+				>
+				<Input
+					id="userEmail"
+					name="Email"
+					type="email"
+					bind:value={form.userEmail}
+					placeholder="you@example.com"
+					required
+					class="border-slate-300 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-indigo-500 dark:border-slate-600 dark:placeholder:text-slate-500"
+				/>
+			</div>
+
+			<div>
+				<label
+					for="userMessage"
+					class="text-foreground text-sm font-medium">Message</label
+				>
+				<Textarea
+					id="userMessage"
+					name="Message"
+					rows={5}
+					bind:value={form.userMessage}
+					placeholder="Your message..."
+					required
+					class="resize-none border-slate-300 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-indigo-500 dark:border-slate-600 dark:placeholder:text-slate-500"
+				/>
+			</div>
+
+			<Button
+				state={submissionStatus ? "loading" : "default"}
+				variant="outline"
+				on:click={submitRequest}
+			>
+				<span class="sr-only">Submit Message</span>
+				{#if submissionStatus}
+					Submitting...
+				{:else}
+					Submit Message
+				{/if}
+			</Button>
 		</CardContent>
 	</Card>
 </main>

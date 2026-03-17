@@ -9,19 +9,6 @@
 		category?: string;
 		items?: string;
 	}
-
-	export let skills: SkillCategory[] = [];
-
-	let skillForm: {
-		id: string;
-		category: string;
-		items: string;
-	} = {
-		id: '',
-		category: '',
-		items: ''
-	};
-
 	const resetSkillForm = () => {
 		skillForm = { id: '', category: '', items: '' };
 	};
@@ -42,8 +29,7 @@
 			<CardTitle>{skillForm.id ? 'Edit Skill Category' : 'Add Skill Category'}</CardTitle>
 		</CardHeader>
 		<CardContent>
-			<form method="POST" action="?/saveSkill" class="space-y-3">
-				<input type="hidden" name="id" value={skillForm.id} />
+				<input type="hidden" name="id" bind:value={skillForm.id} />
 				<Input
 					type="text"
 					name="category"
@@ -58,18 +44,15 @@
 					bind:value={skillForm.items}
 				/>
 				<div class="flex gap-2">
-					<Button type="submit">{skillForm.id ? 'Update' : 'Add'}</Button>
+					<Button on:click={() => submitSkillForm()}>{skillForm.id ? 'Update' : 'Add'}</Button>
 					{#if skillForm.id}
-						<Button type="button" variant="outline" on:click={resetSkillForm}>
+						<Button variant="outline" on:click={() => resetSkillForm()}>
 							Cancel
 						</Button>
 					{/if}
 				</div>
-			</form>
 		</CardContent>
 	</Card>
-
-	<!-- Current Skill Categories Card -->
 	<Card>
 		<CardHeader>
 			<CardTitle>Current Skill Categories</CardTitle>
@@ -83,12 +66,10 @@
 						<Button variant="outline" size="sm" on:click={() => editSkill(item)}>
 							Edit
 						</Button>
-						<form method="POST" action="?/deleteSkill">
-							<input type="hidden" name="id" value={item.id} />
-							<Button variant="destructive" size="sm" type="submit">
+							<input type="hidden" name="id" bind:value={item.id} />
+							<Button variant="destructive" size="sm" on:click={()=>deleteSkill(item.id)}>
 								Delete
 							</Button>
-						</form>
 					</div>
 				</div>
 			{/each}

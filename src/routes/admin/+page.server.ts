@@ -321,6 +321,17 @@ export const actions: Actions = {
     }
   },
 
+  readMessage: async ({ request, cookies }) => {
+    const pb = await requireAdminPocketBase(cookies);
+    const id = readText(await request.formData(), "id");
+    if (!id) return fail(400, { error: "Message id is required." });
+    try {
+      await createOrUpdate(pb, "messages", id, { isRead: true });
+      return { success: true };
+    } catch {
+      return fail(500, { error: "Could not read message." });
+    }
+  },
   deleteMessage: async ({ request, cookies }) => {
     const pb = await requireAdminPocketBase(cookies);
     const id = readText(await request.formData(), "id");

@@ -16,16 +16,20 @@
   "dependencies": {
     "@sveltejs/enhanced-img": "^0.10.4",
     "@unpic/svelte": "^1.0.1",
-    "markdown-it": "^14.1.1",
+    "eslint": "^10.0.3",
+    "eslint-plugin-svelte": "^3.15.2",
     "mdsvex": "^0.12.7",
     "pocketbase": "^0.26.8",
     "svelte-exmarkdown": "^5.0.2",
+    "typescript-eslint": "^8.57.1",
     "vite-plugin-oxlint": "^2.0.1",
     "vite-plugin-webfont-dl": "^3.12.0"
   },
   "devDependencies": {
     "@internationalized/date": "^3.12.0",
     "@lucide/svelte": "^0.577.0",
+    "@ox-content/vite-plugin": "0.17.0",
+    "@ox-content/vite-plugin-svelte": "^0.17.0",
     "@sveltejs/adapter-auto": "^7.0.1",
     "@sveltejs/kit": "^2.55.0",
     "@sveltejs/vite-plugin-svelte": "^7.0.0",

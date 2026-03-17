@@ -16,7 +16,7 @@
 			if (records.length > 0) {
 				const first = records[0];
 				image = resolveMediaUrl(pb, first, 'image') || image;
-				description = readString(first, 'aboutme') || description;
+				aboutme = readString(first, 'aboutme') || aboutme;
 				titles = records
 					.map((record) => readString(record, 'flash'))
 					.filter(Boolean);
@@ -29,7 +29,7 @@
 
 <section class="container mx-auto px-6 py-12">
 	<div class="text-muted-foreground mx-auto mt-8 max-w-3xl text-lg">
-		<enhanced:img src={image} />
+		<enhanced:img src={image} alt={name} />
 		<h1 class="text-center text-3xl font-bold tracking-[0.2em]">{name}</h1>
 		{#each titles as title (title)}
 			<p
@@ -38,6 +38,6 @@
 				{title}
 			</p>
 		{/each}
-		<p class=" text-center">{description}</p>
+		<p class=" text-center">{aboutme}</p>
 	</div>
 </section>

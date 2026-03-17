@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { onMount, tick } from 'svelte';
-	import type { PageData } from './$types';
-	
+	import { onMount, tick } from "svelte";
+	import type { PageData } from "./$types";
+
 	type BlogItem = {
 		id: string;
 		title?: string;
@@ -10,85 +10,72 @@
 		author?: string;
 	};
 
-	let { data }: { data: PageData } = $props();
-
-	const blogs = $derived(data.blogs as BlogItem[]);
-	let blogForm = $state<{
-		id: string;
-		title: string;
-		content: string;
-		author: string;
-	}>({
-		id: '',
-		title: '',
-		content: '',
-		author: ''
-	});
-	
-	const editBlog = (blog: BlogItem) => {
+	const editBlog = ({ props }) => {
 		blogForm = {
-			id: blog.id,
-			title: blog.title ?? '',
-			content: blog.content ?? blog.brief ?? '',
-			author: blog.author ?? ''
+			id: props.blog.id,
+			title: props.blog.title ?? "",
+			content: props.blog.content ?? props.blog.brief ?? "",
+			author: props.blog.author ?? "",
 		};
-	}
-
+	};
 </script>
 
 <div class="mt-6 grid gap-6 xl:grid-cols-[1.4fr_1fr]">
-	<form
-		method="POST"
-		action="?/saveBlog"
-		enctype="multipart/form-data" class="space-y-4 rounded border p-4"
-	>
-		<h2 class="text-lg font-medium">{blogForm.id ? 'Edit Blog Post' : 'Add Blog Post'}</h2>
+	<h2 class="text-lg font-medium">{blogForm.id ? "Edit Blog Post" : "Add Blog Post"}</h2>
+	<Input type="hidden" name="id" bind:value={blogForm.id} />
+	<Input
+		class="w-full rounded border p-2"
+		name="title"
+		placeholder="Title"
+		bind:value={blogForm.title}
+		required
+	/>
 
-		<input type="hidden" name="id" value={blogForm.id} />
-		<input
-			class="w-full rounded border p-2"
-			name="title"
-			placeholder="Title"
-			bind:value={blogForm.title}
-			required
-		/>
-		
-		<input
-			class="w-full rounded border p-2"
-			name="author"
-			placeholder="Blog author"
-			bind:value={blogForm.author}
-		/>
-		<input class="w-full rounded border p-2" name="coverImage" type="file" accept="image/*" />
-
-		<textarea
-			class="h-64 w-full rounded border p-2"
-			name="content"
-			placeholder="blog content here ..."
-			bind:value={blogForm.content}
-		></textarea>
-
-
-
-		<button class="rounded border px-3 py-1 text-sm" type="submit">Save</button> 
-		<button class="rounded border px-3 py-1 text-sm" type="button" onclick={() => editBlog({})}>Cancel</button>
-	</form>
-
+	<Input
+		class="w-full rounded border p-2"
+		name="author"
+		placeholder="Blog author"
+		bind:value={blogForm.author}
+	/>
+	<Input
+		class="w-full rounded border p-2"
+		name="coverImage"
+		type="file"
+		accept="image/*"
+		bind:files={blogForm.coverImage}
+	/>
+	<Input
+		class="h-64 w-full rounded border p-2"
+		name="content"
+		type="file"
+		accept="markdown/*"
+		bind:value={blogForm.content}
+	/>
+	<Button class="rounded border px-3 py-1 text-sm" on:click={() => saveBlog()}>Save</Button>
+	<Button class="rounded border px-3 py-1 text-sm" on:click={() => editBlog({})}>
+		Cancel
+		</Button>
 	<div class="space-y-2 rounded border p-4">
 		<h2 class="text-lg font-medium">Current Blog Posts</h2>
 		{#each blogs as item (item.id)}
 			<div class="rounded border p-3">
 				<p class="font-medium">{item.title}</p>
-				<p class="text-muted-foreground mt-1 line-clamp-2 text-sm">{item.content ?? item.brief}</p>
-				<p class="text-muted-foreground truncate text-sm">{item.author}</p>
+				<p class="text-muted-foreground mt-1 line-clamp-2 text-sm">
+					{item.content ?? item.brief}
+				</p>
+				<p class="text-muted-foreground truncate text-sm">
+					{item.author}
+				</p>
 				<div class="mt-2 flex gap-2">
-					<button class="rounded border px-3 py-1 text-sm" type="button" onclick={() => editBlog(item)}
-						>Edit</button
+					<Button
+						class="rounded border px-3 py-1 text-sm"
+						on:click={() => editBlog(item)}>Edit</Button
 					>
-					<form method="POST" action="?/deleteBlog" enctype="multipart/form-data">
 						<input type="hidden" name="id" value={item.id} />
-						<button class="rounded border px-3 py-1 text-sm red-500" type="submit">Delete</button>
-					</form>
+						<button
+							class="rounded border px-3 py-1 text-sm red-500"
+							on:click={()=>deleteBlog}>Delete</button
+						>
 				</div>
 			</div>
 		{/each}

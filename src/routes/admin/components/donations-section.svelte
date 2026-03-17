@@ -1,39 +1,44 @@
 <script lang="ts">
 	import { Button } from "$lib/components/ui/button";
 	import { Input } from "$lib/components/ui/input";
-	import { Card, CardContent, CardHeader, CardTitle } from "$lib/components/ui/card";
+	import {
+		Card,
+		CardContent,
+		CardHeader,
+		CardTitle,
+	} from "$lib/components/ui/card";
 
-	export let donations: Donation[] = [];
-	let donationForm: {
-		id: string;
-		name: string;
-		link: string;
-	} = {
-		id: '',
-		name: '',
-		link: ''
-	};
-
+	
 	const resetDonationForm = () => {
-		donationForm = { id: '', name: '', link: '' };
-	}
+		donationForm = { id: "", name: "", link: "" };
+	};
 
 	const editDonation = (item: Donation) => {
 		donationForm = {
 			id: item.id,
-			name: item.name ?? '',
-			link: item.link ?? ''
+			name: item.name ?? "",
+			link: item.link ?? "",
 		};
-	}
+	};
 </script>
 
 <div class="mt-6 grid gap-6 lg:grid-cols-2">
 	<Card>
 		<CardHeader>
-			<CardTitle>{donationForm.id ? 'Edit Donation Link' : 'Add Donation Link'}</CardTitle>
+			<CardTitle
+				>{donationForm.id
+					? "Edit Donation Link"
+					: "Add Donation Link"}</CardTitle
+			>
 		</CardHeader>
 		<CardContent>
-			<form method="POST" action="?/saveDonation" enctype="multipart/form-data" class="space-y-3">
+			<form
+				method="POST"
+				action="?/saveDonation"
+				enctype="multipart/form-data"
+				class="space-y-3"
+				use:enhance
+			>
 				<input type="hidden" name="id" value={donationForm.id} />
 				<Input
 					type="text"
@@ -50,9 +55,15 @@
 					bind:value={donationForm.link}
 				/>
 				<div class="flex gap-2">
-					<Button type="submit">{donationForm.id ? 'Update' : 'Add'}</Button>
+					<Button type="submit"
+						>{donationForm.id ? "Update" : "Add"}</Button
+					>
 					{#if donationForm.id}
-						<Button type="button" variant="outline" on:click={resetDonationForm}>
+						<Button
+							type="button"
+							variant="outline"
+							on:click={resetDonationForm}
+						>
 							Cancel
 						</Button>
 					{/if}
@@ -72,12 +83,24 @@
 					<p class="font-medium">{item.name}</p>
 					<p class="text-muted-foreground text-sm">{item.link}</p>
 					<div class="mt-2 flex gap-2">
-						<Button variant="outline" size="sm" on:click={() => editDonation(item)}>
+						<Button
+							variant="outline"
+							size="sm"
+							on:click={() => editDonation(item)}
+						>
 							Edit
 						</Button>
-						<form method="POST" action="?/deleteDonation">
+						<form
+							method="POST"
+							action="?/deleteDonation"
+							use:enhance
+						>
 							<input type="hidden" name="id" value={item.id} />
-							<Button variant="destructive" size="sm" type="submit">
+							<Button
+								variant="destructive"
+								size="sm"
+								type="submit"
+							>
 								Delete
 							</Button>
 						</form>
@@ -85,7 +108,9 @@
 				</div>
 			{/each}
 			{#if donations.length === 0}
-				<p class="text-muted-foreground text-sm">No donation links yet.</p>
+				<p class="text-muted-foreground text-sm">
+					No donation links yet.
+				</p>
 			{/if}
 		</CardContent>
 	</Card>

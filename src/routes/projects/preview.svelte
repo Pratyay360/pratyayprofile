@@ -17,11 +17,9 @@
 	const pb = createClient(import.meta.env.VITE_POCKET_BASE);
 	let loading = true;
 	let failed = false;
-	let projects: ProjectRecord[] = [];
 
-	onMount(async () => {
 		try {
-			const records = await pb.collection('project').getFullList<RecordModel>({});
+			const records =  pb.collection('project').getFullList<RecordModel>({});
 			projects = records.map((record) => ({
 				id: record.id,
 				imageUrl: resolveMediaUrl(pb, record, 'imageUrl', { token: null }),
@@ -35,7 +33,6 @@
 		} finally {
 			loading = false;
 		}
-	});
 </script>
 
 <div class="bg-background min-h-screen px-4 py-24">
@@ -48,28 +45,32 @@
 	{/if}
 
 	{#if failed}
-		<p class="text-destructive mt-8 text-center text-sm">Unable to load projects.</p>
+		<p class="text-destructive mt-8 text-center text-sm">
+			Unable to load projects.
+		</p>
 	{/if}
 
 	<div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 		{#each projects.slice(0, 3) as project (project.id)}
 			<ProjectCard
-				imageUrl={project.imageUrl}
-				title={project.title}
-				brief={project.brief}
-				link={project.link}
+				bind:imageUrl={project.imageUrl}
+				bind:title={project.title}
+				bind:brief={project.brief}
+				bind:link={project.link}
 			/>
 		{/each}
 	</div>
 
 	{#if projects.length > 3}
 		<div class="mt-8 text-center">
-			<a href="/projects">
-				<button class="button-30">See More</button>
-			</a>
+			<Button class="button-30" on:click={() => redirect("/projects")}
+				>See More</Button
+			>
 		</div>
 	{/if}
 	{#if projects.length === 0 && !loading && !failed}
-		<p class="text-muted-foreground mt-8 text-center text-sm">Add your projects to display them here.</p>
+		<p class="text-muted-foreground mt-8 text-center text-sm">
+			Add your projects to display them here.
+		</p>
 	{/if}
 </div>

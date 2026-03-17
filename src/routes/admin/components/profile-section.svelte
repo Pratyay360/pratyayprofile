@@ -6,14 +6,6 @@
 
 	export let profiles: ProfileRecord[] = [];
 
-	let profileForm: {
-		title: string[];
-		description: string;
-	} = {
-		title: [],
-		description: ''
-	};
-
 	const resetProfileForm = () => {
 		profileForm = { title: [], description: '' };
 	}
@@ -27,7 +19,7 @@
 </script>
 
 <div class="mt-6 grid gap-6 lg:grid-cols-2">
-	<form method="POST" action="?/saveProfile" enctype="multipart/form-data" class="space-y-4 rounded border p-4">
+	<form method="POST" action="?/saveProfile" enctype="multipart/form-data" class="space-y-4 rounded border p-4" use:enhance>
 		<h2 class="text-lg font-medium">{profileForm.id ? 'Edit Profile' : 'Add Profile'}</h2>
 		<input type="hidden" name="id" value={profileForm.id} />
 		<div class="grid gap-4 md:grid-cols-2">
@@ -79,7 +71,7 @@
 				<p class="text-muted-foreground text-sm">{profile.title ?? ''}</p>
 				<div class="mt-2 flex gap-2">
 					<button class="rounded border px-3 py-1 text-sm" type="button" onclick={() => editProfile(profile)}>Edit</button>
-					<form method="POST" action="?/deleteProfile">
+					<form method="POST" action="?/deleteProfile" use:enhance>
 						<input type="hidden" name="id" value={profile.id} />
 						<button class="rounded border px-3 py-1 text-sm" type="submit">Delete</button>
 					</form>

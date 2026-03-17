@@ -1,75 +1,118 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import ProjectCard from '$lib/components/normaluicomponents/projectCard.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
-	import { createClient } from '$lib/pocketbase';
+	import {
+		Card,
+		CardContent,
+		CardDescription,
+		CardFooter,
+		CardHeader,
+		CardTitle
+	} from '$lib/components/ui/card';
+	import { Button } from '$lib/components/ui/button';
+	import { Alert, AlertDescription } from '$lib/components/ui/alert';
 	import { readString, resolveMediaUrl } from '$lib/content';
-	import { type RecordModel } from 'pocketbase';
+	import { pb } from '$lib/pocketbase';
+	import type { RecordModel } from 'pocketbase';
 
-	interface ProjectRecord {
+	type ProjectRecord = {
 		id: string;
 		imageUrl: string;
 		title: string;
 		brief: string;
 		link: string;
-	}
+	};
 
-	const pb = createClient(import.meta.env.VITE_POCKET_BASE);
-	let loading = true;
-	let failed = false;
-	let projects: ProjectRecord[] = [];
-	let profileName = 'Pratyay';
+	let loading = $state(true);
+	let failed = $state(false);
+	const profileName = 'Pratyay Mustafi';
+	let projects = $state<ProjectRecord[]>([]);
 
-	onMount(async () => {
-		try {
-			const [projectsResult, profileRecords] = await Promise.all([
-				pb.collection('project').getFullList<RecordModel>({}),
-				pb.collection('aboutme').getFullList<RecordModel>({})
-			]);
-			projects = projectsResult.map((record) => ({
-				id: record.id,
-				imageUrl: resolveMediaUrl(pb, record, 'imageUrl', { token: null }),
-				title: readString(record, 'title'),
-				brief: readString(record, 'brief'),
-				link: readString(record, 'link')
-			}));
-			const profileRecord = profileRecords[0];
-			profileName = profileRecord ? readString(profileRecord, 'name') || profileName : profileName;
-		} catch (error) {
-			console.error(error);
-			failed = true;
-		} finally {
-			loading = false;
-		}
+	$effect(() => {
+		let cancelled = false;
+
+		const fetchProjects = async () => {
+			try {
+				loading = true;
+				failed = false;
+
+				const results = await pb
+					.collection('project')
+					.getFullList<RecordModel>({ sort: '-created' });
+
+				if (cancelled) return;
+
+				projects = results.map((record) => ({
+					id: readString(record, 'id'),
+					imageUrl: resolveMediaUrl(pb, record, 'imageUrl', { token: null }),
+					title: readString(record, 'title'),
+					brief: readString(record, 'brief'),
+					link: readString(record, 'link')
+				}));
+			} catch (error) {
+				console.error('Failed to fetch projects:', error);
+				if (!cancelled) failed = true;
+			} finally {
+				if (!cancelled) loading = false;
+			}
+		};
+
+		fetchProjects();
+
+		return () => {
+			cancelled = true;
+		};
 	});
 </script>
 
 <main class="bg-background min-h-screen px-4 py-24">
-	<h1 class="text-center text-3xl font-bold tracking-[0.2em] lg:text-5xl">Projects By {profileName}</h1>
+	<div class="mx-auto max-w-6xl">
+		<header class="text-center space-y-4">
+			<h1 class="text-3xl font-bold tracking-[0.2em] lg:text-5xl">
+				Projects By {profileName}
+			</h1>
+			<p class="text-muted-foreground mx-auto max-w-2xl">
+				A collection of my recent works and experimental builds.
+			</p>
+		</header>
 
-	{#if loading}
-		<div class="mt-10">
-			<Skeleton class="h-64 w-full" />
-		</div>
-	{/if}
+		{#if loading}
+			<div class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+				{#each Array(6) as _}
+					<Card class="overflow-hidden">
+						<Skeleton class="h-40 w-full" />
+						<CardHeader>
+							<Skeleton class="h-5 w-3/4" />
+							<Skeleton class="h-4 w-full" />
+						</CardHeader>
+						<CardContent>
+							<Skeleton class="h-4 w-5/6" />
+						</CardContent>
+						<CardFooter>
+							<Skeleton class="h-9 w-24" />
+						</CardFooter>
+					</Card>
+				{/each}
+			</div>
 
-	{#if failed}
-		<p class="text-destructive mt-8 text-center text-sm">Unable to load projects.</p>
-	{/if}
-
-	<section class="mx-auto mt-12 max-w-6xl">
-		<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-			{#each projects as project (project.id)}
-				<ProjectCard
-					imageUrl={project.imageUrl}
-					title={project.title}
-					brief={project.brief}
-					link={project.link}
-				/>
-			{/each}
-		</div>
-		{#if projects.length === 0 && !loading && !failed}
-			<p class="text-muted-foreground mt-8 text-center text-sm">Add your projects to display them here.</p>
+		{:else if failed}
+			<Alert variant="destructive"> 
+				<AlertDescription>Failed to load projects. Please try again later.</AlertDescription> 
+			</Alert>
+		{:else}
+			<section class="mt-12">
+				<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+					{#each projects as project (project.id)}
+						<ProjectCard
+							bind:id={project.id}
+							bind:imageUrl={project.imageUrl}
+							bind:title={project.title}
+							bind:brief={project.brief}
+							bind:link={project.link}
+						/>
+					{/each}
+				</div>
+			</section>
 		{/if}
-	</section>
+	</div>
 </main>

@@ -1,17 +1,10 @@
-import { createClient } from "$lib/pocketbase";
 import type { PageServerLoad } from "./$types";
-import { error } from "@sveltejs/kit";
-
-const pb = createClient(import.meta.env.VITE_POCKET_BASE!);
-pb.autoCancellation(false);
-
+import { resolveMediaUrl } from "$lib/content";
+import { createClient } from "$lib/pocketbase";
 export const load: PageServerLoad = async ({ params }) => {
-  try {
-    const blog = await pb.collection("blogs").getOne(params.slug);
-    const renderedContent = blog?.content;
-    const coverImage = pb.files.getURL(blog, blog?.coverImage, { token: null });
-    return { blog, coverImage, renderedContent };
-  } catch (e) {
-    throw error(404, "Blog post not found" + e);
-  }
+  const pb = createClient(import.meta.env.VITE_POCKET_BASE);
+  const blog = await pb.collection("blogs").getOne(params.slug);
+  const coverImage = resolveMediaUrl(pb, blog, "coverImage", { token: null });
+  const content = resolveMediaUrl(pb, blog, "content", { token: null });
+  return { coverImage, content, blog };
 };

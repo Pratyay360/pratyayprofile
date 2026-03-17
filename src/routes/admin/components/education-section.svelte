@@ -2,7 +2,12 @@
 	import { Button } from "$lib/components/ui/button";
 	import { Input } from "$lib/components/ui/input";
 	import { Textarea } from "$lib/components/ui/textarea";
-	import { Card, CardContent, CardHeader, CardTitle } from "$lib/components/ui/card";
+	import {
+		Card,
+		CardContent,
+		CardHeader,
+		CardTitle,
+	} from "$lib/components/ui/card";
 
 	interface EducationEntry {
 		id: string;
@@ -21,24 +26,30 @@
 		period: string;
 		description: string;
 	} = {
-		id: '',
-		degree: '',
-		institution: '',
-		period: '',
-		description: ''
+		id: "",
+		degree: "",
+		institution: "",
+		period: "",
+		description: "",
 	};
 
 	const resetEducationForm = () => {
-		educationForm = { id: '', degree: '', institution: '', period: '', description: '' };
+		educationForm = {
+			id: "",
+			degree: "",
+			institution: "",
+			period: "",
+			description: "",
+		};
 	};
 
 	const editEducation = (item: EducationEntry) => {
 		educationForm = {
 			id: item.id,
-			degree: item.degree ?? '',
-			institution: item.institution ?? '',
-			period: item.period ?? '',
-			description: item.description ?? ''
+			degree: item.degree ?? "",
+			institution: item.institution ?? "",
+			period: item.period ?? "",
+			description: item.description ?? "",
 		};
 	};
 </script>
@@ -47,10 +58,19 @@
 	<!-- Form Card -->
 	<Card>
 		<CardHeader>
-			<CardTitle>{educationForm.id ? 'Edit Education' : 'Add Education'}</CardTitle>
+			<CardTitle
+				>{educationForm.id
+					? "Edit Education"
+					: "Add Education"}</CardTitle
+			>
 		</CardHeader>
 		<CardContent>
-			<form method="POST" action="?/saveEducation" class="space-y-3">
+			<form
+				method="POST"
+				action="?/saveEducation"
+				class="space-y-3"
+				use:enhance
+			>
 				<input type="hidden" name="id" value={educationForm.id} />
 				<Input
 					type="text"
@@ -78,9 +98,15 @@
 					bind:value={educationForm.description}
 				/>
 				<div class="flex gap-2">
-					<Button type="submit">{educationForm.id ? 'Update' : 'Add'}</Button>
+					<Button type="submit"
+						>{educationForm.id ? "Update" : "Add"}</Button
+					>
 					{#if educationForm.id}
-						<Button type="button" variant="outline" on:click={resetEducationForm}>
+						<Button
+							type="button"
+							variant="outline"
+							on:click={resetEducationForm}
+						>
 							Cancel
 						</Button>
 					{/if}
@@ -98,15 +124,25 @@
 			{#each education as item (item.id)}
 				<div class="rounded-lg border p-3">
 					<p class="font-medium">{item.degree}</p>
-					<p class="text-muted-foreground text-sm">{item.institution}</p>
+					<p class="text-muted-foreground text-sm">
+						{item.institution}
+					</p>
 					<!-- Optional: show period and description if you want, but original only shows degree/institution -->
 					<div class="mt-2 flex gap-2">
-						<Button variant="outline" size="sm" on:click={() => editEducation(item)}>
+						<Button
+							variant="outline"
+							size="sm"
+							on:click={() => editEducation(item)}
+						>
 							Edit
 						</Button>
-						<form method="POST" action="?/deleteEducation">
+						<form method="POST" action="?/deleteEducation" use:enhance>
 							<input type="hidden" name="id" value={item.id} />
-							<Button variant="destructive" size="sm" type="submit">
+							<Button
+								variant="destructive"
+								size="sm"
+								type="submit"
+							>
 								Delete
 							</Button>
 						</form>
@@ -114,7 +150,9 @@
 				</div>
 			{/each}
 			{#if education.length === 0}
-				<p class="text-muted-foreground text-sm">No education entries yet.</p>
+				<p class="text-muted-foreground text-sm">
+					No education entries yet.
+				</p>
 			{/if}
 		</CardContent>
 	</Card>

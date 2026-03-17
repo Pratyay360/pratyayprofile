@@ -4,10 +4,12 @@ import { defineConfig } from "vite";
 import oxlintPlugin from "vite-plugin-oxlint";
 import webfontDownload from "vite-plugin-webfont-dl";
 import { enhancedImages } from "@sveltejs/enhanced-img";
+import { oxContent } from "@ox-content/vite-plugin";
 export default defineConfig({
   plugins: [
     tailwindcss(),
     sveltekit(),
+    oxContent(),
     oxlintPlugin(),
     enhancedImages(),
     webfontDownload([

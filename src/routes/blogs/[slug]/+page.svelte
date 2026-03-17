@@ -1,20 +1,10 @@
 <script lang="ts">
     import type { PageData } from "./$types";
-    import markdownit from "markdown-it";
-    const md = markdownit();
-    let { data }: { data: PageData } = $props();
-    const blog = $derived(data.blog);
-    const renderedContent = $derived(data.renderedContent);
-    const result = $derived(renderedContent ? md.render(renderedContent) : "");
+    const blog: PageData = $derived(data.blog);
+    const renderedContent = $derived(data.content);
+    import { parseAndRender } from "@ox-content/napi";
+    const { html: result } = $parseAndRender(data.content);
 </script>
-
-<svelte:head>
-    <title>{blog.title}</title>
-    <meta name="description" content={blog.excerpt || blog.title} />
-    {#if data.coverImage}
-        <meta property="og:image" content={data.coverImage} />
-    {/if}
-</svelte:head>
 
 <article class="mx-auto w-full max-w-4xl px-4 py-16">
     <header class="mb-10">

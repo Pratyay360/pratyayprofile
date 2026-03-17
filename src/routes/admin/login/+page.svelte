@@ -1,12 +1,17 @@
 <script lang="ts">
 	type LoginFormState = {
 		email?: string;
+		password?: string;
 		message?: string;
 		error?: string;
 	};
 
-	let { form } = $props<{ form?: LoginFormState }>();
-	const email = $derived(form?.email ?? '');
+	let loginForm: LoginFormState = $state({
+		email: '',
+		password: '',
+	});
+
+	let { form } = $props();
 </script>
 
 <div class="container mx-auto px-6 py-8">
@@ -14,28 +19,28 @@
 	<p class="text-muted-foreground mt-2 text-sm">
 		Authenticate with email and password.
 	</p>
-
-	<form method="POST" action="?/login" class="mt-6 max-w-sm space-y-3">
-		<label for="email" class="block text-sm font-medium">Email</label>
-		<input
-			id="email"
-			name="email"
-			type="email"
-			class="w-full rounded border p-2"
-			value={email}
-			required
-		/>
-		<label for="password" class="block text-sm font-medium">Password</label>
-		<input
-			id="password"
-			name="password"
-			type="password"
-			class="w-full rounded border p-2"
-			autocomplete="current-password"
-			required
-		/>
-		<button class="rounded-md border px-4 py-2" type="submit">Login</button>
-	</form>
+	<label for="email" class="block text-sm font-medium">Email</label>
+	<Input
+		id="email"
+		name="email"
+		type="email"
+		class="w-full rounded border p-2"
+		bind:value={loginForm.email}
+		required
+	/>
+	<label for="password" class="block text-sm font-medium">Password</label>
+	<Input
+		id="password"
+		name="password"
+		type="password"
+		class="w-full rounded border p-2"
+		autocomplete="true"
+		bind:value={loginForm.password}
+		required
+	/>
+	<Button class="rounded-md border px-4 py-2" on:click={() => login()}
+		>Login</Button
+	>
 
 	<!-- Commented out OTP verification form -->
 	<!-- 
@@ -63,9 +68,11 @@
 	-->
 
 	{#if form?.message}
-		<p class="mt-4 text-sm text-green-700 dark:text-green-400">{form.message}</p>
+		<p class="mt-4 text-sm text-green-700 dark:text-green-400">
+			{form.message}
+		</p>
 	{/if}
 	{#if form?.error}
-		<p class="mt-4 text-sm text-red-700 dark:text-red-400">{form.error}</p>
+		<p class="mt-4 text-sm text-red-700 dark:text-red-400"> {form.error}</p>
 	{/if}
 </div>
