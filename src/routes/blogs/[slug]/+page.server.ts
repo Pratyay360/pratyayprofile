@@ -1,4 +1,4 @@
-import type { PageServerLoad } from "./$types";
+import type { PageServerLoad } from "./$types.d.ts";
 import { parseAndRender } from "@ox-content/napi";
 import { readString, resolveMediaUrl } from "$lib/content";
 import { createClient } from "$lib/pocketbase";

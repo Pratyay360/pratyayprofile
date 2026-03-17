@@ -8,7 +8,7 @@ import {
   // setPendingAuthCookie, // Not needed without OTP
   setAuthCookie,
   verifyUserToken,
-} from "$lib/server/admin-auth";
+} from "../../../lib/server/admin-auth.ts";
 
 // Commented out - not needed without MFA check
 // function extractErrorText(error: unknown): string {

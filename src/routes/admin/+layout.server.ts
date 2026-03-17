@@ -4,7 +4,7 @@ import {
   clearAuthCookie,
   setAuthCookie,
   verifyUserToken,
-} from "$lib/server/admin-auth";
+} from "../../lib/server/admin-auth.ts";
 
 export const load = async ({ cookies, url }) => {
   const token = cookies.get(AUTH_COOKIE);

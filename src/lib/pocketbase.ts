@@ -6,8 +6,8 @@ export function createClient(url: string) {
     _fetch?: (url: string, options?: RequestInit) => Promise<Response>;
   };
 
-  // Configure custom fetch to avoid Cloudflare 403 blocks
-  clientWithFetch._fetch = async function (url: string, options?: RequestInit) {
+  // @ts-ignore
+  clientWithFetch._fetch = function (url: string, options?: RequestInit) {
     if (!options) {
       options = {};
     }

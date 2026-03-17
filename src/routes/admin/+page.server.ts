@@ -1,6 +1,9 @@
 import { fail, redirect } from "@sveltejs/kit";
-import type { Actions, PageServerLoad } from "./$types";
-import { AUTH_COOKIE, clearAuthCookie, verifyUserToken } from "$lib/server/admin-auth";
+import type {
+  Actions,
+  PageServerLoad,
+} from "../../../.svelte-kit/types/src/routes/admin/$types.d.ts";
+import { AUTH_COOKIE, clearAuthCookie, verifyUserToken } from "../../lib/server/admin-auth.ts";
 
 function readText(data: FormData, key: string): string {
   const value = data.get(key);

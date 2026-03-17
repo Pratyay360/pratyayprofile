@@ -35,6 +35,7 @@
 		const hash = href.split('#')[1];
 		return $page.url.hash === `#${hash}`;
 	}
+	
 </script>
 
 <a
