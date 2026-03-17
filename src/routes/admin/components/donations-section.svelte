@@ -1,23 +1,32 @@
 <script lang="ts">
-	import { Button } from "$lib/components/ui/button";
-	import { Input } from "$lib/components/ui/input";
-	import {
-		Card,
-		CardContent,
-		CardHeader,
-		CardTitle,
-	} from "$lib/components/ui/card";
+	import { enhance } from '$app/forms';
+	import { Button } from '$lib/components/ui/button';
+	import { Input } from '$lib/components/ui/input';
+	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
 
-	
+	interface Donation {
+		id: string;
+		name?: string;
+		link?: string;
+	}
+
+	let { donations }: { donations: Donation[] } = $props();
+
+	let donationForm = $state({
+		id: '',
+		name: '',
+		link: ''
+	});
+
 	const resetDonationForm = () => {
-		donationForm = { id: "", name: "", link: "" };
+		donationForm = { id: '', name: '', link: '' };
 	};
 
 	const editDonation = (item: Donation) => {
 		donationForm = {
 			id: item.id,
-			name: item.name ?? "",
-			link: item.link ?? "",
+			name: item.name ?? '',
+			link: item.link ?? ''
 		};
 	};
 </script>
@@ -25,11 +34,7 @@
 <div class="mt-6 grid gap-6 lg:grid-cols-2">
 	<Card>
 		<CardHeader>
-			<CardTitle
-				>{donationForm.id
-					? "Edit Donation Link"
-					: "Add Donation Link"}</CardTitle
-			>
+			<CardTitle>{donationForm.id ? 'Edit Donation Link' : 'Add Donation Link'}</CardTitle>
 		</CardHeader>
 		<CardContent>
 			<form
@@ -39,40 +44,20 @@
 				class="space-y-3"
 				use:enhance
 			>
-				<input type="hidden" name="id" value={donationForm.id} />
-				<Input
-					type="text"
-					name="name"
-					placeholder="Name (e.g. Buy Me a Coffee)"
-					bind:value={donationForm.name}
-					required
-				/>
+				<Input type="hidden" name="id" value={donationForm.id} />
+				<Input type="text" name="name" placeholder="Name" bind:value={donationForm.name} required />
 				<Input type="file" name="image" accept="image/*" />
-				<Input
-					type="url"
-					name="link"
-					placeholder="Donation Link"
-					bind:value={donationForm.link}
-				/>
+				<Input type="url" name="link" placeholder="Donation Link" bind:value={donationForm.link} />
 				<div class="flex gap-2">
-					<Button type="submit"
-						>{donationForm.id ? "Update" : "Add"}</Button
-					>
+					<Button type="submit">{donationForm.id ? 'Update' : 'Add'}</Button>
 					{#if donationForm.id}
-						<Button
-							type="button"
-							variant="outline"
-							on:click={resetDonationForm}
-						>
-							Cancel
-						</Button>
+						<Button type="button" variant="outline" onclick={resetDonationForm}>Cancel</Button>
 					{/if}
 				</div>
 			</form>
 		</CardContent>
 	</Card>
 
-	<!-- Current Donations Card -->
 	<Card>
 		<CardHeader>
 			<CardTitle>Current Donation Links</CardTitle>
@@ -83,34 +68,18 @@
 					<p class="font-medium">{item.name}</p>
 					<p class="text-muted-foreground text-sm">{item.link}</p>
 					<div class="mt-2 flex gap-2">
-						<Button
-							variant="outline"
-							size="sm"
-							on:click={() => editDonation(item)}
-						>
+						<Button variant="outline" size="sm" type="button" onclick={() => editDonation(item)}>
 							Edit
 						</Button>
-						<form
-							method="POST"
-							action="?/deleteDonation"
-							use:enhance
-						>
-							<input type="hidden" name="id" value={item.id} />
-							<Button
-								variant="destructive"
-								size="sm"
-								type="submit"
-							>
-								Delete
-							</Button>
+						<form method="POST" action="?/deleteDonation" use:enhance>
+							<Input type="hidden" name="id" value={item.id} />
+							<Button variant="destructive" size="sm" type="submit">Delete</Button>
 						</form>
 					</div>
 				</div>
 			{/each}
 			{#if donations.length === 0}
-				<p class="text-muted-foreground text-sm">
-					No donation links yet.
-				</p>
+				<p class="text-muted-foreground text-sm">No donation links yet.</p>
 			{/if}
 		</CardContent>
 	</Card>

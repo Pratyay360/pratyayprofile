@@ -1,8 +1,8 @@
 import tailwindcss from "@tailwindcss/vite";
 import { sveltekit } from "@sveltejs/kit/vite";
 import { defineConfig } from "vite";
-import oxlintPlugin from "vite-plugin-oxlint";
 import webfontDownload from "vite-plugin-webfont-dl";
+import oxlintPlugin from "vite-plugin-oxlint";
 import { enhancedImages } from "@sveltejs/enhanced-img";
 import { oxContent } from "@ox-content/vite-plugin";
 export default defineConfig({

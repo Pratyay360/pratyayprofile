@@ -1,18 +1,15 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import ProjectCard from '$lib/components/normaluicomponents/projectCard.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import {
 		Card,
 		CardContent,
-		CardDescription,
 		CardFooter,
-		CardHeader,
-		CardTitle
+		CardHeader
 	} from '$lib/components/ui/card';
-	import { Button } from '$lib/components/ui/button';
-	import { Alert, AlertDescription } from '$lib/components/ui/alert';
+	import { createClient } from '$lib/pocketbase';
 	import { readString, resolveMediaUrl } from '$lib/content';
-	import { pb } from '$lib/pocketbase';
 	import type { RecordModel } from 'pocketbase';
 
 	type ProjectRecord = {
@@ -23,54 +20,36 @@
 		link: string;
 	};
 
-	let loading = $state(true);
-	let failed = $state(false);
+	const pb = createClient(import.meta.env.VITE_POCKET_BASE);
 	const profileName = 'Pratyay Mustafi';
-	let projects = $state<ProjectRecord[]>([]);
 
-	$effect(() => {
-		let cancelled = false;
+	let loading = true;
+	let failed = false;
+	let projects: ProjectRecord[] = [];
 
-		const fetchProjects = async () => {
-			try {
-				loading = true;
-				failed = false;
-
-				const results = await pb
-					.collection('project')
-					.getFullList<RecordModel>({ sort: '-created' });
-
-				if (cancelled) return;
-
-				projects = results.map((record) => ({
-					id: readString(record, 'id'),
-					imageUrl: resolveMediaUrl(pb, record, 'imageUrl', { token: null }),
-					title: readString(record, 'title'),
-					brief: readString(record, 'brief'),
-					link: readString(record, 'link')
-				}));
-			} catch (error) {
-				console.error('Failed to fetch projects:', error);
-				if (!cancelled) failed = true;
-			} finally {
-				if (!cancelled) loading = false;
-			}
-		};
-
-		fetchProjects();
-
-		return () => {
-			cancelled = true;
-		};
+	onMount(async () => {
+		try {
+			const results = await pb.collection('project').getFullList<RecordModel>({ sort: '-created' });
+			projects = results.map((record) => ({
+				id: record.id,
+				imageUrl: resolveMediaUrl(pb, record, 'imageUrl', { token: null }),
+				title: readString(record, 'title'),
+				brief: readString(record, 'brief'),
+				link: readString(record, 'link')
+			}));
+		} catch (error) {
+			console.error('Failed to fetch projects:', error);
+			failed = true;
+		} finally {
+			loading = false;
+		}
 	});
 </script>
 
 <main class="bg-background min-h-screen px-4 py-24">
 	<div class="mx-auto max-w-6xl">
-		<header class="text-center space-y-4">
-			<h1 class="text-3xl font-bold tracking-[0.2em] lg:text-5xl">
-				Projects By {profileName}
-			</h1>
+		<header class="space-y-4 text-center">
+			<h1 class="text-3xl font-bold tracking-[0.2em] lg:text-5xl">Projects By {profileName}</h1>
 			<p class="text-muted-foreground mx-auto max-w-2xl">
 				A collection of my recent works and experimental builds.
 			</p>
@@ -78,7 +57,7 @@
 
 		{#if loading}
 			<div class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-				{#each Array(6) as _}
+				{#each Array.from({ length: 6 }, (_, i) => i) as i (i)}
 					<Card class="overflow-hidden">
 						<Skeleton class="h-40 w-full" />
 						<CardHeader>
@@ -94,21 +73,19 @@
 					</Card>
 				{/each}
 			</div>
-
 		{:else if failed}
-			<Alert variant="destructive"> 
-				<AlertDescription>Failed to load projects. Please try again later.</AlertDescription> 
-			</Alert>
+			<div class="text-destructive mt-12 rounded-lg border border-current/20 px-4 py-3 text-sm">
+				Failed to load projects. Please try again later.
+			</div>
 		{:else}
 			<section class="mt-12">
 				<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 					{#each projects as project (project.id)}
 						<ProjectCard
-							bind:id={project.id}
-							bind:imageUrl={project.imageUrl}
-							bind:title={project.title}
-							bind:brief={project.brief}
-							bind:link={project.link}
+							imageUrl={project.imageUrl}
+							title={project.title}
+							brief={project.brief}
+							link={project.link}
 						/>
 					{/each}
 				</div>
