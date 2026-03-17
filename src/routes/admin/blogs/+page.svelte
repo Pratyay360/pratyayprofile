@@ -21,7 +21,9 @@
 </script>
 
 <div class="mt-6 grid gap-6 xl:grid-cols-[1.4fr_1fr]">
-	<h2 class="text-lg font-medium">{blogForm.id ? "Edit Blog Post" : "Add Blog Post"}</h2>
+	<h2 class="text-lg font-medium">
+		{blogForm.id ? "Edit Blog Post" : "Add Blog Post"}
+	</h2>
 	<Input type="hidden" name="id" bind:value={blogForm.id} />
 	<Input
 		class="w-full rounded border p-2"
@@ -51,10 +53,15 @@
 		accept="markdown/*"
 		bind:value={blogForm.content}
 	/>
-	<Button class="rounded border px-3 py-1 text-sm" on:click={() => saveBlog()}>Save</Button>
-	<Button class="rounded border px-3 py-1 text-sm" on:click={() => editBlog({})}>
+	<Button class="rounded border px-3 py-1 text-sm" on:click={() => saveBlog()}
+		>Save</Button
+	>
+	<Button
+		class="rounded border px-3 py-1 text-sm"
+		on:click={() => editBlog({})}
+	>
 		Cancel
-		</Button>
+	</Button>
 	<div class="space-y-2 rounded border p-4">
 		<h2 class="text-lg font-medium">Current Blog Posts</h2>
 		{#each blogs as item (item.id)}
@@ -71,11 +78,11 @@
 						class="rounded border px-3 py-1 text-sm"
 						on:click={() => editBlog(item)}>Edit</Button
 					>
-						<input type="hidden" name="id" value={item.id} />
-						<button
-							class="rounded border px-3 py-1 text-sm red-500"
-							on:click={()=>deleteBlog}>Delete</button
-						>
+					<input type="hidden" name="id" value={item.id} />
+					<button
+						class="rounded border px-3 py-1 text-sm red-500"
+						on:click={() => deleteBlog}>Delete</button
+					>
 				</div>
 			</div>
 		{/each}
