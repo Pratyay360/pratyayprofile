@@ -15,6 +15,7 @@
 		updated: string;
 		created: string;
 		link: string;
+		hnl: string;
 	}
 
 	const pb = createClient(import.meta.env.VITE_POCKET_BASE);
@@ -33,6 +34,7 @@
 				created: readString(record, "created"),
 				coverImage: resolveMediaUrl(pb, record, "coverImage", { token: null }),
 				link: `/blogs/${record.id}`,
+				hnl: 
 			}));
 		} catch (e) {
 			console.error(e);
@@ -63,7 +65,9 @@
 	{/if}
 
 	{#if !loading && posts.length > 0}
-		<section class="mx-auto grid max-w-6xl gap-8 md:grid-cols-2 lg:grid-cols-3">
+		<section
+			class="mx-auto grid max-w-6xl gap-8 md:grid-cols-2 lg:grid-cols-3"
+		>
 			{#each posts as post (post.id)}
 				<BlogCard
 					link={post.link}
