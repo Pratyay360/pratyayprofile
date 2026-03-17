@@ -1,16 +1,19 @@
 <script lang="ts">
-	import AboutMe from './sections/aboutme.svelte'
-	import Education from './sections/education.svelte';
-	import Skills from './sections/skills.svelte';
-	import Certificates from './certificates/preview.svelte';
-	import Projects from './projects/preview.svelte';
-	import BlogsPreview from './blogs/preview.svelte';
-	import Donate from './sections/donate.svelte';
-	import Contact from './sections/contact.svelte';
-	import Resume from './sections/resume.svelte';
+	import AboutMe from "./sections/aboutme.svelte";
+	import Education from "./sections/education.svelte";
+	import Skills from "./sections/skills.svelte";
+	import Certificates from "./certificates/preview.svelte";
+	import Projects from "./projects/preview.svelte";
+	import BlogsPreview from "./blogs/preview.svelte";
+	import Donate from "./sections/donate.svelte";
+	import Contact from "./sections/contact.svelte";
+	import Resume from "./sections/resume.svelte";
+	import { fontSans, fontSerif, fontMono } from "$lib/fonts";
 </script>
 
-<div>
+<div
+	class="snap-y snap-mandatory {fontSans.variable} {fontSerif.variable} {fontMono.variable} antialiased"
+>
 	<section id="profile" class="snap-center justify-center pt-20">
 		<AboutMe />
 	</section>
