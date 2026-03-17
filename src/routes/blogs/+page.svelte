@@ -15,7 +15,6 @@
 		updated: string;
 		created: string;
 		link: string;
-		hnl: string;
 	}
 
 	const pb = createClient(import.meta.env.VITE_POCKET_BASE);
@@ -34,7 +33,6 @@
 				created: readString(record, "created"),
 				coverImage: resolveMediaUrl(pb, record, "coverImage", { token: null }),
 				link: `/blogs/${record.id}`,
-				hnl: 
 			}));
 		} catch (e) {
 			console.error(e);

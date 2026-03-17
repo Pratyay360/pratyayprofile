@@ -29,10 +29,14 @@
 
 <section class="container mx-auto px-6 py-12">
 	<div class="text-muted-foreground mx-auto mt-8 max-w-3xl text-lg">
-		<img src={image} />
+		<enhanced:img src={image} />
 		<h1 class="text-center text-3xl font-bold tracking-[0.2em]">{name}</h1>
 		{#each titles as title (title)}
-			<p class="animate-typing overflow-hidden whitespace-nowrap border-r-4 border-r-white pr-5 text-5xl dark:text-white  font-bold text-center">{title}</p>
+			<p
+				class="animate-typing overflow-hidden whitespace-nowrap border-r-4 border-r-white pr-5 text-5xl dark:text-white  font-bold text-center"
+			>
+				{title}
+			</p>
 		{/each}
 		<p class=" text-center">{description}</p>
 	</div>
