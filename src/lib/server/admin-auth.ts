@@ -1,6 +1,6 @@
 import type { Cookies } from "@sveltejs/kit";
 import { dev } from "$app/environment";
-import { createClient } from "../pocketbase.ts";
+import { createClient } from "$lib/pocketbase";
 
 export const AUTH_COOKIE = "admin_auth";
 export const PENDING_AUTH_COOKIE = "admin_pending_auth";

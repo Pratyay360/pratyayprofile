@@ -59,9 +59,7 @@
 			<CardTitle>{certificateForm.id ? 'Edit Certificate' : 'Add Certificate'}</CardTitle>
 		</CardHeader>
 		<CardContent>
-			<form method="POST" action="?/saveCertificate" class="space-y-3" enctype="multipart/form-data" use:enhance>
 				<input type="hidden" name="id" value={certificateForm.id} />
-				
 				<Input
 					type="text"
 					name="title"
@@ -108,12 +106,11 @@
 				<div class="flex gap-2">
 					<Button type="submit">{certificateForm.id ? 'Update' : 'Add'}</Button>
 					{#if certificateForm.id}
-						<Button type="button" variant="outline" on:click={resetCertificateForm}>
+						<Button type="button" variant="outline" size="sm" on:click={()=> resetCertificateForm}>
 							Cancel
 						</Button>
 					{/if}
 				</div>
-			</form>
 		</CardContent>
 	</Card>
 
