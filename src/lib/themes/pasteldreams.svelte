@@ -1,4 +1,4 @@
-<div class="pasteldreams" />
+<div class="pasteldreams"></div>
 
 <style>
     @import "tailwindcss";
@@ -65,7 +65,7 @@
         --spacing: 0.25rem;
     }
 
-    .dark {
+    :global(.dark) {
         --background: hsl(24 9.8039% 10%);
         --foreground: hsl(226.4516 100% 93.9216%);
         --card: hsl(270 17.7778% 17.6471%);
@@ -180,7 +180,7 @@
         * {
             @apply border-border outline-ring/50;
         }
-        body {
+        :global(body) {
             @apply bg-background text-foreground;
         }
     }

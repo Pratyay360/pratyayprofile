@@ -1,23 +1,22 @@
 <script lang="ts">
-	import favicon from "$lib/assets/favicon.svg";
-	import { ModeWatcher } from "mode-watcher";
-	import Navbar from "$lib/components/navbar/navbar.svelte";
-	let { children } = $props();
+  import favicon from "$lib/assets/favicon.svg";
+  import Navbar from "$lib/components/navbar/navbar.svelte";
+  import CatppuchinTheme from "$lib/themes/catppuchin.svelte";
+  import { ModeWatcher } from "mode-watcher";
+
+  let { children } = $props();
 </script>
 
-<style >
-
-@import "tw-animate-css";
-@plugin "@tailwindcss/typography";
-
-
-
-</style>
-
-
 <svelte:head>
-	<link rel="icon" href={favicon} />
+  <link rel="icon" href={favicon} />
 </svelte:head>
+
+<CatppuchinTheme />
 <ModeWatcher />
 <Navbar />
 {@render children()}
+
+<style>
+  @import "tw-animate-css";
+  @plugin "@tailwindcss/typography";
+</style>

@@ -31,7 +31,6 @@
 		<AspectRatio ratio={16 / 10}>
 			{#if imageSrc}
 				<enhanced:img
-
 					src={imageSrc}
 					alt={title || 'certificate image'}
 					class="object-cover"

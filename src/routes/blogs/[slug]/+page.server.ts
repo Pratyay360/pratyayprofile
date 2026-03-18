@@ -7,7 +7,7 @@ export const load: PageServerLoad = async ({ params }) => {
   const pb = createClient(import.meta.env.VITE_POCKET_BASE);
   const blog = await pb.collection("blogs").getOne(params.slug);
   const coverImage = resolveMediaUrl(pb, blog, "coverImage", { token: null });
-  const content = readString(blog, "content");
+  const content = resolveMediaUrl(pb, blog, "content", { token: null });
   const rendered = parseAndRender(content).html;
 
   return { coverImage, content, rendered, blog };

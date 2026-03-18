@@ -13,10 +13,7 @@ export default defineConfig({
     oxContent(),
     oxlintPlugin(),
     enhancedImages(),
-    robots({
-      userAgent: "*",
-      allow: "/",
-    }),
+    robots(),
     webfontDownload([
       "https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap",
       "https://fonts.googleapis.com/css2?family=Fira+Code&display=swap",

@@ -1,4 +1,4 @@
-<div class="modernminimal" />
+<div class="modernminimal"></div>
 
 <style>
     @import "tailwindcss";
@@ -65,7 +65,7 @@
         --spacing: 0.25rem;
     }
 
-    .dark {
+    :global(.dark) {
         --background: hsl(0 0% 9.0196%);
         --foreground: hsl(0 0% 89.8039%);
         --card: hsl(0 0% 14.902%);
@@ -180,7 +180,7 @@
         * {
             @apply border-border outline-ring/50;
         }
-        body {
+        :global(body) {
             @apply bg-background text-foreground;
         }
     }

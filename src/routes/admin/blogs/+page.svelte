@@ -38,19 +38,13 @@
 </script>
 
 <div class="mt-6 grid gap-6 xl:grid-cols-[1.4fr_1fr]">
-	<form
-		method="POST"
-		action="?/saveBlog"
-		enctype="multipart/form-data"
-		class="space-y-3 rounded border p-4"
-		use:enhance
-	>
+	<form method="POST" action="?/saveBlog" use:enhance class="space-y-4 rounded border p-4">
 		<h2 class="text-lg font-medium">{blogForm.id ? 'Edit Blog Post' : 'Add Blog Post'}</h2>
 		<Input type="hidden" name="id" value={blogForm.id} />
 		<Input name="title" placeholder="Title" bind:value={blogForm.title} required />
 		<Input name="author" placeholder="Blog author" bind:value={blogForm.author} />
 		<Input name="coverImage" type="file" accept="image/*" />
-		<Textarea name="content" rows={12} placeholder="Markdown content" bind:value={blogForm.content} />
+		<Textarea name="content" bind:value={blogForm.content} rows={10} />
 		<div class="flex gap-2">
 			<Button type="submit">Save</Button>
 			{#if blogForm.id}

@@ -1,4 +1,4 @@
-<div class="catppuchin" />
+<div class="catppuchin"></div>
 
 <style lang="css">
   @import "tailwindcss";
@@ -65,7 +65,7 @@
     --spacing: 0.25rem;
   }
 
-  .dark {
+  :global(.dark) {
     --background: hsl(240 21.3115% 11.9608%);
     --foreground: hsl(226.1538 63.9344% 88.0392%);
     --card: hsl(240 21.0526% 14.902%);
@@ -180,7 +180,7 @@
     * {
       @apply border-border outline-ring/50;
     }
-    body {
+    :global(body) {
       @apply bg-background text-foreground;
     }
   }

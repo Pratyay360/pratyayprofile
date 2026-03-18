@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@internationalized/date": "^3.12.0",
-    "@lucide/svelte": "^0.577.0",
+    "@lucide/svelte": "^0.561.0",
     "@ox-content/vite-plugin": "0.17.0",
     "@ox-content/vite-plugin-svelte": "^0.17.0",
     "@sveltejs/adapter-auto": "^7.0.1",

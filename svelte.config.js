@@ -1,5 +1,5 @@
 import { mdsvex } from "mdsvex";
-import preprocessor from "svelte-preprocess";
+import { sveltePreprocess } from "svelte-preprocess";
 import adapter from "@sveltejs/adapter-auto";
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -10,8 +10,11 @@ const config = {
       trustedOrigins: ["pocketbase.pratyay.qzz.io", "localhost"],
     },
   },
-  preprocess: [mdsvex(), preprocessor()],
+  preprocess: [mdsvex(), sveltePreprocess()],
   extensions: [".svelte", ".svx"],
+  alias: {
+    $themes: "./src/lib/themes",
+  },
 };
 
 export default config;

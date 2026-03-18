@@ -1,4 +1,4 @@
-<div class="violetbloom"/>
+<div class="violetbloom"></div>
 <style>
 @import "tailwindcss";
 
@@ -59,7 +59,7 @@
   --spacing: 0.27rem;
 }
 
-.dark {
+:global(.dark) {
   --background: hsl(225 7.1429% 10.9804%);
   --foreground: hsl(0 0% 94.1176%);
   --card: hsl(228.0000 6.8493% 14.3137%);
@@ -176,7 +176,7 @@
   * {
     @apply border-border outline-ring/50;
   }
-  body {
+  :global(body) {
     @apply bg-background text-foreground;
     letter-spacing: var(--tracking-normal);
   }

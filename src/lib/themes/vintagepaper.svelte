@@ -1,4 +1,4 @@
-<div class="vintagepaper" />
+<div class="vintagepaper"></div>
 
 <style>
    @import "tailwindcss";
@@ -60,7 +60,7 @@
   --spacing: 0.25rem;
 }
 
-.dark {
+:global(.dark) {
   --background: hsl(25.0000 15.3846% 15.2941%);
   --foreground: hsl(39 34.4828% 88.6275%);
   --card: hsl(25.7143 13.7255% 20%);
@@ -170,7 +170,7 @@
   * {
     @apply border-border outline-ring/50;
   }
-  body {
+  :global(body) {
     @apply bg-background text-foreground;
   }
 }

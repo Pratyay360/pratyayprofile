@@ -1,4 +1,4 @@
-<div class="bubblegum" />
+<div class="bubblegum"></div>
 
 <style>
 @import "tailwindcss";
@@ -65,7 +65,7 @@
   --spacing: 0.25rem;
 }
 
-.dark {
+:global(.dark) {
   --background: hsl(201.4286 43.75% 12.549%);
   --foreground: hsl(333.75 40% 92.1569%);
   --card: hsl(201.4286 33.3333% 16.4706%);
@@ -185,14 +185,8 @@
   * {
     @apply border-border outline-ring/50;
   }
-  body {
+  :global(body) {
     @apply bg-background text-foreground;
   }
 }
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-}
+</style>

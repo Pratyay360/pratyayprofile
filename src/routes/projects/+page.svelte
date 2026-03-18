@@ -46,7 +46,7 @@
 	});
 </script>
 
-<main class="bg-background min-h-screen px-4 py-24">
+<main class="min-h-screen px-4 py-24">
 	<div class="mx-auto max-w-6xl">
 		<header class="space-y-4 text-center">
 			<h1 class="text-3xl font-bold tracking-[0.2em] lg:text-5xl">Projects By {profileName}</h1>

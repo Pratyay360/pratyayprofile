@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { enhance } from "$app/forms";
 	import { goto } from "$app/navigation";
 	import type { PageData } from "./$types";
 	import ProfileSection from "./components/profile-section.svelte";
@@ -21,7 +22,21 @@
 		| "donations"
 		| "messages";
 
+	let { data }: { data: PageData } = $props();
 	let currentSection: AdminSection = $state("me");
+
+	const setSection = (section: AdminSection) => {
+		currentSection = section;
+	};
+
+	const profiles = $derived(data.profiles as any[]);
+	const projects = $derived(data.projects as any[]);
+	const certificates = $derived(data.certificates as any[]);
+	const skills = $derived(data.skills as any[]);
+	const education = $derived(data.education as any[]);
+	const socials = $derived(data.social_links as any[]);
+	const donations = $derived(data.donation as any[]);
+	const messages = $derived(data.messages as any[]);
 </script>
 
 <div class="container mx-auto px-6 py-8">
@@ -31,7 +46,7 @@
 			class="rounded border px-3 py-1 {currentSection === 'me'
 				? 'bg-primary text-primary-foreground'
 				: ''}"
-			on:click={() => setSection("me")}
+			onclick={() => setSection("me")}
 		>
 			Profile
 		</Button>
@@ -39,16 +54,14 @@
 			class="rounded border px-3 py-1 {currentSection === 'projects'
 				? 'bg-primary text-primary-foreground'
 				: ''}"
-			on:click={() => setSection("projects")}
+			onclick={() => setSection("projects")}
 		>
 			Projects
 		</Button>
 
 		<Button
-			class="rounded border px-3 py-1 {currentSection === 'blogs'
-				? 'bg-primary text-primary-foreground'
-				: ''}"
-			on:click={() => redirect("/admin/blogs")}
+			class="rounded border px-3 py-1"
+			onclick={() => goto("/admin/blogs")}
 		>
 			Blogs
 		</Button>
@@ -56,7 +69,7 @@
 			class="rounded border px-3 py-1 {currentSection === 'certificates'
 				? 'bg-primary text-primary-foreground'
 				: ''}"
-			on:click={() => setSection("certificates")}
+			onclick={() => setSection("certificates")}
 		>
 			Certificates
 		</Button>
@@ -64,7 +77,7 @@
 			class="rounded border px-3 py-1 {currentSection === 'skills'
 				? 'bg-primary text-primary-foreground'
 				: ''}"
-			on:click={() => setSection("skills")}
+			onclick={() => setSection("skills")}
 		>
 			Skills
 		</Button>
@@ -72,7 +85,7 @@
 			class="rounded border px-3 py-1 {currentSection === 'education'
 				? 'bg-primary text-primary-foreground'
 				: ''}"
-			on:click={() => setSection("education")}
+			onclick={() => setSection("education")}
 		>
 			Education
 		</Button>
@@ -80,7 +93,7 @@
 			class="rounded border px-3 py-1 {currentSection === 'socials'
 				? 'bg-primary text-primary-foreground'
 				: ''}"
-			on:click={() => setSection("socials")}
+			onclick={() => setSection("socials")}
 		>
 			Socials
 		</Button>
@@ -88,7 +101,7 @@
 			class="rounded border px-3 py-1 {currentSection === 'donations'
 				? 'bg-primary text-primary-foreground'
 				: ''}"
-			on:click={() => setSection("donation")}
+			onclick={() => setSection("donations")}
 		>
 			Donations
 		</Button>
@@ -96,33 +109,33 @@
 			class="rounded border px-3 py-1 {currentSection === 'messages'
 				? 'bg-primary text-primary-foreground'
 				: ''}"
-			on:click={() => setSection("messages")}
+			onclick={() => setSection("messages")}
 		>
 			Messages
 		</Button>
 
-		<Button
-			class="rounded border px-3 py-1"
-			type="destructive"
-			on:click={() => logout}>Logout</Button
-		>
+		<form method="POST" action="?/logout" use:enhance>
+			<Button class="rounded border px-3 py-1" type="submit" variant="destructive">
+				Logout
+			</Button>
+		</form>
 	</div>
 
 	{#if currentSection === "me"}
-		<ProfileSection profiles={data.profiles} />
+		<ProfileSection profiles={profiles} />
 	{:else if currentSection === "projects"}
-		<ProjectsSection projects={data.projects} />
+		<ProjectsSection projects={projects} />
 	{:else if currentSection === "certificates"}
-		<CertificatesSection certificates={data.certificates} />
+		<CertificatesSection certificates={certificates} />
 	{:else if currentSection === "skills"}
-		<SkillsSection skills={data.skills} />
+		<SkillsSection skills={skills} />
 	{:else if currentSection === "education"}
-		<EducationSection education={data.education} />
+		<EducationSection education={education} />
 	{:else if currentSection === "socials"}
-		<SocialsSection socials={data.social_links} />
+		<SocialsSection socials={socials} />
 	{:else if currentSection === "donations"}
-		<DonationsSection donations={data.donation} />
+		<DonationsSection donations={donations} />
 	{:else if currentSection === "messages"}
-		<ViewMessages messages={data.messages} />
+		<ViewMessages messages={messages} />
 	{/if}
 </div>

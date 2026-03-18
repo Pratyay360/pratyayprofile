@@ -1,4 +1,4 @@
-<div class="candyicon" />
+<div class="candyicon"></div>
 
 <style>
     @import "tailwindcss";
@@ -66,7 +66,7 @@
         --spacing: 0.25rem;
     }
 
-    .dark {
+    :global(.dark) {
         --background: hsl(220 14.7541% 11.9608%);
         --foreground: hsl(0 0% 89.8039%);
         --card: hsl(197.1429 6.9307% 19.8039%);
@@ -182,7 +182,7 @@
         * {
             @apply border-border outline-ring/50;
         }
-        body {
+        :global(body) {
             @apply bg-background text-foreground;
         }
     }
