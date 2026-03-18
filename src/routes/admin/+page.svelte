@@ -25,9 +25,26 @@
 	let { data }: { data: PageData } = $props();
 	let currentSection: AdminSection = $state("me");
 
+	const sections: { id: AdminSection; label: string }[] = [
+		{ id: "me", label: "Profile" },
+		{ id: "projects", label: "Projects" },
+		{ id: "certificates", label: "Certificates" },
+		{ id: "skills", label: "Skills" },
+		{ id: "education", label: "Education" },
+		{ id: "socials", label: "Socials" },
+		{ id: "donations", label: "Donations" },
+		{ id: "messages", label: "Messages" }
+	];
+
 	const setSection = (section: AdminSection) => {
 		currentSection = section;
 	};
+
+	const sectionButtonClass = (section: AdminSection) =>
+		cn(
+			"rounded border px-3 py-1",
+			currentSection === section && "bg-primary text-primary-foreground"
+		);
 
 	const profiles = $derived(data.profiles as any[]);
 	const projects = $derived(data.projects as any[]);
@@ -42,22 +59,11 @@
 <div class="container mx-auto px-6 py-8">
 	<h1 class="text-2xl font-semibold">Admin</h1>
 	<div class="mt-6 flex flex-wrap gap-2">
-		<Button
-			class="rounded border px-3 py-1 {currentSection === 'me'
-				? 'bg-primary text-primary-foreground'
-				: ''}"
-			onclick={() => setSection("me")}
-		>
-			Profile
-		</Button>
-		<Button
-			class="rounded border px-3 py-1 {currentSection === 'projects'
-				? 'bg-primary text-primary-foreground'
-				: ''}"
-			onclick={() => setSection("projects")}
-		>
-			Projects
-		</Button>
+		{#each sections as section (section.id)}
+			<Button class={sectionButtonClass(section.id)} onclick={() => setSection(section.id)}>
+				{section.label}
+			</Button>
+		{/each}
 
 		<Button
 			class="rounded border px-3 py-1"

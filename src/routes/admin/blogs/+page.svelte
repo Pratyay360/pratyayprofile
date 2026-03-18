@@ -3,7 +3,6 @@
 	import type { PageData } from './$types';
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
-	import { Textarea } from '$lib/components/ui/textarea';
 
 	type BlogItem = {
 		id: string;
@@ -38,21 +37,19 @@
 </script>
 
 <div class="mt-6 grid gap-6 xl:grid-cols-[1.4fr_1fr]">
-	<form method="POST" action="?/saveBlog" use:enhance class="space-y-4 rounded border p-4">
-		<h2 class="text-lg font-medium">{blogForm.id ? 'Edit Blog Post' : 'Add Blog Post'}</h2>
+    <h2 class="text-lg font-medium">{blogForm.id ? 'Edit Blog Post' : 'Add Blog Post'}</h2>
 		<Input type="hidden" name="id" value={blogForm.id} />
 		<Input name="title" placeholder="Title" bind:value={blogForm.title} required />
 		<Input name="author" placeholder="Blog author" bind:value={blogForm.author} />
 		<Input name="coverImage" type="file" accept="image/*" />
-		<Textarea name="content" bind:value={blogForm.content} rows={10} />
+		<Textarea name="content" rows={12} placeholder="Markdown content" bind:value={blogForm.content} />
 		<div class="flex gap-2">
 			<Button type="submit">Save</Button>
 			{#if blogForm.id}
 				<Button type="button" variant="outline" onclick={resetBlogForm}>Cancel</Button>
 			{/if}
 		</div>
-	</form>
-
+	
 	<div class="space-y-2 rounded border p-4">
 		<h2 class="text-lg font-medium">Current Blog Posts</h2>
 		{#each blogs as item (item.id)}

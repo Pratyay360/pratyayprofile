@@ -1,0 +1,214 @@
+<script lang="ts">
+    import { page } from "$app/stores";
+    import { cn } from "$lib/utils";
+    import CheckIcon from "@lucide/svelte/icons/check";
+    import ChevronsUpDownIcon from "@lucide/svelte/icons/chevrons-up-down";
+    import { tick } from "svelte";
+    import * as Command from "$lib/components/ui/command/index.js";
+    import * as Popover from "$lib/components/ui/popover/index.js";
+    import {
+        NavigationMenuRoot as NavigationMenu,
+        NavigationMenuList,
+        NavigationMenuItem,
+        NavigationMenuLink,
+    } from "$lib/components/ui/navigation-menu";
+    import {
+        Sheet,
+        SheetContent,
+        SheetTrigger,
+        SheetHeader,
+        SheetTitle,
+    } from "$lib/components/ui/sheet";
+    import { Button } from "$lib/components/ui/button";
+    import Themer from "$lib/themer/themer.svelte";
+    import Menu from "@lucide/svelte/icons/menu";
+
+    // Fix 2: separate state for sheet vs popover
+    let sheetOpen = $state(false);
+    let popoverOpen = $state(false);
+    let value = $state("");
+    let triggerRef = $state<HTMLButtonElement>(null!);
+
+    // Fix 1: was `theme.find(...)`, array is named `themes`
+    const selectedValue = $derived(themes.find((f) => f.value === value)?.label);
+
+    function closeAndFocusTrigger() {
+        popoverOpen = false;
+        tick().then(() => {
+            triggerRef.focus();
+        });
+    }
+
+    const themes = [
+        { label: "catppuchin",     value: "<catppuchin/>"     },
+        { label: "bubblegum",      value: "<bubblegum/>"      },
+        { label: "candyicon",      value: "<candyicon/>"      },
+        { label: "claymorphism",   value: "<claymorphism/>"   },
+        { label: "modernminimal",  value: "<modernminimal/>"  },
+        { label: "pasteldreams",   value: "<pasteldreams/>"   },
+        { label: "vintagepaper",   value: "<vintagepaper/>"   },
+        { label: "violetbloom",   value: "<violetbloom/>"   },
+    ];
+
+    const navItems = [
+        { label: "About Me",    href: "/#aboutme"     },
+        { label: "Education",   href: "/#education"   },
+        { label: "Skills",      href: "/#skills"      },
+        { label: "Certificates",href: "/#certificate" },
+        { label: "Projects",    href: "/#projects"    },
+        { label: "Blogs",       href: "/#blogs"       },
+        { label: "Resume",      href: "/#resume"      },
+        { label: "Donate",      href: "/#donate"      },
+        { label: "Contact Me",  href: "/#contact"     },
+    ];
+
+    function isActive(href: string): boolean {
+        const hash = href.split("#")[1];
+        return $page.url.hash === `#${hash}`;
+    }
+</script>
+
+<a
+    href="#main-content"
+    class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:px-4 focus:py-2 focus:text-foreground focus:shadow-lg"
+>
+    Skip to content
+</a>
+
+<header class="supports-backdrop-filter:bg-background/90 sticky top-0 z-50 w-full border-b backdrop-blur">
+    <div class="container flex h-16 items-center justify-between px-4 md:px-6">
+        <div class="flex items-center"></div>
+
+        <!-- Desktop Navigation -->
+        <NavigationMenu class="hidden flex-1 justify-center md:flex">
+            <NavigationMenuList class="gap-x-1 lg:gap-x-2">
+                {#each navItems as { label, href } (label)}
+                    <NavigationMenuItem>
+                        <NavigationMenuLink
+                            {href}
+                            class={cn(
+                                "relative rounded-md px-3 py-2 text-sm font-medium transition-all",
+                                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                                "hover:bg-accent hover:text-accent-foreground",
+                                isActive(href)
+                                    ? "text-primary bg-primary/10"
+                                    : "text-muted-foreground hover:text-primary",
+                            )}
+                            aria-current={isActive(href) ? "page" : undefined}
+                        >
+                            {label}
+                            <span
+                                class={cn(
+                                    "absolute bottom-0 left-1/2 h-0.5 w-4/5 -translate-x-1/2 scale-x-0 rounded-full bg-primary transition-transform duration-200",
+                                    isActive(href) && "scale-x-100",
+                                )}
+                            ></span>
+                        </NavigationMenuLink>
+                    </NavigationMenuItem>
+                {/each}
+            </NavigationMenuList>
+        </NavigationMenu>
+
+        <!-- Right side: Theme switcher and mobile menu button -->
+        <div class="flex items-center gap-2">
+            <Themer />
+
+            <div class="md:hidden">
+                <!-- Fix 2: use sheetOpen -->
+                <Sheet bind:open={sheetOpen}>
+                    <SheetTrigger>
+                        {#snippet child({ props })}
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                aria-label="Open menu"
+                                {...props}
+                                class="hover:bg-accent"
+                            >
+                                <Menu class="h-5 w-5" />
+                            </Button>
+                        {/snippet}
+                    </SheetTrigger>
+
+                    <SheetContent side="right" class="w-64 p-6 overflow-y-auto">
+                        <SheetHeader class="mb-6">
+                            <SheetTitle>Menu</SheetTitle>
+                        </SheetHeader>
+
+                        <nav class="flex flex-col space-y-4">
+                            {#each navItems as { label, href } (label)}
+                                <a
+                                    {href}
+                                    onclick={() => (sheetOpen = false)}
+                                    class={cn(
+                                        "block rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                                        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                                        "hover:bg-accent hover:text-accent-foreground",
+                                        isActive(href)
+                                            ? "text-primary bg-primary/10"
+                                            : "text-muted-foreground",
+                                    )}
+                                    aria-current={isActive(href) ? "page" : undefined}
+                                >
+                                    {label}
+                                </a>
+                            {/each}
+                        </nav>
+
+                        <div>
+                            <!-- Fix 2: use popoverOpen -->
+                            <Popover.Root bind:open={popoverOpen}>
+                                <Popover.Trigger bind:ref={triggerRef}>
+                                    {#snippet child({ props })}
+                                        <Button
+                                            variant="outline"
+                                            class="w-[200px] justify-between"
+                                            {...props}
+                                            role="combobox"
+                                            aria-expanded={popoverOpen}
+                                        >
+                                            {selectedValue ?? "Select a theme..."}
+                                            <ChevronsUpDownIcon class="ms-2 size-4 shrink-0 opacity-50" />
+                                        </Button>
+                                    {/snippet}
+                                </Popover.Trigger>
+                                <Popover.Content class="w-[200px] p-0">
+                                    <Command.Root>
+                                        <Command.Input placeholder="Search themes..." />
+                                        <Command.List>
+                                            <Command.Empty>No themes found.</Command.Empty>
+                                            <Command.Group>
+                                                {#each themes as theme}
+                                                    <Command.Item
+                                                        value={theme.value}
+                                                        onSelect={() => {
+                                                            value = theme.value;
+                                                            closeAndFocusTrigger();
+                                                        }}
+                                                    >
+                                                        <CheckIcon
+                                                            class={cn(
+                                                                "me-2 size-4",
+                                                                value !== theme.value && "text-transparent",
+                                                            )}
+                                                        />
+                                                        {theme.label}
+                                                    </Command.Item>
+                                                {/each}
+                                            </Command.Group>
+                                        </Command.List>
+                                    </Command.Root>
+                                </Popover.Content>
+                            </Popover.Root>
+                        </div>
+
+                        <div class="mt-8 border-t pt-6">
+                            <p class="mb-2 text-sm text-muted-foreground">Theme</p>
+                            <Themer />
+                        </div>
+                    </SheetContent>
+                </Sheet>
+            </div>
+        </div>
+    </div>
+</header>
