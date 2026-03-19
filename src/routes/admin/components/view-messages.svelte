@@ -28,10 +28,10 @@
 
 	// Fixed: Actually update the message status
 	const markAsRead = (id: string) => {
-		const index = messages.findIndex((m) => m.id === id);
-		if (index !== -1) {
-			messages[index] = { ...messages[index], isRead: true };
-		}
+  		const index = messages.findIndex((m) => m.id === id);
+  		if (index !== -1) {
+  			messages[index] = { ...messages[index], isRead: true };
+  		}
 	};
 </script>
 
@@ -53,7 +53,7 @@
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
-				<span>{m.message}</span>
+				<span>{{</span>
 				</CardContent>
 				<CardFooter class="flex items-center justify-between">
 					<span class="text-muted-foreground text-xs">{m.created}</span>
