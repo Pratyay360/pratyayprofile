@@ -16,13 +16,13 @@
         import.meta.env.VITE_POCKET_BASE
     );
 
-    let submissionStatus = false;
+    let submissionStatus = $state(false);
 
-    let form = {
+    let form = $state({
         userName: "",
         userEmail: "",
         userMessage: "",
-    };
+    });
 
     const submitRequest = async () => {
         try {

@@ -18,11 +18,11 @@
 			<circle cx="100" cy="100" r="30" fill="#FBBEBE" />
 		</svg>
 
-		<p class="mb-6 text-lg text-yellow-300 md:text-xl">Oops! You seem to be lost. 🥲</p>
+		<p class="mb-6 text-lg  md:text-xl">Oops! You seem to be lost. 🥲</p>
 
 		<a
 			href="/"
-			class="inline-block rounded-lg border border-yellow-300 bg-transparent px-6 py-2 text-yellow-300 shadow-md transition-all duration-300 hover:border-transparent hover:bg-yellow-300 hover:text-white hover:shadow-lg focus:ring-2 focus:ring-yellow-300 focus:ring-offset-2 focus:outline-none"
+			class="inline-block rounded-lg border  bg-transparent px-6 py-2  shadow-md transition-all duration-300 hover:border-transparent  hover:shadow-lg focus:ring-2  focus:ring-offset-2 focus:outline-none"
 			aria-label="Return to homepage"
 		>
 			Return to Home
