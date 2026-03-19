@@ -17,6 +17,6 @@ export default defineConfig({
     webfontDownload([
       "https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap",
       "https://fonts.googleapis.com/css2?family=Fira+Code&display=swap",
-    ])
+    ]),
   ],
 });

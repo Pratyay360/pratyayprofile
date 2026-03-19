@@ -15,4 +15,6 @@
 <CatppuchinTheme />
 <ModeWatcher />
 <Navbar />
-{@render children()}
+<main id="main-content">
+  {@render children()}
+</main>

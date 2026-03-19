@@ -1,9 +1,17 @@
 <script lang="ts">
-    import type { PageData } from "./$types";
     import { readString } from "$lib/content";
-    import {parseAndRender} from "@ox-content/napi";
+    import { parseAndRender } from "@ox-content/napi";
+
     let { data } = $props();
-    const {markdown} = parseAndRender(data.content, { gfm: true, footnotes: true, tables: true });
+    const title = $derived(readString(data.blog, "title"));
+    const created = $derived(readString(data.blog, "created"));
+    const updated = $derived(readString(data.blog, "updated"));
+    const author = $derived(readString(data.blog, "author"));
+    const rendered = $derived(parseAndRender(data.content, {
+        gfm: true,
+        footnotes: true,
+        tables: true,
+    }));
 </script>
 
 <article class="mx-auto w-full max-w-4xl px-4 py-16">
@@ -11,28 +19,24 @@
         <h1
             class="mb-4 text-4xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100"
         >
-            {readString(data.blog, "title")}
+            {title}
         </h1>
 
         <div
             class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-neutral-600 dark:text-neutral-400"
         >
-            <time datetime={readString(data.blog, "created")}>
-                Created: {new Date(
-                    readString(data.blog, "created"),
-                ).toLocaleDateString()}
+            <time datetime={created}>
+                Created: {new Date(created).toLocaleDateString()}
             </time>
-            {#if readString(data.blog, "updated") && readString(data.blog, "updated") !== readString(data.blog, "created")}
+            {#if updated && updated !== created}
                 <span>•</span>
-                <time datetime={readString(data.blog, "updated")}>
-                    Updated: {new Date(
-                        readString(data.blog, "updated"),
-                    ).toLocaleDateString()}
+                <time datetime={updated}>
+                    Updated: {new Date(updated).toLocaleDateString()}
                 </time>
             {/if}
-            {#if readString(data.blog, "author")}
+            {#if author}
                 <span>•</span>
-                <span>By {readString(data.blog, "author")}</span>
+                <span>By {author}</span>
             {/if}
         </div>
     </header>
@@ -41,13 +45,13 @@
         <div class="mb-10">
             <img
                 src={data.coverImage}
-                alt={readString(blog, "title")}
+                alt={title}
                 class="w-full rounded-lg object-cover"
             />
         </div>
     {/if}
 
     <div class="prose prose-neutral dark:prose-invert max-w-none prose-headings:font-semibold prose-a:text-blue-600 dark:prose-a:text-blue-400">
-        {@html markdown}
+        {@html rendered.html}
     </div>
 </article>

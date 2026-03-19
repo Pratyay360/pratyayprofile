@@ -1,11 +1,6 @@
 <script lang="ts">
     import { page } from "$app/stores";
     import { cn } from "$lib/utils";
-    import CheckIcon from "@lucide/svelte/icons/check";
-    import ChevronsUpDownIcon from "@lucide/svelte/icons/chevrons-up-down";
-    import { tick } from "svelte";
-    import * as Command from "$lib/components/ui/command/index.js";
-    import * as Popover from "$lib/components/ui/popover/index.js";
     import {
         NavigationMenuRoot as NavigationMenu,
         NavigationMenuList,
@@ -23,50 +18,33 @@
     import Themer from "$lib/themer/themer.svelte";
     import Menu from "@lucide/svelte/icons/menu";
 
-    // Fix 2: separate state for sheet vs popover
     let sheetOpen = $state(false);
-    let popoverOpen = $state(false);
-    let value = $state("");
-    let triggerRef = $state<HTMLButtonElement>(null!);
 
-    // Fix 1: was `theme.find(...)`, array is named `themes`
-   
-    function closeAndFocusTrigger() {
-        popoverOpen = false;
-        tick().then(() => {
-            triggerRef.focus();
-        });
-    }
+    type NavItem = {
+        label: string;
+        href: string;
+        type: "hash" | "path";
+        value: string;
+    };
 
-    const themes = [
-        { label: "catppuchin", value: "<catppuchin/>" },
-        { label: "bubblegum", value: "<bubblegum/>" },
-        { label: "candyicon", value: "<candyicon/>" },
-        { label: "claymorphism", value: "<claymorphism/>" },
-        { label: "modernminimal", value: "<modernminimal/>" },
-        { label: "pasteldreams", value: "<pasteldreams/>" },
-        { label: "vintagepaper", value: "<vintagepaper/>" },
-        { label: "violetbloom", value: "<violetbloom/>" },
-    ];
-    const selectedValue = $derived(
-        themes.find((f) => f.value === value)?.label,
-    );
-
-    const navItems = [
-        { label: "About Me", href: "/#aboutme" },
-        { label: "Education", href: "/#education" },
-        { label: "Skills", href: "/#skills" },
-        { label: "Certificates", href: "/#certificate" },
-        { label: "Projects", href: "/#projects" },
-        { label: "Blogs", href: "/#blogs" },
-        { label: "Resume", href: "/#resume" },
-        { label: "Donate", href: "/#donate" },
-        { label: "Contact Me", href: "/#contact" },
+    const navItems: NavItem[] = [
+        { label: "About Me", href: "/#profile", type: "hash", value: "#profile" },
+        { label: "Education", href: "/#education", type: "hash", value: "#education" },
+        { label: "Skills", href: "/#skills", type: "hash", value: "#skills" },
+        { label: "Certificates", href: "/certificates", type: "path", value: "/certificates" },
+        { label: "Projects", href: "/projects", type: "path", value: "/projects" },
+        { label: "Blogs", href: "/blogs", type: "path", value: "/blogs" },
+        { label: "Resume", href: "/#resume", type: "hash", value: "#resume" },
+        { label: "Donate", href: "/#donate", type: "hash", value: "#donate" },
+        { label: "Contact Me", href: "/#contact", type: "hash", value: "#contact" },
     ];
 
-    function isActive(href: string): boolean {
-        const hash = href.split("#")[1];
-        return $page.url.hash === `#${hash}`;
+    function isActive(item: NavItem): boolean {
+        if (item.type === "path") {
+            return $page.url.pathname === item.value || $page.url.pathname.startsWith(`${item.value}/`);
+        }
+
+        return $page.url.pathname === "/" && $page.url.hash === item.value;
     }
 </script>
 
@@ -81,30 +59,30 @@
     class="supports-backdrop-filter:bg-background/90 sticky top-0 z-50 w-full border-b backdrop-blur"
 >
     <div class="container flex h-16 items-center justify-between px-4 md:px-6">
-        <div class="flex items-center"></div>
+        <div class="hidden md:block md:w-10"></div>
 
         <!-- Desktop Navigation -->
         <NavigationMenu class="hidden flex-1 justify-center md:flex">
             <NavigationMenuList class="gap-x-1 lg:gap-x-2">
-                {#each navItems as { label, href } (label)}
+                {#each navItems as item (item.label)}
                     <NavigationMenuItem>
                         <NavigationMenuLink
-                            {href}
+                            href={item.href}
                             class={cn(
                                 "relative rounded-md px-3 py-2 text-sm font-medium transition-all",
                                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                                 "hover:bg-accent hover:text-accent-foreground",
-                                isActive(href)
+                                isActive(item)
                                     ? "text-primary bg-primary/10"
                                     : "text-muted-foreground hover:text-primary",
                             )}
-                            aria-current={isActive(href) ? "page" : undefined}
+                            aria-current={isActive(item) ? "page" : undefined}
                         >
-                            {label}
+                            {item.label}
                             <span
                                 class={cn(
                                     "absolute bottom-0 left-1/2 h-0.5 w-4/5 -translate-x-1/2 scale-x-0 rounded-full bg-primary transition-transform duration-200",
-                                    isActive(href) && "scale-x-100",
+                                    isActive(item) && "scale-x-100",
                                 )}
                             ></span>
                         </NavigationMenuLink>
@@ -140,82 +118,26 @@
                         </SheetHeader>
 
                         <nav class="flex flex-col space-y-4">
-                            {#each navItems as { label, href } (label)}
+                            {#each navItems as item (item.label)}
                                 <a
-                                    {href}
+                                    href={item.href}
                                     onclick={() => (sheetOpen = false)}
                                     class={cn(
                                         "block rounded-md px-3 py-2 text-sm font-medium transition-colors",
                                         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                                         "hover:bg-accent hover:text-accent-foreground",
-                                        isActive(href)
+                                        isActive(item)
                                             ? "text-primary bg-primary/10"
                                             : "text-muted-foreground",
                                     )}
-                                    aria-current={isActive(href)
+                                    aria-current={isActive(item)
                                         ? "page"
                                         : undefined}
                                 >
-                                    {label}
+                                    {item.label}
                                 </a>
                             {/each}
                         </nav>
-
-                        <div>
-                            <!-- Fix 2: use popoverOpen -->
-                            <Popover.Root bind:open={popoverOpen}>
-                                <Popover.Trigger bind:ref={triggerRef}>
-                                    {#snippet child({ props })}
-                                        <Button
-                                            variant="outline"
-                                            class="w-[200px] justify-between"
-                                            {...props}
-                                            role="combobox"
-                                            aria-expanded={popoverOpen}
-                                        >
-                                            {selectedValue ??
-                                                "Select a theme..."}
-                                            <ChevronsUpDownIcon
-                                                class="ms-2 size-4 shrink-0 opacity-50"
-                                            />
-                                        </Button>
-                                    {/snippet}
-                                </Popover.Trigger>
-                                <Popover.Content class="w-[200px] p-0">
-                                    <Command.Root>
-                                        <Command.Input
-                                            placeholder="Search themes..."
-                                        />
-                                        <Command.List>
-                                            <Command.Empty
-                                                >No themes found.</Command.Empty
-                                            >
-                                            <Command.Group>
-                                                {#each themes as theme}
-                                                    <Command.Item
-                                                        value={theme.value}
-                                                        onSelect={() => {
-                                                            value = theme.value;
-                                                            closeAndFocusTrigger();
-                                                        }}
-                                                    >
-                                                        <CheckIcon
-                                                            class={cn(
-                                                                "me-2 size-4",
-                                                                value !==
-                                                                    theme.value &&
-                                                                    "text-transparent",
-                                                            )}
-                                                        />
-                                                        {theme.label}
-                                                    </Command.Item>
-                                                {/each}
-                                            </Command.Group>
-                                        </Command.List>
-                                    </Command.Root>
-                                </Popover.Content>
-                            </Popover.Root>
-                        </div>
 
                         <div class="mt-8 border-t pt-6">
                             <p class="mb-2 text-sm text-muted-foreground">
