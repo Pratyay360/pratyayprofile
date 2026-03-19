@@ -8,15 +8,15 @@ import { oxContent } from "@ox-content/vite-plugin";
 import { robots } from "vite-plugin-robots";
 export default defineConfig({
   plugins: [
+    robots(),
     tailwindcss(),
     sveltekit(),
-    oxContent(),
     oxlintPlugin(),
     enhancedImages(),
-    robots(),
+    oxContent(),
     webfontDownload([
       "https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap",
       "https://fonts.googleapis.com/css2?family=Fira+Code&display=swap",
-    ]),
+    ])
   ],
 });

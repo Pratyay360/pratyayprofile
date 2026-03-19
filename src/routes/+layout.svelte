@@ -3,6 +3,7 @@
   import Navbar from "$lib/components/navbar/navbar.svelte";
   import CatppuchinTheme from "$lib/themes/catppuchin.svelte";
   import { ModeWatcher } from "mode-watcher";
+  import './layout.css';
 
   let { children } = $props();
 </script>
