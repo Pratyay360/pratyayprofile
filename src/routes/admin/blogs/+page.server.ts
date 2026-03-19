@@ -1,6 +1,10 @@
 import { fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
-import { AUTH_COOKIE, clearAuthCookie, verifyUserToken } from "../../../lib/server/admin-auth";
+import {
+  AUTH_COOKIE,
+  clearAuthCookie,
+  verifyUserToken,
+} from "../../../lib/server/admin-auth";
 
 const readText = (data: FormData, key: string): string => {
   const value = data.get(key);
