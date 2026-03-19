@@ -30,8 +30,7 @@
     let triggerRef = $state<HTMLButtonElement>(null!);
 
     // Fix 1: was `theme.find(...)`, array is named `themes`
-    const selectedValue = $derived(themes.find((f) => f.value === value)?.label);
-
+   
     function closeAndFocusTrigger() {
         popoverOpen = false;
         tick().then(() => {
@@ -40,26 +39,29 @@
     }
 
     const themes = [
-        { label: "catppuchin",     value: "<catppuchin/>"     },
-        { label: "bubblegum",      value: "<bubblegum/>"      },
-        { label: "candyicon",      value: "<candyicon/>"      },
-        { label: "claymorphism",   value: "<claymorphism/>"   },
-        { label: "modernminimal",  value: "<modernminimal/>"  },
-        { label: "pasteldreams",   value: "<pasteldreams/>"   },
-        { label: "vintagepaper",   value: "<vintagepaper/>"   },
-        { label: "violetbloom",   value: "<violetbloom/>"   },
+        { label: "catppuchin", value: "<catppuchin/>" },
+        { label: "bubblegum", value: "<bubblegum/>" },
+        { label: "candyicon", value: "<candyicon/>" },
+        { label: "claymorphism", value: "<claymorphism/>" },
+        { label: "modernminimal", value: "<modernminimal/>" },
+        { label: "pasteldreams", value: "<pasteldreams/>" },
+        { label: "vintagepaper", value: "<vintagepaper/>" },
+        { label: "violetbloom", value: "<violetbloom/>" },
     ];
+    const selectedValue = $derived(
+        themes.find((f) => f.value === value)?.label,
+    );
 
     const navItems = [
-        { label: "About Me",    href: "/#aboutme"     },
-        { label: "Education",   href: "/#education"   },
-        { label: "Skills",      href: "/#skills"      },
-        { label: "Certificates",href: "/#certificate" },
-        { label: "Projects",    href: "/#projects"    },
-        { label: "Blogs",       href: "/#blogs"       },
-        { label: "Resume",      href: "/#resume"      },
-        { label: "Donate",      href: "/#donate"      },
-        { label: "Contact Me",  href: "/#contact"     },
+        { label: "About Me", href: "/#aboutme" },
+        { label: "Education", href: "/#education" },
+        { label: "Skills", href: "/#skills" },
+        { label: "Certificates", href: "/#certificate" },
+        { label: "Projects", href: "/#projects" },
+        { label: "Blogs", href: "/#blogs" },
+        { label: "Resume", href: "/#resume" },
+        { label: "Donate", href: "/#donate" },
+        { label: "Contact Me", href: "/#contact" },
     ];
 
     function isActive(href: string): boolean {
@@ -75,7 +77,9 @@
     Skip to content
 </a>
 
-<header class="supports-backdrop-filter:bg-background/90 sticky top-0 z-50 w-full border-b backdrop-blur">
+<header
+    class="supports-backdrop-filter:bg-background/90 sticky top-0 z-50 w-full border-b backdrop-blur"
+>
     <div class="container flex h-16 items-center justify-between px-4 md:px-6">
         <div class="flex items-center"></div>
 
@@ -148,7 +152,9 @@
                                             ? "text-primary bg-primary/10"
                                             : "text-muted-foreground",
                                     )}
-                                    aria-current={isActive(href) ? "page" : undefined}
+                                    aria-current={isActive(href)
+                                        ? "page"
+                                        : undefined}
                                 >
                                     {label}
                                 </a>
@@ -167,16 +173,23 @@
                                             role="combobox"
                                             aria-expanded={popoverOpen}
                                         >
-                                            {selectedValue ?? "Select a theme..."}
-                                            <ChevronsUpDownIcon class="ms-2 size-4 shrink-0 opacity-50" />
+                                            {selectedValue ??
+                                                "Select a theme..."}
+                                            <ChevronsUpDownIcon
+                                                class="ms-2 size-4 shrink-0 opacity-50"
+                                            />
                                         </Button>
                                     {/snippet}
                                 </Popover.Trigger>
                                 <Popover.Content class="w-[200px] p-0">
                                     <Command.Root>
-                                        <Command.Input placeholder="Search themes..." />
+                                        <Command.Input
+                                            placeholder="Search themes..."
+                                        />
                                         <Command.List>
-                                            <Command.Empty>No themes found.</Command.Empty>
+                                            <Command.Empty
+                                                >No themes found.</Command.Empty
+                                            >
                                             <Command.Group>
                                                 {#each themes as theme}
                                                     <Command.Item
@@ -189,7 +202,9 @@
                                                         <CheckIcon
                                                             class={cn(
                                                                 "me-2 size-4",
-                                                                value !== theme.value && "text-transparent",
+                                                                value !==
+                                                                    theme.value &&
+                                                                    "text-transparent",
                                                             )}
                                                         />
                                                         {theme.label}
@@ -203,7 +218,9 @@
                         </div>
 
                         <div class="mt-8 border-t pt-6">
-                            <p class="mb-2 text-sm text-muted-foreground">Theme</p>
+                            <p class="mb-2 text-sm text-muted-foreground">
+                                Theme
+                            </p>
                             <Themer />
                         </div>
                     </SheetContent>

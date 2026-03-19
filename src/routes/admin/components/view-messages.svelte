@@ -11,36 +11,55 @@
 		CardHeader,
 		CardTitle
 	} from '$lib/components/ui/card';
+	import { Textarea } from '$lib/components/ui/textarea';
+    import Candyicon from '$lib/themes/candyicon.svelte';
 
-	interface MessageRecord {
+	interface Message {
 		id: string;
-		isRead?: boolean;
-		name?: string;
-		email?: string;
-		message?: string;
-		created?: string;
+		name: string;
+		email: string;
+		message: string;
+		isRead: boolean;
+		created: string;
 	}
 
-	let { messages }: { messages: MessageRecord[] } = $props();
+	// Fixed: $props() is a function call
+	let { messages = [] }: { messages: Message[] } = $props();
+
+	// Fixed: Actually update the message status
+	const markAsRead = (id: string) => {
+		const index = messages.findIndex((m) => m.id === id);
+		if (index !== -1) {
+			messages[index] = { ...messages[index], isRead: true };
+		}
+	};
 </script>
 
-<section class="container mx-auto px-6 py-12">
+<div class="container mx-auto px-6 py-12">
 	<h1 class="text-center text-3xl font-bold tracking-[0.2em]">MESSAGES</h1>
+	
 	<div class="mt-10 space-y-6">
-		{#each messages.filter((message) => !message.isRead) as message (message.id)}
-			<Card>
+		<!-- Unread Messages -->
+		{#each messages.filter((m) => !m.isRead) as m (m.id)}
+			<Card class="opacity-75">
 				<CardHeader>
-					<CardTitle>{message.name ?? 'Unknown'}</CardTitle>
-					<CardDescription>{message.email ?? ''}</CardDescription>
+					<CardTitle>
+					<span>
+						{m.name}
+					</span>
+					</CardTitle>
+					<CardDescription>
+					   <span> {m.email}</span> 
+					</CardDescription>
 				</CardHeader>
 				<CardContent>
-					<p class="whitespace-pre-wrap">{message.message ?? ''}</p>
+				<span>{m.message}</span>
 				</CardContent>
 				<CardFooter class="flex items-center justify-between">
-					<span class="text-muted-foreground text-xs">{message.created ?? ''}</span>
+					<span class="text-muted-foreground text-xs">{m.created}</span>
 					<form method="POST" action="?/readMessage" use:enhance>
-						<Input type="hidden" name="id" value={message.id} />
-						<Button variant="outline" size="icon" type="submit">
+						<Input type="hidden" name="id" value={m.id} />
+						<Button variant="destructive" size="icon" type="submit">
 							<Check class="h-4 w-4" />
 						</Button>
 					</form>
@@ -49,19 +68,21 @@
 		{/each}
 
 		<h2 class="text-lg font-medium">Already Read</h2>
-		{#each messages.filter((message) => message.isRead) as message (message.id)}
-			<Card>
+		
+		<!-- Read Messages -->
+		{#each messages.filter((m) => m.isRead) as m (m.id)}
+			<Card class="opacity-75">
 				<CardHeader>
-					<CardTitle>{message.name ?? 'Unknown'}</CardTitle>
-					<CardDescription>{message.email ?? ''}</CardDescription>
+					<CardTitle>{m.name}</CardTitle>
+					<CardDescription>{m.email}</CardDescription>
 				</CardHeader>
 				<CardContent>
-					<p class="whitespace-pre-wrap">{message.message ?? ''}</p>
+					<Textarea value={m.message} readonly class="resize-none" />
 				</CardContent>
 				<CardFooter class="flex items-center justify-between">
-					<span class="text-muted-foreground text-xs">{message.created ?? ''}</span>
+					<span class="text-muted-foreground text-xs">{m.created}</span>
 					<form method="POST" action="?/deleteMessage" use:enhance>
-						<Input type="hidden" name="id" value={message.id} />
+						<Input type="hidden" name="id" value={m.id} />
 						<Button variant="destructive" size="icon" type="submit">
 							<Trash class="h-4 w-4" />
 						</Button>
@@ -74,4 +95,4 @@
 			<p class="text-muted-foreground text-center text-sm">No messages yet.</p>
 		{/if}
 	</div>
-</section>
+</div>

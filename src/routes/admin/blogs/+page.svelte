@@ -3,7 +3,8 @@
 	import type { PageData } from './$types';
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
-
+	import { Textarea } from '$lib/components/ui/textarea';
+	
 	type BlogItem = {
 		id: string;
 		title?: string;
