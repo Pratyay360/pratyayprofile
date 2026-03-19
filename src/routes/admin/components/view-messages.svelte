@@ -73,11 +73,17 @@
 		{#each messages.filter((m) => m.isRead) as m (m.id)}
 			<Card class="opacity-75">
 				<CardHeader>
-					<CardTitle>{m.name}</CardTitle>
-					<CardDescription>{m.email}</CardDescription>
+					<CardTitle>
+					<span>
+						{m.name}
+					</span>
+					</CardTitle>
+					<CardDescription>
+					<span>{m.email}</span>
+					</CardDescription>
 				</CardHeader>
 				<CardContent>
-					<Textarea value={m.message} readonly class="resize-none" />
+				<span>{m.message}</span>
 				</CardContent>
 				<CardFooter class="flex items-center justify-between">
 					<span class="text-muted-foreground text-xs">{m.created}</span>

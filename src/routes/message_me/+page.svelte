@@ -12,7 +12,12 @@
     } from "$lib/components/ui/card";
     import { createClient } from "$lib/pocketbase";
 
+    const pocketBaseClient = createClient(
+        import.meta.env.VITE_POCKET_BASE
+    );
+
     let submissionStatus = false;
+
     let form = {
         userName: "",
         userEmail: "",
@@ -20,26 +25,29 @@
     };
 
     const submitRequest = async () => {
-        const pocketBaseClient = createClient(
-            import.meta.env.VITE_POCKET_BASE!,
-        );
-
         try {
             submissionStatus = true;
+
             await pocketBaseClient.collection("messages").create({
                 userName: form.userName,
                 userEmail: form.userEmail,
                 userMessage: form.userMessage,
             });
+
             toast.success("Message sent successfully");
-            form = { userName: "", userEmail: "", userMessage: "" };
-        } catch {
+
+            // safer reset
+            form.userName = "";
+            form.userEmail = "";
+            form.userMessage = "";
+
+        } catch (err) {
+            console.error(err); // stop hiding problems
             toast.error("Failed to send message");
         } finally {
             submissionStatus = false;
         }
-    };
-</script>
+    };</script>
 
 <div class=" flex min-h-screen items-center justify-center p-4">
     <Toaster />

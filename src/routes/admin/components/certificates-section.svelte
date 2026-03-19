@@ -51,7 +51,7 @@
 				class="space-y-3"
 				use:enhance
 			>
-				<Input type="hidden" name="id" value={certificateForm.id} />
+				<Input type="hidden" name="id" bind:value={certificateForm.id} />
 				<Input type="text" name="title" placeholder="Certificate Title" bind:value={certificateForm.title} required />
 				<Input type="date" name="date" bind:value={certificateForm.date} />
 				<Input type="url" name="link" placeholder="Verification Link" bind:value={certificateForm.link} />

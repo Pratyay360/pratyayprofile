@@ -47,7 +47,7 @@
   });
 </script>
 
-<main class="bg-background min-h-screen px-4 py-24">
+<main class="min-h-screen px-4 py-24">
   <h1 class="mb-16 text-center text-4xl font-bold tracking-wider md:text-5xl">
     Blogs.
   </h1>
