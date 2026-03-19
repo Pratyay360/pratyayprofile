@@ -24,7 +24,8 @@
         userMessage: "",
     });
 
-    const submitRequest = async () => {
+    const submitRequest = async (e: Event) => {
+        e.preventDefault();
         try {
             submissionStatus = true;
 
@@ -51,9 +52,7 @@
 
 <div class=" flex min-h-screen items-center justify-center p-4">
     <Toaster />
-    <Card
-        class="w-full max-w-2xl border-slate-200 shadow-xl dark:border-slate-700"
-    >
+    <Card class="w-full max-w-2xl border-border shadow-xl">
         <CardHeader class="pb-4">
             <CardTitle class="text-foreground text-center text-3xl font-bold"
                 >Contact Us</CardTitle
@@ -75,7 +74,6 @@
                         bind:value={form.userName}
                         placeholder="Your name"
                         required
-                        class="placeholder:text-slate-400 focus:border-indigo-500 focus:ring-indigo-500 dark:border-slate-600 dark:placeholder:text-slate-500"
                     />
                 </div>
 
@@ -91,7 +89,6 @@
                         bind:value={form.userEmail}
                         placeholder="you@example.com"
                         required
-                        class="border-slate-300 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-indigo-500 dark:border-slate-600 dark:placeholder:text-slate-500"
                     />
                 </div>
 
@@ -108,7 +105,7 @@
                         bind:value={form.userMessage}
                         placeholder="Your message..."
                         required
-                        class="resize-none border-slate-300 placeholder:text-slate-400 focus:border-indigo-500 focus:ring-indigo-500 dark:border-slate-600 dark:placeholder:text-slate-500"
+                        class="resize-none"
                     />
                 </div>
 

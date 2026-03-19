@@ -13,11 +13,13 @@
 	import { Card, CardHeader, CardTitle, CardDescription } from '$lib/components/ui/card';
 	import { AspectRatio } from '$lib/components/ui/aspect-ratio';
 	import { Skeleton } from '$lib/components/ui/skeleton/index';
-	export let imageSrc: string = '';
-	export let title: string = '';
-	export let description: string = '';
-	export let link: string = '';
-	export let date: string = '';
+	let {
+		imageSrc = '',
+		title = '',
+		description = '',
+		link = '',
+		date = ''
+	}: Props = $props();
 </script>
 
 <a

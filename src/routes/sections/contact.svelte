@@ -45,7 +45,7 @@
 	<h1 class="text-center text-3xl font-bold tracking-[0.2em]">CONTACT ME</h1>
 
 	{#if failed}
-		<div class="mt-8 text-center text-red-500">
+		<div class="mt-8 text-center text-destructive">
 			<p>Unable to load social links at the moment. Please try again later.</p>
 		</div>
 	{/if}
@@ -70,7 +70,7 @@
 	<div class="mt-10 flex items-center justify-center">
 		<a href="/message_me">
 			<button
-				class="rounded-full border border-indigo-600 px-6 py-2 text-2xl font-bold transition-colors hover:bg-indigo-600 hover:text-white"
+				class="rounded-full border border-primary px-6 py-2 text-2xl font-bold transition-colors hover:bg-primary hover:text-primary-foreground"
 			>
 				Message Me
 			</button>

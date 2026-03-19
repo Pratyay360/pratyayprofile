@@ -60,8 +60,6 @@
 <div class="container mx-auto px-6 py-8">
     <h1 class="text-2xl font-semibold">Admin</h1>
     <div class="mt-6 flex flex-wrap gap-2">
-        
-
         <Button
             class="rounded border px-3 py-1"
             onclick={() => goto("/admin/blogs")}

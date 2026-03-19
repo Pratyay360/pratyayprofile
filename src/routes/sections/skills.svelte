@@ -37,7 +37,7 @@
 	<h1 class="text-center text-3xl font-bold tracking-[0.2em]" aria-level="1">SKILLS</h1>
 
 	{#if failed}
-		<div class="mt-8 text-center text-red-500">
+		<div class="mt-8 text-center text-destructive">
 			<p>Unable to load skills at the moment. Please try again later.</p>
 		</div>
 	{/if}

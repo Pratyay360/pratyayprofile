@@ -9,7 +9,6 @@
   import PastedreamTheme from "$lib/themes/pasteldreams.svelte";
   import VintagePaperTheme from "$lib/themes/vintagepaper.svelte";
   import VioletBloomTheme from "$lib/themes/violetbloom.svelte";
-
   import { theme } from "$lib/theme";
   import { ModeWatcher } from "mode-watcher";
   import "./layout.css";
@@ -25,8 +24,8 @@
     { id: "violetbloom", component: VioletBloomTheme },
   ];
 
-  let currentTheme = $derived(
-    chosenStyle.find((s) => s.id === $theme)?.component || CatppuchinTheme
+  let CurrentTheme = $derived(
+    chosenStyle.find((s) => s.id === $theme)?.component 
   );
 </script>
 
@@ -34,7 +33,7 @@
   <link rel="icon" href={favicon} />
 </svelte:head>
 
-<currentTheme></currentTheme>
+<CurrentTheme  />
 
 <ModeWatcher />
 <Navbar />

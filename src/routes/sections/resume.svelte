@@ -7,9 +7,9 @@
 	<div class="mt-10 text-center">
 		<a href={resumeUrl} target="_blank" rel="noopener noreferrer">
 			<button
-				class="relative inline-flex items-center justify-center overflow-hidden rounded-lg bg-linear-to-br from-purple-500 to-pink-500 p-0.5 text-sm font-medium text-gray-900 transition-transform hover:scale-105 dark:text-white"
+				class="relative inline-flex items-center justify-center overflow-hidden rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-primary-foreground transition-transform hover:scale-105 hover:bg-primary/90"
 			>
-				<span class="relative rounded-md bg-white px-5 py-2.5 transition-all dark:bg-gray-900">
+				<span>
 					Show Resume
 				</span>
 			</button>

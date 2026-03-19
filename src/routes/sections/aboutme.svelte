@@ -33,7 +33,7 @@
 		<h1 class="text-center text-3xl font-bold tracking-[0.2em]">{name}</h1>
 		{#each titles as title (title)}
 			<p
-				class="animate-typing overflow-hidden whitespace-nowrap border-r-4 border-r-white pr-5 text-5xl dark:text-white  font-bold text-center"
+				class="animate-typing overflow-hidden whitespace-nowrap border-r-4 border-r-primary pr-5 text-5xl text-foreground font-bold text-center"
 			>
 				{title}
 			</p>

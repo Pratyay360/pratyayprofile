@@ -20,9 +20,11 @@
         SheetHeader,
         SheetTitle,
     } from "$lib/components/ui/sheet";
+    import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
     import { Button } from "$lib/components/ui/button";
     import Themer from "$lib/themer/themer.svelte";
     import Menu from "@lucide/svelte/icons/menu";
+    import Palette from "@lucide/svelte/icons/palette";
 
     let sheetOpen = $state(false);
     let popoverOpen = $state(false);
@@ -120,7 +122,27 @@
         <!-- Right side: Theme switcher and mobile menu button -->
         <div class="flex items-center gap-2">
             <!-- Desktop Themer -->
-            <div class="hidden md:block">
+            <div class="hidden items-center gap-2 md:flex">
+                <DropdownMenu.Root>
+                    <DropdownMenu.Trigger>
+                        {#snippet child({ props })}
+                            <Button variant="outline" size="icon" {...props}>
+                                <Palette class="h-5 w-5" />
+                                <span class="sr-only">Toggle theme</span>
+                            </Button>
+                        {/snippet}
+                    </DropdownMenu.Trigger>
+                    <DropdownMenu.Content align="end">
+                        {#each themes as theme}
+                            <DropdownMenu.Item onSelect={() => ($themeStore = theme.value)}>
+                                {theme.label}
+                                {#if $themeStore === theme.value}
+                                    <CheckIcon class="ml-auto h-4 w-4" />
+                                {/if}
+                            </DropdownMenu.Item>
+                        {/each}
+                    </DropdownMenu.Content>
+                </DropdownMenu.Root>
                 <Themer />
             </div>
 

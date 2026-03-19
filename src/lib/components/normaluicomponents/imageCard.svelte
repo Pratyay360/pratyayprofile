@@ -24,7 +24,7 @@
         />
     {:else}
         <div
-            class="h-10 w-10 rounded-md bg-gray-200"
+            class="h-10 w-10 rounded-md bg-muted"
             role="img"
             aria-label={name || "image placeholder"}
         ></div>
@@ -40,7 +40,7 @@
     </div>
 {:else}
     <div
-        class="h-10 w-10 rounded-md bg-gray-200"
+        class="h-10 w-10 rounded-md bg-muted"
         role="img"
         aria-label={name || "image placeholder"}
     ></div>
