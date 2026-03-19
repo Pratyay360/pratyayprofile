@@ -10,6 +10,7 @@
   import VintagePaperTheme from "$lib/themes/vintagepaper.svelte";
   import VioletBloomTheme from "$lib/themes/violetbloom.svelte";
 
+  import { theme } from "$lib/theme";
   import { ModeWatcher } from "mode-watcher";
   import "./layout.css";
   let { children } = $props();
@@ -23,13 +24,17 @@
     { id: "vintagepaper", component: VintagePaperTheme },
     { id: "violetbloom", component: VioletBloomTheme },
   ];
+
+  let currentTheme = $derived(
+    chosenStyle.find((s) => s.id === $theme)?.component || CatppuchinTheme
+  );
 </script>
 
 <svelte:head>
   <link rel="icon" href={favicon} />
 </svelte:head>
 
-<chosenStyle[id].component />
+<currentTheme></currentTheme>
 
 <ModeWatcher />
 <Navbar />

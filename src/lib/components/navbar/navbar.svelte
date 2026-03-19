@@ -1,6 +1,7 @@
 <script lang="ts">
     import { page } from "$app/stores";
     import { cn } from "$lib/utils";
+    import { theme as themeStore } from "$lib/theme";
     import CheckIcon from "@lucide/svelte/icons/check";
     import ChevronsUpDownIcon from "@lucide/svelte/icons/chevrons-up-down";
     import { tick } from "svelte";
@@ -26,7 +27,6 @@
     // Fix 2: separate state for sheet vs popover
     let sheetOpen = $state(false);
     let popoverOpen = $state(false);
-    let value = $state("");
     let triggerRef = $state<HTMLButtonElement>(null!);
 
     // Fix 1: was `theme.find(...)`, array is named `themes`
@@ -39,17 +39,17 @@
     }
 
     const themes = [
-        { label: "catppuchin", value: "<catppuchin/>" },
-        { label: "bubblegum", value: "<bubblegum/>" },
-        { label: "candyicon", value: "<candyicon/>" },
-        { label: "claymorphism", value: "<claymorphism/>" },
-        { label: "modernminimal", value: "<modernminimal/>" },
-        { label: "pasteldreams", value: "<pasteldreams/>" },
-        { label: "vintagepaper", value: "<vintagepaper/>" },
-        { label: "violetbloom", value: "<violetbloom/>" },
+        { label: "catppuchin", value: "catppuchin" },
+        { label: "bubblegum", value: "bubblegum" },
+        { label: "candyicon", value: "candyicon" },
+        { label: "claymorphism", value: "claymorphism" },
+        { label: "modernminimal", value: "modernminimal" },
+        { label: "pasteldreams", value: "pasteldreams" },
+        { label: "vintagepaper", value: "vintagepaper" },
+        { label: "violetbloom", value: "violetbloom" },
     ];
     const selectedValue = $derived(
-        themes.find((f) => f.value === value)?.label,
+        themes.find((f) => f.value === $themeStore)?.label,
     );
 
     const navItems = [
@@ -168,7 +168,7 @@
                                     {#snippet child({ props })}
                                         <Button
                                             variant="outline"
-                                            class="w-[200px] justify-between"
+                                            class="w-50 justify-between"
                                             {...props}
                                             role="combobox"
                                             aria-expanded={popoverOpen}
@@ -181,7 +181,7 @@
                                         </Button>
                                     {/snippet}
                                 </Popover.Trigger>
-                                <Popover.Content class="w-[200px] p-0">
+                                <Popover.Content class="w-50 p-0">
                                     <Command.Root>
                                         <Command.Input
                                             placeholder="Search themes..."
@@ -195,14 +195,14 @@
                                                     <Command.Item
                                                         value={theme.value}
                                                         onSelect={() => {
-                                                            value = theme.value;
+                                                            $themeStore = theme.value;
                                                             closeAndFocusTrigger();
                                                         }}
                                                     >
                                                         <CheckIcon
                                                             class={cn(
                                                                 "me-2 size-4",
-                                                                value !==
+                                                                $themeStore !==
                                                                     theme.value &&
                                                                     "text-transparent",
                                                             )}

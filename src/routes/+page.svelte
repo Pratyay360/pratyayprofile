@@ -27,28 +27,5 @@
   <section id={section.id} class="snap-center justify-center pt-20">
     <section.component />
   </section>
-  <!-- <section id="education" class="snap-center justify-center pt-20">
-    <Education />
-  </section>
-  <section id="skills" class="snap-center justify-center pt-20">
-    <Skills />
-  </section>
-  <section id="certificate" class="snap-center justify-center pt-20">
-    <Certificates />
-  </section>
-  <section id="projects" class="snap-center justify-center pt-20">
-    <Projects />
-  </section>
-  <section id="blogs" class="snap-center justify-center pt-20">
-    <BlogsPreview />
-  </section>
-  <section id="resume" class="snap-center justify-center pt-20">
-    <Resume />
-  </section>
-  <section id="donate" class="snap-center justify-center pt-20">
-    <Donate />
-  </section>
-  <section id="contact" class="snap-center justify-center pt-20">
-    <Contact />
-  </section> -->
+  {/each}
 </div>
