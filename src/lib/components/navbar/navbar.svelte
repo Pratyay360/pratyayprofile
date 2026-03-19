@@ -24,19 +24,9 @@
     import Themer from "$lib/themer/themer.svelte";
     import Menu from "@lucide/svelte/icons/menu";
 
-    // Fix 2: separate state for sheet vs popover
     let sheetOpen = $state(false);
     let popoverOpen = $state(false);
-    let triggerRef = $state<HTMLButtonElement>(null!);
-
-    // Fix 1: was `theme.find(...)`, array is named `themes`
-   
-    function closeAndFocusTrigger() {
-        popoverOpen = false;
-        tick().then(() => {
-            triggerRef.focus();
-        });
-    }
+    let triggerRef = $state<HTMLButtonElement | null>(null);
 
     const themes = [
         { label: "catppuchin", value: "catppuchin" },
@@ -48,9 +38,14 @@
         { label: "vintagepaper", value: "vintagepaper" },
         { label: "violetbloom", value: "violetbloom" },
     ];
+
+    // Fix: Make selectedValue reactive with proper null handling
     const selectedValue = $derived(
-        themes.find((f) => f.value === $themeStore)?.label,
+        themes.find((f) => f.value === $themeStore)?.label ?? "Select a theme..."
     );
+
+    // Fix: Make currentHash reactive to track hash changes
+    const currentHash = $derived($page.url.hash);
 
     const navItems = [
         { label: "About Me", href: "/#aboutme" },
@@ -64,9 +59,18 @@
         { label: "Contact Me", href: "/#contact" },
     ];
 
+    // Fix: Use reactive currentHash instead of $page.url.hash directly
     function isActive(href: string): boolean {
         const hash = href.split("#")[1];
-        return $page.url.hash === `#${hash}`;
+        return currentHash === `#${hash}`;
+    }
+
+    // Fix: Safely handle null triggerRef
+    function closeAndFocusTrigger() {
+        popoverOpen = false;
+        tick().then(() => {
+            triggerRef?.focus();
+        });
     }
 </script>
 
@@ -115,10 +119,13 @@
 
         <!-- Right side: Theme switcher and mobile menu button -->
         <div class="flex items-center gap-2">
-            <Themer />
+            <!-- Desktop Themer -->
+            <div class="hidden md:block">
+                <Themer />
+            </div>
 
+            <!-- Mobile Menu -->
             <div class="md:hidden">
-                <!-- Fix 2: use sheetOpen -->
                 <Sheet bind:open={sheetOpen}>
                     <SheetTrigger>
                         {#snippet child({ props })}
@@ -152,44 +159,38 @@
                                             ? "text-primary bg-primary/10"
                                             : "text-muted-foreground",
                                     )}
-                                    aria-current={isActive(href)
-                                        ? "page"
-                                        : undefined}
+                                    aria-current={isActive(href) ? "page" : undefined}
                                 >
                                     {label}
                                 </a>
                             {/each}
                         </nav>
 
-                        <div>
-                            <!-- Fix 2: use popoverOpen -->
+                        <!-- Theme Selector in Mobile Menu -->
+                        <div class="mt-8 border-t pt-6">
+                            <p class="mb-3 text-sm font-medium text-muted-foreground">
+                                Theme
+                            </p>
                             <Popover.Root bind:open={popoverOpen}>
                                 <Popover.Trigger bind:ref={triggerRef}>
                                     {#snippet child({ props })}
                                         <Button
                                             variant="outline"
-                                            class="w-50 justify-between"
+                                            class="w-full justify-between"
                                             {...props}
                                             role="combobox"
                                             aria-expanded={popoverOpen}
                                         >
-                                            {selectedValue ??
-                                                "Select a theme..."}
-                                            <ChevronsUpDownIcon
-                                                class="ms-2 size-4 shrink-0 opacity-50"
-                                            />
+                                            {selectedValue}
+                                            <ChevronsUpDownIcon class="ms-2 size-4 shrink-0 opacity-50" />
                                         </Button>
                                     {/snippet}
                                 </Popover.Trigger>
-                                <Popover.Content class="w-50 p-0">
+                                <Popover.Content class="w-[--radix-popover-trigger-width] p-0">
                                     <Command.Root>
-                                        <Command.Input
-                                            placeholder="Search themes..."
-                                        />
+                                        <Command.Input placeholder="Search themes..." />
                                         <Command.List>
-                                            <Command.Empty
-                                                >No themes found.</Command.Empty
-                                            >
+                                            <Command.Empty>No themes found.</Command.Empty>
                                             <Command.Group>
                                                 {#each themes as theme}
                                                     <Command.Item
@@ -202,9 +203,8 @@
                                                         <CheckIcon
                                                             class={cn(
                                                                 "me-2 size-4",
-                                                                $themeStore !==
-                                                                    theme.value &&
-                                                                    "text-transparent",
+                                                                $themeStore !== theme.value &&
+                                                                    "opacity-0",
                                                             )}
                                                         />
                                                         {theme.label}
@@ -215,13 +215,6 @@
                                     </Command.Root>
                                 </Popover.Content>
                             </Popover.Root>
-                        </div>
-
-                        <div class="mt-8 border-t pt-6">
-                            <p class="mb-2 text-sm text-muted-foreground">
-                                Theme
-                            </p>
-                            <Themer />
                         </div>
                     </SheetContent>
                 </Sheet>

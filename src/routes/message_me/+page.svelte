@@ -64,7 +64,7 @@
         </CardHeader>
 
         <CardContent>
-            <form class="space-y-6" on:submit|preventDefault={submitRequest}>
+            <form class="space-y-6" onsubmit={submitRequest}>
                 <div>
                     <label for="userName" class="text-sm font-medium"
                         >Name</label
