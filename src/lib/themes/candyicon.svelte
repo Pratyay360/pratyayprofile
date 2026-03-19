@@ -1,7 +1,6 @@
 <div class="candyicon"></div>
 
 <style>
-    @import "tailwindcss";
 
     @custom-variant dark (&:is(.dark *));
 

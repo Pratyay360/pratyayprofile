@@ -1,8 +1,6 @@
 <div class="pasteldreams"></div>
 
 <style>
-    @import "tailwindcss";
-
     @custom-variant dark (&:is(.dark *));
 
     :root {

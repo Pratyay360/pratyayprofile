@@ -53,7 +53,7 @@
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
-				<span>{{</span>
+				<span>{m.message}</span>
 				</CardContent>
 				<CardFooter class="flex items-center justify-between">
 					<span class="text-muted-foreground text-xs">{m.created}</span>

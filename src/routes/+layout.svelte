@@ -15,8 +15,3 @@
 <ModeWatcher />
 <Navbar />
 {@render children()}
-
-<style>
-  @import "tw-animate-css";
-  @plugin "@tailwindcss/typography";
-</style>

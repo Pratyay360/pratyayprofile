@@ -1,7 +1,6 @@
 <div class="vintagepaper"></div>
 
 <style>
-   @import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
 

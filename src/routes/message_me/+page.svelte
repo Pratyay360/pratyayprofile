@@ -31,8 +31,8 @@
                 userEmail: form.userEmail,
                 userMessage: form.userMessage,
             });
-            form = { userName: "", userEmail: "", userMessage: "" };
             toast.success("Message sent successfully");
+            form = { userName: "", userEmail: "", userMessage: "" };
         } catch {
             toast.error("Failed to send message");
         } finally {

@@ -1,10 +1,7 @@
 <div class="modernminimal"></div>
 
 <style>
-    @import "tailwindcss";
-
     @custom-variant dark (&:is(.dark *));
-
     :root {
         --background: hsl(0 0% 100%);
         --foreground: hsl(0 0% 20%);

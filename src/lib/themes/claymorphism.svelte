@@ -1,7 +1,6 @@
 <div class="claymorphism"></div>
 
 <style lang="css">
-    @import "tailwindcss";
 
     @custom-variant dark (&:is(.dark *));
 
