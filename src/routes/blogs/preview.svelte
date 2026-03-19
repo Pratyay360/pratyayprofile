@@ -5,6 +5,7 @@
 	import { createClient } from "$lib/pocketbase";
 	import { readString, readStringArray, resolveMediaUrl } from "$lib/content";
 	import { type RecordModel } from "pocketbase";
+	
 	interface BlogRecord {
 		id: string;
 		coverImage: string;
