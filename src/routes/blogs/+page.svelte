@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import type { RecordModel } from "pocketbase";
   import BlogCard from "$lib/components/normaluicomponents/blogCard.svelte";
   import { readString, resolveMediaUrl } from "$lib/content";
@@ -21,27 +22,29 @@
   let failed = $state(false);
   let posts = $state<BlogRecord[]>([]);
 
-  try {
-    const records = pb
-      .collection("blogs")
-      .getFullList<RecordModel>({ sort: "-created" });
+  onMount(async () => {
+    try {
+      const records = await pb
+        .collection("blogs")
+        .getFullList<RecordModel>({ sort: "-created" });
 
-    posts = records.map((record) => ({
-      id: record.id,
-      title: readString(record, "title"),
-      author: readString(record, "author"),
-      updated: readString(record, "updated"),
-      created: readString(record, "created"),
-      brief: readString(record, "brief") || readString(record, "content"),
-      coverImage: resolveMediaUrl(pb, record, "coverImage", { token: null }),
-      link: `/blogs/${record.id}`,
-    }));
-  } catch (error) {
-    console.error("Failed to fetch blogs:", error);
-    failed = true;
-  } finally {
-    loading = false;
-  }
+      posts = records.map((record) => ({
+        id: record.id,
+        title: readString(record, "title"),
+        author: readString(record, "author"),
+        updated: readString(record, "updated"),
+        created: readString(record, "created"),
+        brief: readString(record, "brief") || readString(record, "content"),
+        coverImage: resolveMediaUrl(pb, record, "coverImage", { token: null }),
+        link: `/blogs/${record.id}`,
+      }));
+    } catch (error) {
+      console.error("Failed to fetch blogs:", error);
+      failed = true;
+    } finally {
+      loading = false;
+    }
+  });
 </script>
 
 <main class="min-h-screen px-4 py-24">
@@ -51,7 +54,7 @@
 
   {#if loading && !failed}
     <div class="mx-auto grid max-w-6xl gap-8 md:grid-cols-2 lg:grid-cols-3">
-      {#each Array.from({ length: 6 }, (1, i) => i) as i (i)}
+      {#each Array.from({ length: 6 }, (_, i) => i) as i (i)}
         <div class="space-y-3">
           <Skeleton class="h-56 w-full rounded-xl" />
           <Skeleton class="h-6 w-2/3" />
@@ -61,13 +64,23 @@
       {/each}
     </div>
   {/if}
+
   {#if failed}
-    <ErrorPage />
+    <p class="text-destructive mt-12 text-center text-sm">
+      Failed to load blogs. Please try again later.
+    </p>
   {/if}
+
+  {#if !loading && !failed && posts.length === 0}
+    <p class="text-muted-foreground mt-12 text-center text-sm">
+      No blog posts yet.
+    </p>
+  {/if}
+
   {#if posts.length > 0}
     <section class="mx-auto grid max-w-6xl gap-8 md:grid-cols-2 lg:grid-cols-3">
-      {#each posts as post (post.id)}
-        <BlogCard {...post} />
+      {#each posts as blogPost (blogPost.id)}
+        <BlogCard {...blogPost} />
       {/each}
     </section>
   {/if}

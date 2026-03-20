@@ -5,6 +5,8 @@
 	import { createClient } from '$lib/pocketbase';
 	import { readString, resolveMediaUrl } from '$lib/content';
 	import { type RecordModel } from 'pocketbase';
+	import { Button } from "$lib/components/ui/button";
+    import { goto } from '$app/navigation';
 
 	interface SocialRecord {
 		id: string;
@@ -17,6 +19,10 @@
 	let social: SocialRecord[] = [];
 	let loading = true;
 	let failed = false;
+
+	onMount(() => {
+		loadSocial();
+	});
 
 	async function loadSocial() {
 		loading = true;
@@ -36,9 +42,6 @@
 		}
 	}
 
-	onMount(() => {
-		loadSocial();
-	});
 </script>
 
 <section class="container mx-auto px-6 py-12">
@@ -69,9 +72,7 @@
 
 	<div class="mt-10 flex items-center justify-center">
 		<Button
-			on:click={() => {
-				redirect("/message_me");
-			}}
+			onclick={() => goto("/message_me")}
 			class="rounded-full border border-primary px-6 py-2 text-2xl font-bold transition-colors hover:bg-primary hover:text-primary-foreground"
 			aria-label="Message Me"
 		>

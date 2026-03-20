@@ -1,14 +1,18 @@
 <script lang="ts">
   import ProjectCard from "$lib/components/normaluicomponents/projectCard.svelte";
   import { Skeleton } from "$lib/components/ui/skeleton";
+  
   import {
     Card,
     CardContent,
     CardFooter,
     CardHeader,
   } from "$lib/components/ui/card";
-  export let data;
+  
+  
+  
   const profileName = "Pratyay Mustafi";
+  let data = $props();
   const projects = data.projects ?? [];
 </script>
 
@@ -23,26 +27,17 @@
       </p>
     </header>
 
-    <!-- Show error if no projects were loaded -->
-    <!-- {#if projects.length === 0}
-      <div
-        class="text-destructive mt-12 rounded-lg border border-current/20 px-4 py-3 text-sm"
-      >
-        Failed to load projects. Please try again later.
-      </div>
-    {:else} -->
-      <section class="mt-12">
-        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {#each projects as project (project.id)}
-            <ProjectCard
-              imageUrl={project.imageUrl}
-              title={project.title}
-              brief={project.brief}
-              link={project.link}
-            />
-          {/each}
-        </div>
-      </section>
-    {/if}
+<section class="mt-12">
+  <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+  {#each projects as project (project.id)}
+    <ProjectCard
+      imageUrl={project.imageUrl}
+      title={project.title}
+      brief={project.brief}
+      link={project.link}
+    />
+  {/each}
+  </div>
+</section>
   </div>
 </main>

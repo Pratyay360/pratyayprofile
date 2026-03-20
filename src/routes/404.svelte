@@ -1,3 +1,9 @@
+<script>
+    import { CropIcon } from "@lucide/svelte";
+    import { redirect } from "@sveltejs/kit";
+    import { Button } from "$lib/components/ui/button";
+</script>
+<CropIcon />    
 <div class="flex min-h-screen items-center justify-center">
 	<div class="text-center">
 		<svg

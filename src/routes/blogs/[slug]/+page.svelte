@@ -1,8 +1,9 @@
 <script lang="ts">
     import type { PageData } from "./$types";
     import { readString } from "$lib/content";
-
+    import { parseAndRender } from "@ox-content/napi";
     let { data }: { data: PageData } = $props();
+
 </script>
 
 <article class="mx-auto w-full max-w-4xl px-4 py-16">
@@ -41,6 +42,6 @@
     <div
         class="prose prose-neutral dark:prose-invert max-w-none prose-headings:font-semibold prose-a:text-blue-600 dark:prose-a:text-blue-400"
     >
-        {@html data.rendered.html}
+        {@html (parseAndRender(data.content, { gfm: true, footnotes: true, tables: true }))}
     </div>
 </article>

@@ -6,10 +6,13 @@
     const pb = createClient(import.meta.env.VITE_POCKET_BASE);
     let data: RecordModel[] = $state([]);
 
-    const records = pb.collection('me').getFullList<RecordModel>({})
-    if (records.length > 0) {
-        data = records.map((record) => readString(record, "flash"));
-    }
+    pb.collection('me').getFullList<RecordModel>({}).then((records) => {
+        if (records.length > 0) {
+            data = records;
+        }
+    }).catch((error) => {
+        console.error(error);
+    });
 </script>
 
 <section class="container mx-auto px-6 py-12">

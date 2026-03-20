@@ -43,7 +43,8 @@
 
     // Fix: Make selectedValue reactive with proper null handling
     const selectedValue = $derived(
-        themes.find((f) => f.value === $themeStore)?.label ?? "Select a theme..."
+        themes.find((f) => f.value === $themeStore)?.label ??
+            "Select a theme...",
     );
 
     // Fix: Make currentHash reactive to track hash changes
@@ -134,7 +135,9 @@
                     </DropdownMenu.Trigger>
                     <DropdownMenu.Content align="end">
                         {#each themes as theme}
-                            <DropdownMenu.Item onSelect={() => ($themeStore = theme.value)}>
+                            <DropdownMenu.Item
+                                onSelect={() => ($themeStore = theme.value)}
+                            >
                                 {theme.label}
                                 {#if $themeStore === theme.value}
                                     <CheckIcon class="ml-auto h-4 w-4" />
@@ -181,7 +184,9 @@
                                             ? "text-primary bg-primary/10"
                                             : "text-muted-foreground",
                                     )}
-                                    aria-current={isActive(href) ? "page" : undefined}
+                                    aria-current={isActive(href)
+                                        ? "page"
+                                        : undefined}
                                 >
                                     {label}
                                 </a>
@@ -190,7 +195,9 @@
 
                         <!-- Theme Selector in Mobile Menu -->
                         <div class="mt-8 border-t pt-6">
-                            <p class="mb-3 text-sm font-medium text-muted-foreground">
+                            <p
+                                class="mb-3 text-sm font-medium text-muted-foreground"
+                            >
                                 Theme
                             </p>
                             <Popover.Root bind:open={popoverOpen}>
@@ -204,28 +211,38 @@
                                             aria-expanded={popoverOpen}
                                         >
                                             {selectedValue}
-                                            <ChevronsUpDownIcon class="ms-2 size-4 shrink-0 opacity-50" />
+                                            <ChevronsUpDownIcon
+                                                class="ms-2 size-4 shrink-0 opacity-50"
+                                            />
                                         </Button>
                                     {/snippet}
                                 </Popover.Trigger>
-                                <Popover.Content class="w-[--radix-popover-trigger-width] p-0">
+                                <Popover.Content
+                                    class="w-[--radix-popover-trigger-width] p-0"
+                                >
                                     <Command.Root>
-                                        <Command.Input placeholder="Search themes..." />
+                                        <Command.Input
+                                            placeholder="Search themes..."
+                                        />
                                         <Command.List>
-                                            <Command.Empty>No themes found.</Command.Empty>
+                                            <Command.Empty
+                                                >No themes found.</Command.Empty
+                                            >
                                             <Command.Group>
                                                 {#each themes as theme}
                                                     <Command.Item
                                                         value={theme.value}
                                                         onSelect={() => {
-                                                            $themeStore = theme.value;
+                                                            $themeStore =
+                                                                theme.value;
                                                             closeAndFocusTrigger();
                                                         }}
                                                     >
                                                         <CheckIcon
                                                             class={cn(
                                                                 "me-2 size-4",
-                                                                $themeStore !== theme.value &&
+                                                                $themeStore !==
+                                                                    theme.value &&
                                                                     "opacity-0",
                                                             )}
                                                         />

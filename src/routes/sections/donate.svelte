@@ -1,9 +1,10 @@
 <script lang="ts">
-	import DonationCard from '$lib/components/normaluicomponents/donation.svelte';
-	import { Skeleton } from '$lib/components/ui/skeleton';
-	import { createClient } from '$lib/pocketbase';
-	import { readString, resolveMediaUrl } from '$lib/content';
-	import { type RecordModel } from 'pocketbase';
+	import { onMount } from "svelte";
+	import DonationCard from "$lib/components/normaluicomponents/donation.svelte";
+	import { Skeleton } from "$lib/components/ui/skeleton";
+	import { createClient } from "$lib/pocketbase";
+	import { readString, resolveMediaUrl } from "$lib/content";
+	import type { RecordModel } from "pocketbase";
 
 	interface DonationRecord {
 		id: string;
@@ -14,23 +15,31 @@
 
 	const pb = createClient(import.meta.env.VITE_POCKET_BASE);
 
-	let loading = $state(true);
-	let failed = $state(false);
-	let donations: DonationRecord[] = $state([]);
+	let loading = true;
+	let failed = false;
+	let donations: DonationRecord[] = [];
 
-	try {
-		const records = pb.collection('donation').getFullList<RecordModel>({});
-		donations = records.map((record) => ({
-			id: record.id,
-			name: readString(record, 'name'),
-			image: resolveMediaUrl(pb, record, 'image', {token: null}),
-			link: readString(record, 'link')
-		}));
-	} catch (error) {
-		console.error(error);
-		failed = true;
-	} finally {
-		loading = false;
+	onMount(loadDonations);
+
+	async function loadDonations() {
+		loading = true;
+		failed = false;
+
+		try {
+			const records = await pb.collection("donation").getFullList<RecordModel>();
+
+			donations = records.map((record) => ({
+				id: record.id,
+				name: readString(record, "name"),
+				image: resolveMediaUrl(pb, record, "image", { token: null }),
+				link: readString(record, "link")
+			}));
+		} catch (error) {
+			console.error("Donation fetch failed:", error);
+			failed = true;
+		} finally {
+			loading = false;
+		}
 	}
 </script>
 

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { createClient } from '$lib/pocketbase';
 	import { readString, readStringArray } from '$lib/content';
@@ -11,23 +12,25 @@
 
 	const pb = createClient(import.meta.env.VITE_POCKET_BASE!);
 
-	let loading = true;
-	let skills: SkillRecord[] = [];
-	let failed = false;
+	let loading = $state(true);
+	let skills = $state<SkillRecord[]>([]);
+	let failed = $state(false);
 
-	try {
-		const records = pb.collection('skill').getFullList<Record<string, unknown>>({});
-		skills = records.map((record) => ({
-			id: readString(record, 'id'),
-			category: readString(record, 'category'),
-			items: readStringArray(record, 'items')
-		}));
-	} catch (error) {
-		console.error(error);
-		failed = true;
-	} finally {
-		loading = false;
-	}
+	onMount(async () => {
+		try {
+			const records = await pb.collection('skill').getFullList<Record<string, unknown>>({});
+			skills = records.map((record) => ({
+				id: readString(record, 'id'),
+				category: readString(record, 'category'),
+				items: readStringArray(record, 'items')
+			}));
+		} catch (error) {
+			console.error(error);
+			failed = true;
+		} finally {
+			loading = false;
+		}
+	});
 </script>
 
 <section class="container mx-auto px-6 py-12">
@@ -45,7 +48,7 @@
 		</div>
 	{/if}
 
-	<!-- {#if !loading && !failed} -->
+	{#if !loading && !failed}
 		<div class="mt-10 space-y-8">
 			{#each skills as skill (skill.id)}
 				<div class="border-primary border-l-4 pl-4">
@@ -58,11 +61,13 @@
 						{/each}
 					</div>
 				</div>
-			{/each} 
-			<!-- {#if skills.length >= 0} -->
+			{/each}
 
-			<!-- {/if} --> 
-
+			{#if skills.length === 0}
+				<p class="text-muted-foreground text-center text-sm">
+					Add your skills to display them here.
+				</p>
+			{/if}
 		</div>
-	<!-- {/if} -->
+	{/if}
 </section>

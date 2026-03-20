@@ -4,7 +4,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
 	import { Textarea } from '$lib/components/ui/textarea';
-	
+	import { deleteBlog } from '$admin/pages/blogs/page.server';
 	type BlogItem = {
 		id: string;
 		title?: string;
@@ -62,10 +62,8 @@
 					<Button type="button" variant="outline" size="sm" onclick={() => editBlog(item)}>
 						Edit
 					</Button>
-					<form method="POST" action="?/deleteBlog" use:enhance>
-						<Input type="hidden" name="id" value={item.id} />
-						<Button type="submit" variant="destructive" size="sm">Delete</Button>
-					</form>
+					<Input type="hidden" name="id" value={item.id} />
+					<Button type="submit" variant="destructive" onclick={() => deleteBlog}>Delete</Button>
 				</div>
 			</div>
 		{/each}
