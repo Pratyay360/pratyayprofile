@@ -8,7 +8,7 @@ export const load: PageServerLoad = async ({ params }) => {
   const blog = await pb.collection("blogs").getOne(params.slug);
   const coverImage = resolveMediaUrl(pb, blog, "coverImage", { token: null });
   const content = resolveMediaUrl(pb, blog, "content", { token: null });
-  const rendered = parseAndRender(content, { gfm: true, footnotes: true, tables: true }).html;
+  const rendered = parseAndRender(content, { gfm: true, footnotes: true, tables: true });
 
-  return { coverImage, content, rendered, blog };
+  return { coverImage, rendered, blog };
 };

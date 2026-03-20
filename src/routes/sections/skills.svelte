@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { createClient } from '$lib/pocketbase';
 	import { readString, readStringArray } from '$lib/content';
@@ -16,21 +15,19 @@
 	let skills: SkillRecord[] = [];
 	let failed = false;
 
-	onMount(async () => {
-		try {
-			const records = await pb.collection('skill').getFullList<Record<string, unknown>>({});
-			skills = records.map((record) => ({
-				id: readString(record, 'id'),
-				category: readString(record, 'category'),
-				items: readStringArray(record, 'items')
-			}));
-		} catch (error) {
-			console.error(error);
-			failed = true;
-		} finally {
-			loading = false;
-		}
-	});
+	try {
+		const records = pb.collection('skill').getFullList<Record<string, unknown>>({});
+		skills = records.map((record) => ({
+			id: readString(record, 'id'),
+			category: readString(record, 'category'),
+			items: readStringArray(record, 'items')
+		}));
+	} catch (error) {
+		console.error(error);
+		failed = true;
+	} finally {
+		loading = false;
+	}
 </script>
 
 <section class="container mx-auto px-6 py-12">

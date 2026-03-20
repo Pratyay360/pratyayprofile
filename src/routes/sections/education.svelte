@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import EducationCard from '$lib/components/normaluicomponents/education.svelte';
 	import { createClient } from '$lib/pocketbase';
 	import { readString } from '$lib/content';
@@ -18,24 +17,22 @@
 	let loading = true;
 	let failed = false;
 	let education: EducationRecord[] = [];
-	onMount(async () => {
-		try {
-			const records = await pb.collection('education').getFullList<RecordModel>({});
-			education = records.map((record) => ({
-				id: record.id,
-				degree: readString(record, 'degree'),
-				category: readString(record, 'category'),
-				date_from: readString(record, 'date_from'),
-				date_to: readString(record, 'date_to'),
-				description: readString(record, 'description')
-			}));
-		} catch (e) {
-			console.error(e);
-			failed = true;
-		} finally {
-			loading = false;
-		}
-	});
+	try {
+		const records = pb.collection('education').getFullList<RecordModel>({});
+		education = records.map((record) => ({
+			id: readString(record, 'id'),
+			degree: readString(record, 'degree'),
+			category: readString(record, 'category'),
+			date_from: readString(record, 'date_from'),
+			date_to: readString(record, 'date_to'),
+			description: readString(record, 'description')
+		}));
+	} catch (e) {
+		console.error(e);
+		failed = true;
+	} finally {
+		loading = false;
+	}
 </script>
 
 <section class="container mx-auto px-6 py-12">

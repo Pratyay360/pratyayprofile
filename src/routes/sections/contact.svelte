@@ -68,12 +68,14 @@
 	</div>
 
 	<div class="mt-10 flex items-center justify-center">
-		<a href="/message_me">
-			<button
-				class="rounded-full border border-primary px-6 py-2 text-2xl font-bold transition-colors hover:bg-primary hover:text-primary-foreground"
-			>
-				Message Me
-			</button>
-		</a>
+		<Button
+			on:click={() => {
+				redirect("/message_me");
+			}}
+			class="rounded-full border border-primary px-6 py-2 text-2xl font-bold transition-colors hover:bg-primary hover:text-primary-foreground"
+			aria-label="Message Me"
+		>
+			Message Me
+		</Button>
 	</div>
 </section>

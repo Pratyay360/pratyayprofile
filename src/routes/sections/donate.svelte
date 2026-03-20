@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import DonationCard from '$lib/components/normaluicomponents/donation.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { createClient } from '$lib/pocketbase';
@@ -15,26 +14,24 @@
 
 	const pb = createClient(import.meta.env.VITE_POCKET_BASE);
 
-	let loading = true;
-	let failed = false;
-	let donations: DonationRecord[] = [];
+	let loading = $state(true);
+	let failed = $state(false);
+	let donations: DonationRecord[] = $state([]);
 
-	onMount(async () => {
-		try {
-			const records = await pb.collection('donation').getFullList<RecordModel>({});
-			donations = records.map((record) => ({
-				id: record.id,
-				name: readString(record, 'name'),
-				image: resolveMediaUrl(pb, record, 'image'),
-				link: readString(record, 'link')
-			}));
-		} catch (error) {
-			console.error(error);
-			failed = true;
-		} finally {
-			loading = false;
-		}
-	});
+	try {
+		const records = pb.collection('donation').getFullList<RecordModel>({});
+		donations = records.map((record) => ({
+			id: record.id,
+			name: readString(record, 'name'),
+			image: resolveMediaUrl(pb, record, 'image', {token: null}),
+			link: readString(record, 'link')
+		}));
+	} catch (error) {
+		console.error(error);
+		failed = true;
+	} finally {
+		loading = false;
+	}
 </script>
 
 <section class="container mx-auto px-6 py-12">

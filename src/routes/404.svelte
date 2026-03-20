@@ -1,4 +1,4 @@
-<div class="flex min-h-screen items-center justify-center bg-black text-white">
+<div class="flex min-h-screen items-center justify-center">
 	<div class="text-center">
 		<svg
 			class="mx-auto mb-6"
@@ -20,12 +20,14 @@
 
 		<p class="mb-6 text-lg  md:text-xl">Oops! You seem to be lost. 🥲</p>
 
-		<a
-			href="/"
+		<Button
+			on:click={() => {
+				redirect("/");
+			}}
 			class="inline-block rounded-lg border  bg-transparent px-6 py-2  shadow-md transition-all duration-300 hover:border-transparent  hover:shadow-lg focus:ring-2  focus:ring-offset-2 focus:outline-none"
 			aria-label="Return to homepage"
 		>
 			Return to Home
-		</a>
+		</Button>
 	</div>
 </div>

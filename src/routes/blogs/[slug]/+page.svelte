@@ -41,6 +41,6 @@
     <div
         class="prose prose-neutral dark:prose-invert max-w-none prose-headings:font-semibold prose-a:text-blue-600 dark:prose-a:text-blue-400"
     >
-        {@html data.rendered}
+        {@html data.rendered.html}
     </div>
 </article>
