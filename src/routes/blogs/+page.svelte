@@ -22,7 +22,7 @@
   let posts = $state<BlogRecord[]>([]);
 
   try {
-    const records = await pb
+    const records = pb
       .collection("blogs")
       .getFullList<RecordModel>({ sort: "-created" });
 

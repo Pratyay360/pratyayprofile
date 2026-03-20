@@ -18,28 +18,26 @@
 	}
 
 	const pb = createClient(import.meta.env.VITE_POCKET_BASE);
-	let loading = true;
-	let failed = false;
-	let certificates: CertificateRecord[] = [];
+	let loading = $state(true);
+	let failed = $state(false);
+	let certificates: CertificateRecord[] = $state([]);
 
-	onMount(async () => {
-		try {
-			const records = await pb.collection('certificate').getFullList<RecordModel>({});
-			certificates = records.map((record) => ({
-				id: record.id,
-				title: readString(record, 'title'),
-				description: readString(record, 'description'),
-				date: readString(record, 'date'),
-				imageSrc: resolveMediaUrl(pb, record, 'imageSrc'),
-				link: readString(record, 'link')
-			}));
-		} catch (e) {
-			console.error(e);
-			failed = true;
-		} finally {
-			loading = false;
-		}
-	});
+	try {
+		const records = pb.collection('certificate').getFullList<RecordModel>({});
+		certificates = records.map((record) => ({
+			id: record.id,
+			title: readString(record, 'title'),
+			description: readString(record, 'description'),
+			date: readString(record, 'date'),
+			imageSrc: resolveMediaUrl(pb, record, 'imageSrc'),
+			link: readString(record, 'link')
+		}));
+	} catch (e) {
+		console.error(e);
+		failed = true;
+	} finally {
+		loading = false;
+	}
 </script>
 
 <section class="container mx-auto px-6 py-12">
