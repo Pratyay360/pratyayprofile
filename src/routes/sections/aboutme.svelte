@@ -4,23 +4,21 @@
     import { type RecordModel } from "pocketbase";
 
     const pb = createClient(import.meta.env.VITE_POCKET_BASE);
-    let data: RecordModel[] = [];
+    let data: RecordModel[] = $state([]);
 
+    const records = pb.collection('me').getFullList<RecordModel>({})
     if (records.length > 0) {
-        const records = pb.collection('me').getFullList<RecordModel>({})
-        data = records
-            .map((record) => readString(record, "flash"))
-            .filter(Boolean);
+        data = records.map((record) => readString(record, "flash"));
     }
 </script>
 
 <section class="container mx-auto px-6 py-12">
     <div class="text-muted-foreground mx-auto mt-8 max-w-3xl text-lg">
-        {#each data as record}
+        {#each data as record (record.id)}
             <p
                 class="animate-typing overflow-hidden whitespace-nowrap border-r-4 border-r-primary pr-5 text-5xl text-foreground font-bold text-center"
             >
-                {record}
+                {record.flash}
             </p>
         {/each}
     </div>

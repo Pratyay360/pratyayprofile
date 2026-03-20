@@ -1,7 +1,6 @@
 <div class="claymorphism"></div>
 
 <style lang="css">
-  @reference "$lib/themes/layout.css";
             
     
     :root {

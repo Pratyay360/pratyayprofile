@@ -1,7 +1,6 @@
 <div class="vintagepaper"></div>
 
 <style>
-  @reference "$lib/themes/layout.css";
 
 :root {
   --background: hsl(44.0000 42.8571% 93.1373%);

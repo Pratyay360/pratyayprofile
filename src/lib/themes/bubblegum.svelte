@@ -1,7 +1,6 @@
 <div class="bubblegum"></div>
 
 <style>
-  @reference "$lib/themes/layout.css";
             
 
 :root {

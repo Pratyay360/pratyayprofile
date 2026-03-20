@@ -1,7 +1,6 @@
 <div class="candyicon"></div>
 
 <style>
-  @reference "$lib/themes/layout.css";
             
     
     :root {

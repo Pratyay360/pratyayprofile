@@ -1,8 +1,7 @@
 <div class="pasteldreams"></div>
 
 <style>
-  @reference "$lib/themes/layout.css";
-            
+          
     
     :root {
         --background: hsl(280 33.3333% 96.4706%);

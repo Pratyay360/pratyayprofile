@@ -1,7 +1,5 @@
 <div class="violetbloom"></div>
 <style>
-  @reference "$lib/themes/layout.css";
-
 
 :root {
   --background: hsl(0 0% 99.2157%);

@@ -1,7 +1,6 @@
 <div class="modernminimal"></div>
 
 <style>
-  @reference "$lib/themes/layout.css";
 
   :root {
     --background: hsl(0 0% 100%);
