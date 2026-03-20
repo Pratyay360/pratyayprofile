@@ -1,5 +1,6 @@
 import type { PageServerLoad } from "./$types.d.ts";
-import { resolveMediaUrl, readString } from "$lib/content";
+import { parseAndRender } from "@ox-content/napi";
+import { readString, resolveMediaUrl } from "$lib/content";
 import { createClient } from "$lib/pocketbase";
 
 export const load: PageServerLoad = async ({ params }) => {
@@ -7,6 +8,7 @@ export const load: PageServerLoad = async ({ params }) => {
   const blog = await pb.collection("blogs").getOne(params.slug);
   const coverImage = resolveMediaUrl(pb, blog, "coverImage", { token: null });
   const content = readString(blog, "content");
+  const rendered = parseAndRender(content, { gfm: true, footnotes: true, tables: true }).html;
 
-  return { coverImage, content, blog };
+  return { coverImage, content, rendered, blog };
 };
