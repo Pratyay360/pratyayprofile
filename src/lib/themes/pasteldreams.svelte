@@ -1,8 +1,9 @@
 <div class="pasteldreams"></div>
 
 <style>
-    @custom-variant dark (&:is(.dark *));
-
+  @reference "$lib/themes/layout.css";
+            
+    
     :root {
         --background: hsl(280 33.3333% 96.4706%);
         --foreground: hsl(216.9231 19.1176% 26.6667%);

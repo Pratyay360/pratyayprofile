@@ -1,8 +1,8 @@
 <div class="bubblegum"></div>
 
 <style>
-
-@custom-variant dark (&:is(.dark *));
+  @reference "$lib/themes/layout.css";
+            
 
 :root {
   --background: hsl(330 47.0588% 93.3333%);

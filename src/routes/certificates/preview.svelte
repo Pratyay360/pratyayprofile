@@ -5,7 +5,9 @@
 	import { createClient } from '$lib/pocketbase';
 	import { readString, resolveMediaUrl } from '$lib/content';
 	import { type RecordModel } from 'pocketbase';
-
+	import { Button } from '$lib/components/ui/button';
+    import { redirect } from '@sveltejs/kit';
+	
 	interface CertificateRecord {
 		id: string;
 		title: string;
@@ -42,17 +44,14 @@
 
 <section class="container mx-auto px-6 py-12">
 	<h1 class="text-center text-3xl font-bold tracking-[0.2em]">CERTIFICATES</h1>
-
 	{#if loading}
 		<div class="mt-10">
 			<Skeleton class="h-64 w-full" />
 		</div>
 	{/if}
-
 	{#if failed}
 		<p class="text-destructive mt-8 text-center text-sm">Unable to load certificates.</p>
 	{/if}
-
 	<div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 		{#each certificates.slice(0, 3) as cert (cert.id)}
 			<CertificateCard
@@ -67,16 +66,16 @@
 
 	{#if certificates.length > 3}
 		<div class="mt-8 text-center">
-			<a href="/certificates">
-				<button
+				<Button
 					class="border-primary hover:bg-primary hover:text-primary-foreground rounded-md border px-4 py-2 text-sm font-medium transition-colors"
+					onclick={() => redirect(302, '/certificates')}
 				>
 					See More
-				</button>
-			</a>
+				</Button>
+				
 		</div>
 	{/if}
-	{#if certificates.length === 0 && !loading && !failed}
+	<!-- {#if certificates.length === 0 && !loading && !failed}
 		<p class="text-muted-foreground mt-8 text-center text-sm">Add certificates to show them here.</p>
-	{/if}
+	{/if} -->
 </section>

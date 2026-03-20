@@ -1,9 +1,9 @@
 <div class="catppuchin"></div>
 
 <style lang="css">
-
-  @custom-variant dark (&:is(.dark *));
-
+  @reference "$lib/themes/layout.css";
+            
+  
   :root {
     --background: hsl(220 23.0769% 94.902%);
     --foreground: hsl(233.7931 16.0221% 35.4902%);

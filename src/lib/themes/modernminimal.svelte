@@ -1,65 +1,66 @@
 <div class="modernminimal"></div>
 
 <style>
-    @custom-variant dark (&:is(.dark *));
-    :root {
-        --background: hsl(0 0% 100%);
-        --foreground: hsl(0 0% 20%);
-        --card: hsl(0 0% 100%);
-        --card-foreground: hsl(0 0% 20%);
-        --popover: hsl(0 0% 100%);
-        --popover-foreground: hsl(0 0% 20%);
-        --primary: hsl(217.2193 91.2195% 59.8039%);
-        --primary-foreground: hsl(0 0% 100%);
-        --secondary: hsl(220 14.2857% 95.8824%);
-        --secondary-foreground: hsl(215 13.7931% 34.1176%);
-        --muted: hsl(210 20% 98.0392%);
-        --muted-foreground: hsl(220 8.9362% 46.0784%);
-        --accent: hsl(204 93.75% 93.7255%);
-        --accent-foreground: hsl(224.4444 64.2857% 32.9412%);
-        --destructive: hsl(0 84.2365% 60.1961%);
-        --destructive-foreground: hsl(0 0% 100%);
-        --border: hsl(220 13.0435% 90.9804%);
-        --input: hsl(220 13.0435% 90.9804%);
-        --ring: hsl(217.2193 91.2195% 59.8039%);
-        --chart-1: hsl(217.2193 91.2195% 59.8039%);
-        --chart-2: hsl(221.2121 83.1933% 53.3333%);
-        --chart-3: hsl(224.2781 76.3265% 48.0392%);
-        --chart-4: hsl(225.931 70.7317% 40.1961%);
-        --chart-5: hsl(224.4444 64.2857% 32.9412%);
-        --sidebar: hsl(210 20% 98.0392%);
-        --sidebar-foreground: hsl(0 0% 20%);
-        --sidebar-primary: hsl(217.2193 91.2195% 59.8039%);
-        --sidebar-primary-foreground: hsl(0 0% 100%);
-        --sidebar-accent: hsl(204 93.75% 93.7255%);
-        --sidebar-accent-foreground: hsl(224.4444 64.2857% 32.9412%);
-        --sidebar-border: hsl(220 13.0435% 90.9804%);
-        --sidebar-ring: hsl(217.2193 91.2195% 59.8039%);
-        --font-sans: Inter, sans-serif;
-        --font-serif: Source Serif 4, serif;
-        --font-mono: JetBrains Mono, monospace;
-        --radius: 0.375rem;
-        --shadow-x: 0;
-        --shadow-y: 1px;
-        --shadow-blur: 3px;
-        --shadow-spread: 0px;
-        --shadow-opacity: 0.1;
-        --shadow-color: oklch(0 0 0);
-        --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
-        --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
-        --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.1),
-            0 1px 2px -1px hsl(0 0% 0% / 0.1);
-        --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.1),
-            0 1px 2px -1px hsl(0 0% 0% / 0.1);
-        --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.1),
-            0 2px 4px -1px hsl(0 0% 0% / 0.1);
-        --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.1),
-            0 4px 6px -1px hsl(0 0% 0% / 0.1);
-        --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.1),
-            0 8px 10px -1px hsl(0 0% 0% / 0.1);
-        --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
-        --tracking-normal: 0em;
-        --spacing: 0.25rem;
+  @reference "$lib/themes/layout.css";
+
+  :root {
+    --background: hsl(0 0% 100%);
+    --foreground: hsl(0 0% 20%);
+    --card: hsl(0 0% 100%);
+    --card-foreground: hsl(0 0% 20%);
+    --popover: hsl(0 0% 100%);
+    --popover-foreground: hsl(0 0% 20%);
+    --primary: hsl(217.2193 91.2195% 59.8039%);
+    --primary-foreground: hsl(0 0% 100%);
+    --secondary: hsl(220 14.2857% 95.8824%);
+    --secondary-foreground: hsl(215 13.7931% 34.1176%);
+    --muted: hsl(210 20% 98.0392%);
+    --muted-foreground: hsl(220 8.9362% 46.0784%);
+    --accent: hsl(204 93.75% 93.7255%);
+    --accent-foreground: hsl(224.4444 64.2857% 32.9412%);
+    --destructive: hsl(0 84.2365% 60.1961%);
+    --destructive-foreground: hsl(0 0% 100%);
+    --border: hsl(220 13.0435% 90.9804%);
+    --input: hsl(220 13.0435% 90.9804%);
+    --ring: hsl(217.2193 91.2195% 59.8039%);
+    --chart-1: hsl(217.2193 91.2195% 59.8039%);
+    --chart-2: hsl(221.2121 83.1933% 53.3333%);
+    --chart-3: hsl(224.2781 76.3265% 48.0392%);
+    --chart-4: hsl(225.931 70.7317% 40.1961%);
+    --chart-5: hsl(224.4444 64.2857% 32.9412%);
+    --sidebar: hsl(210 20% 98.0392%);
+    --sidebar-foreground: hsl(0 0% 20%);
+    --sidebar-primary: hsl(217.2193 91.2195% 59.8039%);
+    --sidebar-primary-foreground: hsl(0 0% 100%);
+    --sidebar-accent: hsl(204 93.75% 93.7255%);
+    --sidebar-accent-foreground: hsl(224.4444 64.2857% 32.9412%);
+    --sidebar-border: hsl(220 13.0435% 90.9804%);
+    --sidebar-ring: hsl(217.2193 91.2195% 59.8039%);
+    --font-sans: Inter, sans-serif;
+    --font-serif: Source Serif 4, serif;
+    --font-mono: JetBrains Mono, monospace;
+    --radius: 0.375rem;
+    --shadow-x: 0;
+    --shadow-y: 1px;
+    --shadow-blur: 3px;
+    --shadow-spread: 0px;
+    --shadow-opacity: 0.1;
+    --shadow-color: oklch(0 0 0);
+    --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.1),
+        0 1px 2px -1px hsl(0 0% 0% / 0.1);
+    --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.1),
+        0 1px 2px -1px hsl(0 0% 0% / 0.1);
+    --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.1),
+        0 2px 4px -1px hsl(0 0% 0% / 0.1);
+    --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.1),
+        0 4px 6px -1px hsl(0 0% 0% / 0.1);
+    --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.1),
+        0 8px 10px -1px hsl(0 0% 0% / 0.1);
+    --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+    --tracking-normal: 0em;
+    --spacing: 0.25rem;
     }
 
     :global(.dark) {

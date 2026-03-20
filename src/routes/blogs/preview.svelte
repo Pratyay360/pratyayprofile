@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount } from "svelte";
 	import BlogCard from "$lib/components/normaluicomponents/blogCard.svelte";
 	import { Skeleton } from "$lib/components/ui/skeleton";
 	import { createClient } from "$lib/pocketbase";
@@ -60,9 +59,7 @@
 	{/if}
 
 	{#if failed}
-		<p class="text-destructive mt-8 text-center text-sm">
-			Unable to load blogs.
-		</p>
+		<ErrorPage />
 	{/if}
 
 	<div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -89,10 +86,5 @@
 				</button>
 			</a>
 		</div>
-	{/if}
-	{#if posts.length === 0 && !loading && !failed}
-		<p class="text-muted-foreground mt-8 text-center text-sm">
-			Add blog posts to show them here.
-		</p>
 	{/if}
 </div>

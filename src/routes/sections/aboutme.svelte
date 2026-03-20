@@ -5,39 +5,26 @@
 	import { type RecordModel } from 'pocketbase';
 
 	const pb = createClient(import.meta.env.VITE_POCKET_BASE);
-	let name = 'Pratyay Mustafi';
-	let image = '';
-	let aboutme = ''; 	
-	let titles: string[] = [];
+	let data: RecordModel[] = [];
+	
 
 	onMount(async () => {
-		try {
-			const records = await pb.collection('me').getFullList<RecordModel>({  });
-			if (records.length > 0) {
-				const first = records[0];
-				image = resolveMediaUrl(pb, first, 'image') || image;
-				aboutme = readString(first, 'aboutme') || aboutme;
-				titles = records
-					.map((record) => readString(record, 'flash'))
-					.filter(Boolean);
-			}
-		} catch (error) {
-			console.error(error);
+		const records = await pb.readStringArray();
+		if (records.length > 0) {
+			data = records.map((record) => readString(record, 'flash'))
+				.filter(Boolean);
 		}
 	});
 </script>
 
 <section class="container mx-auto px-6 py-12">
 	<div class="text-muted-foreground mx-auto mt-8 max-w-3xl text-lg">
-		<enhanced:img src={image} alt={name} />
-		<h1 class="text-center text-3xl font-bold tracking-[0.2em]">{name}</h1>
-		{#each titles as title (title)}
+		{#each data as record}
 			<p
 				class="animate-typing overflow-hidden whitespace-nowrap border-r-4 border-r-primary pr-5 text-5xl text-foreground font-bold text-center"
 			>
-				{title}
+				{record}
 			</p>
 		{/each}
-		<p class=" text-center">{aboutme}</p>
 	</div>
 </section>

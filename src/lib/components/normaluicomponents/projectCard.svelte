@@ -1,5 +1,4 @@
 <script module lang="ts">
-    // Typed shape for consumers who want to import the interface
     export interface Props {
         imageUrl?: string;
         link?: string;

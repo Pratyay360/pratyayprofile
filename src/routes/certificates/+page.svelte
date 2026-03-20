@@ -49,9 +49,9 @@
 		</div>
 	{/if}
 
-	{#if failed}
+	<!-- {#if failed}
 		<p class="text-destructive mt-8 text-center text-sm">Unable to load certificates.</p>
-	{/if}
+	{/if} -->
 
 	<section class="mx-auto mt-12 max-w-6xl">
 		<div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -65,8 +65,8 @@
 				/>
 			{/each}
 		</div>
-		{#if certificates.length === 0 && !loading && !failed}
+		<!-- {#if certificates.length === 0 && !loading && !failed}
 			<p class="text-muted-foreground mt-8 text-center text-sm">Add your certificates to display them here.</p>
-		{/if}
+		{/if} -->
 	</section>
 </main>

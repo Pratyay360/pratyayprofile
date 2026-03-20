@@ -1,9 +1,9 @@
 <div class="claymorphism"></div>
 
 <style lang="css">
-
-    @custom-variant dark (&:is(.dark *));
-
+  @reference "$lib/themes/layout.css";
+            
+    
     :root {
         --background: hsl(20 5.8824% 90%);
         --foreground: hsl(217.2414 32.5843% 17.451%);

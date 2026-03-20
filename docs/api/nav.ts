@@ -10,4 +10,9 @@ export interface NavItem {
   children?: NavItem[];
 }
 
-export const apiNav: NavItem[] = [] as const;
+export const apiNav: NavItem[] = [
+  {
+    "title": "+page.server",
+    "path": "/api/+page.server"
+  }
+] as const;

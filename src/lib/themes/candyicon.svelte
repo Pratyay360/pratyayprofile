@@ -1,9 +1,9 @@
 <div class="candyicon"></div>
 
 <style>
-
-    @custom-variant dark (&:is(.dark *));
-
+  @reference "$lib/themes/layout.css";
+            
+    
     :root {
         --background: hsl(200 23.0769% 97.451%);
         --foreground: hsl(0 0% 20%);

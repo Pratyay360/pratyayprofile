@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	// Typed shape for consumers who want to import the interface
 	export interface Props {
 		imageSrc?: string;

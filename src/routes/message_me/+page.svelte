@@ -12,9 +12,7 @@
     } from "$lib/components/ui/card";
     import { createClient } from "$lib/pocketbase";
 
-    const pocketBaseClient = createClient(
-        import.meta.env.VITE_POCKET_BASE
-    );
+    const pocketBaseClient = createClient(import.meta.env.VITE_POCKET_BASE);
 
     let submissionStatus = $state(false);
 
@@ -28,46 +26,43 @@
         e.preventDefault();
         try {
             submissionStatus = true;
-
-            await pocketBaseClient.collection("messages").create({
-                userName: form.userName,
-                userEmail: form.userEmail,
-                userMessage: form.userMessage,
-            });
-
+            const data = {
+                name: form.userName,
+                email: form.userEmail,
+                message: form.userMessage,
+            };
+            await pocketBaseClient.collection("messages").create(data);
             toast.success("Message sent successfully");
-
-            // safer reset
             form.userName = "";
             form.userEmail = "";
             form.userMessage = "";
-
         } catch (err) {
-            console.error(err); // stop hiding problems
+            console.error(err);
             toast.error("Failed to send message");
         } finally {
             submissionStatus = false;
         }
-    };</script>
+    };
+</script>
 
-<div class=" flex min-h-screen items-center justify-center p-4">
-    <Toaster />
+<Toaster />
+
+<div class="flex min-h-screen items-center justify-center p-4">
     <Card class="w-full max-w-2xl border-border shadow-xl">
         <CardHeader class="pb-4">
-            <CardTitle class="text-foreground text-center text-3xl font-bold"
-                >Contact Us</CardTitle
-            >
-            <CardDescription class="text-muted-foreground text-center">
-                Got a query or wish to work together?
+            <CardTitle class="text-foreground text-center text-3xl font-bold">
+                Get In Touch
+            </CardTitle>
+            <CardDescription class="text-muted-foreground text-center p-3">
+                Message me :)
             </CardDescription>
         </CardHeader>
 
         <CardContent>
-            <form class="space-y-6" onsubmit={submitRequest}>
                 <div>
-                    <label for="userName" class="text-sm font-medium"
-                        >Name</label
-                    >
+                    <label for="userName" class="text-sm font-medium">
+                        Name
+                    </label>
                     <Input
                         id="userName"
                         name="Name"
@@ -78,10 +73,9 @@
                 </div>
 
                 <div>
-                    <label
-                        for="userEmail"
-                        class="text-foreground text-sm font-medium">Email</label
-                    >
+                    <label for="userEmail" class="text-foreground text-sm font-medium">
+                        Email
+                    </label>
                     <Input
                         id="userEmail"
                         name="Email"
@@ -93,11 +87,9 @@
                 </div>
 
                 <div>
-                    <label
-                        for="userMessage"
-                        class="text-foreground text-sm font-medium"
-                        >Message</label
-                    >
+                    <label for="userMessage" class="text-foreground text-sm font-medium">
+                        Message
+                    </label>
                     <Textarea
                         id="userMessage"
                         name="Message"
@@ -110,8 +102,8 @@
                 </div>
 
                 <Button
-                    type="submit"
                     variant="outline"
+                    onclick={submitRequest}
                     disabled={submissionStatus}
                 >
                     {#if submissionStatus}
@@ -120,7 +112,6 @@
                         Submit Message
                     {/if}
                 </Button>
-            </form>
         </CardContent>
     </Card>
 </div>
