@@ -45,7 +45,8 @@
   --shadow-xl: 0px 4px 6px 0px hsl(240 30% 25% / 0.12), 0px 8px 10px -1px hsl(240 30% 25% / 0.12);
   --shadow-2xl: 0px 4px 6px 0px hsl(240 30% 25% / 0.3);
 }
-[data-theme="catppuchin"].dark, [data-theme="catppuchin"] .dark {
+[data-theme="catppuchin"].dark,
+[data-theme="catppuchin"] .dark {
   --background: hsl(240 21.3115% 11.9608%);
   --foreground: hsl(226.1538 63.9344% 88.0392%);
   --card: hsl(240 21.0526% 14.902%);
@@ -120,14 +121,20 @@
   --radius: 0.4rem;
   --shadow-2xs: 3px 3px 0px 0px hsl(325.78 58.18% 56.86% / 0.5);
   --shadow-xs: 3px 3px 0px 0px hsl(325.78 58.18% 56.86% / 0.5);
-  --shadow-sm: 3px 3px 0px 0px hsl(325.78 58.18% 56.86% / 1), 3px 1px 2px -1px hsl(325.78 58.18% 56.86% / 1);
-  --shadow: 3px 3px 0px 0px hsl(325.78 58.18% 56.86% / 1), 3px 1px 2px -1px hsl(325.78 58.18% 56.86% / 1);
-  --shadow-md: 3px 3px 0px 0px hsl(325.78 58.18% 56.86% / 1), 3px 2px 4px -1px hsl(325.78 58.18% 56.86% / 1);
-  --shadow-lg: 3px 3px 0px 0px hsl(325.78 58.18% 56.86% / 1), 3px 4px 6px -1px hsl(325.78 58.18% 56.86% / 1);
-  --shadow-xl: 3px 3px 0px 0px hsl(325.78 58.18% 56.86% / 1), 3px 8px 10px -1px hsl(325.78 58.18% 56.86% / 1);
+  --shadow-sm:
+    3px 3px 0px 0px hsl(325.78 58.18% 56.86% / 1), 3px 1px 2px -1px hsl(325.78 58.18% 56.86% / 1);
+  --shadow:
+    3px 3px 0px 0px hsl(325.78 58.18% 56.86% / 1), 3px 1px 2px -1px hsl(325.78 58.18% 56.86% / 1);
+  --shadow-md:
+    3px 3px 0px 0px hsl(325.78 58.18% 56.86% / 1), 3px 2px 4px -1px hsl(325.78 58.18% 56.86% / 1);
+  --shadow-lg:
+    3px 3px 0px 0px hsl(325.78 58.18% 56.86% / 1), 3px 4px 6px -1px hsl(325.78 58.18% 56.86% / 1);
+  --shadow-xl:
+    3px 3px 0px 0px hsl(325.78 58.18% 56.86% / 1), 3px 8px 10px -1px hsl(325.78 58.18% 56.86% / 1);
   --shadow-2xl: 3px 3px 0px 0px hsl(325.78 58.18% 56.86% / 2.5);
 }
-[data-theme="bubblegum"].dark, [data-theme="bubblegum"] .dark {
+[data-theme="bubblegum"].dark,
+[data-theme="bubblegum"] .dark {
   --background: hsl(201.4286 43.75% 12.549%);
   --foreground: hsl(333.75 40% 92.1569%);
   --card: hsl(201.4286 33.3333% 16.4706%);
@@ -209,7 +216,8 @@
   --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 8px 10px -1px hsl(0 0% 0% / 0.1);
   --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
 }
-[data-theme="candyicon"].dark, [data-theme="candyicon"] .dark {
+[data-theme="candyicon"].dark,
+[data-theme="candyicon"] .dark {
   --background: hsl(220 14.7541% 11.9608%);
   --foreground: hsl(0 0% 89.8039%);
   --card: hsl(197.1429 6.9307% 19.8039%);
@@ -291,7 +299,8 @@
   --shadow-xl: 2px 2px 10px 4px hsl(240 4% 60% / 0.18), 2px 8px 10px 3px hsl(240 4% 60% / 0.18);
   --shadow-2xl: 2px 2px 10px 4px hsl(240 4% 60% / 0.45);
 }
-[data-theme="claymorphism"].dark, [data-theme="claymorphism"] .dark {
+[data-theme="claymorphism"].dark,
+[data-theme="claymorphism"] .dark {
   --background: hsl(30 11.1111% 10.5882%);
   --foreground: hsl(214.2857 31.8182% 91.3725%);
   --card: hsl(25.7143 8.642% 15.8824%);
@@ -373,7 +382,8 @@
   --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 8px 10px -1px hsl(0 0% 0% / 0.1);
   --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
 }
-[data-theme="modernminimal"].dark, [data-theme="modernminimal"] .dark {
+[data-theme="modernminimal"].dark,
+[data-theme="modernminimal"] .dark {
   --background: hsl(0 0% 9.0196%);
   --foreground: hsl(0 0% 89.8039%);
   --card: hsl(0 0% 14.902%);
@@ -455,7 +465,8 @@
   --shadow-xl: 0px 8px 16px -4px hsl(0 0% 0% / 0.08), 0px 8px 10px -5px hsl(0 0% 0% / 0.08);
   --shadow-2xl: 0px 8px 16px -4px hsl(0 0% 0% / 0.2);
 }
-[data-theme="pasteldreams"].dark, [data-theme="pasteldreams"] .dark {
+[data-theme="pasteldreams"].dark,
+[data-theme="pasteldreams"] .dark {
   --background: hsl(24 9.8039% 10%);
   --foreground: hsl(226.4516 100% 93.9216%);
   --card: hsl(270 17.7778% 17.6471%);
@@ -537,7 +548,8 @@
   --shadow-xl: 2px 3px 5px 0px hsl(28 13% 20% / 0.12), 2px 8px 10px -1px hsl(28 13% 20% / 0.12);
   --shadow-2xl: 2px 3px 5px 0px hsl(28 13% 20% / 0.3);
 }
-[data-theme="vintagepaper"].dark, [data-theme="vintagepaper"] .dark {
+[data-theme="vintagepaper"].dark,
+[data-theme="vintagepaper"] .dark {
   --background: hsl(25 15.3846% 15.2941%);
   --foreground: hsl(39 34.4828% 88.6275%);
   --card: hsl(25.7143 13.7255% 20%);
@@ -619,7 +631,8 @@
   --shadow-xl: 0px 2px 3px 0px hsl(0 0% 0% / 0.16), 0px 8px 10px -1px hsl(0 0% 0% / 0.16);
   --shadow-2xl: 0px 2px 3px 0px hsl(0 0% 0% / 0.4);
 }
-[data-theme="violetbloom"].dark, [data-theme="violetbloom"] .dark {
+[data-theme="violetbloom"].dark,
+[data-theme="violetbloom"] .dark {
   --background: hsl(225 7.1429% 10.9804%);
   --foreground: hsl(0 0% 94.1176%);
   --card: hsl(228 6.8493% 14.3137%);

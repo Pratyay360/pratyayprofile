@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import { readString } from '$lib/content';
-
 	let { data }: { data: PageData } = $props();
 </script>
 
@@ -29,8 +28,6 @@
 		<div class="mb-10 text-secondary">
 			<enhanced:img src={data.coverImage} alt={readString(data.blog, 'title')} class="w-full rounded-lg object-cover" />
 		</div>
-		
-
 	<div
 		class="prose prose-neutral dark:prose-invert max-w-none prose-headings:font-semibold prose-a:text-blue-600 dark:prose-a:text-blue-400"
 	>
