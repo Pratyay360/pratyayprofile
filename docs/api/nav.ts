@@ -12,7 +12,7 @@ export interface NavItem {
 
 export const apiNav: NavItem[] = [
   {
-    title: "+page.server",
-    path: "/api/+page.server",
-  },
+    "title": "+page.server",
+    "path": "/api/+page.server"
+  }
 ] as const;
