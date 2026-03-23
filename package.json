@@ -14,9 +14,8 @@
     "format": "oxfmt . --write"
   },
   "dependencies": {
-    "@catppuccin/tailwindcss": "^1.0.0",
+    "@fortawesome/svelte-fontawesome": "^0.2.4",
     "@sveltejs/enhanced-img": "^0.10.4",
-    "@unpic/svelte": "^1.0.1",
     "eslint": "^10.1.0",
     "eslint-plugin-svelte": "^3.16.0",
     "mdsvex": "^0.12.7",
