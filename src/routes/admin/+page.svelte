@@ -61,55 +61,55 @@
     <h1 class="text-2xl font-semibold">Admin</h1>
     <div class="mt-6 flex flex-wrap gap-2">
         <Button
+            class={sectionButtonClass("me")}
+            onclick={() => setSection("me")}
+        >
+            Profile
+        </Button>
+        <Button
+            class={sectionButtonClass("projects")}
+            onclick={() => setSection("projects")}
+        >
+            Projects
+        </Button>
+        <Button
             class="rounded border px-3 py-1"
             onclick={() => goto("/admin/blogs")}
         >
             Blogs
         </Button>
         <Button
-            class="rounded border px-3 py-1 {currentSection === 'certificates'
-                ? 'bg-primary text-primary-foreground'
-                : ''}"
+            class={sectionButtonClass("certificates")}
             onclick={() => setSection("certificates")}
         >
             Certificates
         </Button>
         <Button
-            class="rounded border px-3 py-1 {currentSection === 'skills'
-                ? 'bg-primary text-primary-foreground'
-                : ''}"
+            class={sectionButtonClass("skills")}
             onclick={() => setSection("skills")}
         >
             Skills
         </Button>
         <Button
-            class="rounded border px-3 py-1 {currentSection === 'education'
-                ? 'bg-primary text-primary-foreground'
-                : ''}"
+            class={sectionButtonClass("education")}
             onclick={() => setSection("education")}
         >
             Education
         </Button>
         <Button
-            class="rounded border px-3 py-1 {currentSection === 'socials'
-                ? 'bg-primary text-primary-foreground'
-                : ''}"
+            class={sectionButtonClass("socials")}
             onclick={() => setSection("socials")}
         >
             Socials
         </Button>
         <Button
-            class="rounded border px-3 py-1 {currentSection === 'donations'
-                ? 'bg-primary text-primary-foreground'
-                : ''}"
+            class={sectionButtonClass("donations")}
             onclick={() => setSection("donations")}
         >
             Donations
         </Button>
         <Button
-            class="rounded border px-3 py-1 {currentSection === 'messages'
-                ? 'bg-primary text-primary-foreground'
-                : ''}"
+            class={sectionButtonClass("messages")}
             onclick={() => setSection("messages")}
         >
             Messages
