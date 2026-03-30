@@ -10,6 +10,9 @@
     "sourceMap": true,
     "strict": true,
     "moduleResolution": "bundler",
-    "noUnusedLocals": false
+    "noUnusedLocals": false,
+    "types": [
+      "./worker-configuration.d.ts"
+    ]
   }
 }
