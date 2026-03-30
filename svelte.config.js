@@ -6,11 +6,11 @@ import adapter from "@sveltejs/adapter-cloudflare";
 const config = {
   kit: {
     adapter: adapter(),
-    csrf: { trustedOrigins: ["pocketbase.pratyay.qzz.io", "localhost"] }
+    csrf: { trustedOrigins: ["*.pratyay.qzz.io", "localhost"] },
   },
   preprocess: [mdsvex(), sveltePreprocess()],
   extensions: [".svelte", ".svx"],
-  alias: { $themes: "./src/lib/themes" }
+  alias: { $themes: "./src/lib/themes" },
 };
 
 export default config;

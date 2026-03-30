@@ -9,7 +9,7 @@ export function initTheme(ssrTheme: string) {
   if (browser) {
     // Prefer localStorage (client-side source of truth), fall back to SSR cookie value
     const stored = localStorage.getItem("theme");
-    theme.set(stored ? stored: ssrTheme);
+    theme.set(stored ? stored : ssrTheme);
   } else {
     theme.set(ssrTheme);
   }
