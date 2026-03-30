@@ -5,18 +5,13 @@ const DEFAULT_THEME = "catppuchin";
 
 export const theme = writable<string>(DEFAULT_THEME);
 
-export function initTheme(initialTheme: string) {
-  theme.set(initialTheme);
-
+export function initTheme(ssrTheme: string) {
   if (browser) {
-    // Apply immediately
-    document.documentElement.setAttribute("data-theme", initialTheme);
-
-    // Persist to localStorage
-    localStorage.setItem("theme", initialTheme);
-
-    // Persist to cookie
-    document.cookie = `theme=${encodeURIComponent(initialTheme)}; path=/; max-age=31536000; SameSite=Lax`;
+    // Prefer localStorage (client-side source of truth), fall back to SSR cookie value
+    const stored = localStorage.getItem("theme");
+    theme.set(stored ? stored: ssrTheme);
+  } else {
+    theme.set(ssrTheme);
   }
 }
 
