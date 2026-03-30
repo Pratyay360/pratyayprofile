@@ -19,25 +19,29 @@
     let failed = $state(false);
     let certificates = $state<CertificateRecord[]>([]);
 
-    try {
-        const records = pb
-            .collection("certificates")
-            .getFullList<CertificateRecord>({});
+    onMount(async () => {
+        try {
+            const records = await pb
+                .collection("certificates")
+                .getFullList({});
 
-        certificates = records.map((record) => ({
-            id: record.id,
-            title: readString(record, "title"),
-            description: readString(record, "description"),
-            date: readString(record, "date"),
-            imageSrc: resolveMediaUrl(pb, record, "imageSrc", { token: null }),
-            link: `/certificates/${record.id}`,
-        }));
-    } catch (error) {
-        console.error("Failed to fetch certificates:", error);
-        failed = true;
-    } finally {
-        loading = false;
-    }
+            certificates = (records as unknown as RecordModel[]).map((record) => ({
+                id: record.id,
+                title: readString(record, "title"),
+                description: readString(record, "description"),
+                date: readString(record, "date"),
+                imageSrc: resolveMediaUrl(pb, record, "imageSrc", {
+                    token: null,
+                }),
+                link: `/certificates/${record.id}`,
+            }));
+        } catch (error) {
+            console.error("Failed to fetch certificates:", error);
+            failed = true;
+        } finally {
+            loading = false;
+        }
+    });
 </script>
 
 <main class="min-h-screen px-4 py-24">

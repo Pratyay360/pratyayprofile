@@ -42,7 +42,6 @@
     rel="noopener noreferrer"
     class="block"
     aria-label={title ? `Open blog: ${title}` : "Open blog"}
-    use:enhance
 >
     <Card
         class="group relative h-full overflow-hidden transition-transform duration-300 hover:scale-[1.02]"

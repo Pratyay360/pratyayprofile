@@ -4,6 +4,6 @@ export const load: LayoutServerLoad = ({ cookies }) => {
   const theme = cookies.get("theme") || "catppuchin";
 
   return {
-    theme
+    theme,
   };
 };

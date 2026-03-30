@@ -4,7 +4,6 @@
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
 	import { Textarea } from '$lib/components/ui/textarea';
-	import { deleteBlog } from '$admin/pages/blogs/page.server';
 	type BlogItem = {
 		id: string;
 		title?: string;
@@ -38,7 +37,8 @@
 </script>
 
 <div class="mt-6 grid gap-6 xl:grid-cols-[1.4fr_1fr]">
-    <h2 class="text-lg font-medium">{blogForm.id ? 'Edit Blog Post' : 'Add Blog Post'}</h2>
+	<form method="POST" action="?/saveBlog" use:enhance class="space-y-4 rounded border p-4">
+		<h2 class="text-lg font-medium">{blogForm.id ? 'Edit Blog Post' : 'Add Blog Post'}</h2>
 		<Input type="hidden" name="id" value={blogForm.id} />
 		<Input name="title" placeholder="Title" bind:value={blogForm.title} required />
 		<Input name="author" placeholder="Blog author" bind:value={blogForm.author} />
@@ -50,7 +50,8 @@
 				<Button type="button" variant="outline" onclick={resetBlogForm}>Cancel</Button>
 			{/if}
 		</div>
-	
+	</form>
+
 	<div class="space-y-2 rounded border p-4">
 		<h2 class="text-lg font-medium">Current Blog Posts</h2>
 		{#each blogs as item (item.id)}
@@ -62,8 +63,10 @@
 					<Button type="button" variant="outline" size="sm" onclick={() => editBlog(item)}>
 						Edit
 					</Button>
-					<Input type="hidden" name="id" value={item.id} />
-					<Button type="submit" variant="destructive" onclick={() => deleteBlog}>Delete</Button>
+					<form method="POST" action="?/deleteBlog" use:enhance>
+						<Input type="hidden" name="id" value={item.id} />
+						<Button type="submit" variant="destructive" size="sm">Delete</Button>
+					</form>
 				</div>
 			</div>
 		{/each}

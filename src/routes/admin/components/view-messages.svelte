@@ -12,7 +12,6 @@
         CardTitle,
     } from "$lib/components/ui/card";
     import { Textarea } from "$lib/components/ui/textarea";
-    import Candyicon from "$lib/themes/candyicon.svelte";
 
     interface Message {
         id: string;

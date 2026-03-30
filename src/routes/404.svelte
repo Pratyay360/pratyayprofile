@@ -1,6 +1,6 @@
 <script>
     import { CropIcon } from "@lucide/svelte";
-    import { redirect } from "@sveltejs/kit";
+    import { goto } from "$app/navigation";
     import { Button } from "$lib/components/ui/button";
 </script>
 <CropIcon />    
@@ -27,8 +27,8 @@
 		<p class="mb-6 text-lg  md:text-xl">Oops! You seem to be lost. 🥲</p>
 
 		<Button
-			on:click={() => {
-				redirect("/");
+			onclick={() => {
+				goto("/");
 			}}
 			class="inline-block rounded-lg border  bg-transparent px-6 py-2  shadow-md transition-all duration-300 hover:border-transparent  hover:shadow-lg focus:ring-2  focus:ring-offset-2 focus:outline-none"
 			aria-label="Return to homepage"

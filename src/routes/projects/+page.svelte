@@ -10,8 +10,8 @@
     } from "$lib/components/ui/card";
 
     const profileName = "Pratyay Mustafi";
-    let data = $props();
-    const projects = data.projects ?? [];
+    let { data } = $props();
+    const projects = $derived(data.projects ?? []);
 </script>
 
 <main class="min-h-screen px-4 py-24">
@@ -32,9 +32,7 @@
                         imageUrl={project.imageUrl}
                         title={project.title}
                         brief={project.brief}
-                        link={project.blog
-                            ? `/blogs/${project.blog}`
-                            : project.link}
+                        link={project.link}
                     />
                 {/each}
             </div>
