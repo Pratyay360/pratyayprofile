@@ -1,23 +1,25 @@
 <script lang="ts">
-  import favicon from "$lib/assets/favicon.svg";
-  import Navbar from "$lib/components/navbar/navbar.svelte";
-  import { theme } from "$lib/theme";
-  import { ModeWatcher } from "mode-watcher";
-  import { browser } from "$app/environment";
-  import "./layout.css";
+    import favicon from "$lib/assets/favicon.svg";
+    import Navbar from "$lib/components/navbar/navbar.svelte";
+    import { initTheme, theme } from "$lib/theme";
+    import { ModeWatcher } from "mode-watcher";
+    import { page } from "$app/stores";
+    import "./layout.css";
 
-  let { children } = $props();
+    let { children } = $props();
 
-  $effect(() => {
-    if (browser) {
-      document.documentElement.setAttribute("data-theme", $theme);
-    }
-  });
+    $effect(() => {
+        document.documentElement.setAttribute("data-theme", $theme);
+    });
 </script>
 
 <svelte:head>
-  <link rel="icon" href={favicon} />
+    <link rel="icon" href={favicon} />
 </svelte:head>
+
+{#if $page.data.theme}
+    {@const _ = initTheme($page.data.theme)}
+{/if}
 
 <ModeWatcher />
 <Navbar />
