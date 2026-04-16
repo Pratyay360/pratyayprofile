@@ -1,10 +1,6 @@
 import { fail, redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
-import {
-  AUTH_COOKIE,
-  clearAuthCookie,
-  verifyUserToken,
-} from "../../../lib/server/admin-auth";
+import { AUTH_COOKIE, clearAuthCookie, verifyUserToken } from "../../../lib/server/admin-auth";
 
 const readText = (data: FormData, key: string): string => {
   const value = data.get(key);
@@ -28,11 +24,7 @@ const requireAdminPocketBase = async (cookies: any) => {
   return pb;
 };
 
-const safeGetList = async <T>(
-  pb: any,
-  collection: string,
-  options = {},
-): Promise<T[]> => {
+const safeGetList = async <T>(pb: any, collection: string, options = {}): Promise<T[]> => {
   try {
     return await pb.collection(collection).getFullList(options);
   } catch {
@@ -72,10 +64,7 @@ export const actions: Actions = {
 
     const payload = new FormData();
     payload.set("title", title);
-    payload.set(
-      "content",
-      readText(data, "content") || readText(data, "brief"),
-    );
+    payload.set("content", readText(data, "content") || readText(data, "brief"));
     payload.set("url", readText(data, "url"));
     const image = readOptionalFile(data, "coverImage");
     if (image) payload.set("coverImage", image);

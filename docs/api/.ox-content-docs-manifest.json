@@ -1,5 +1,6 @@
 [
   "+page.server.md",
+  "content.md",
   "index.md",
   "nav.ts"
 ]

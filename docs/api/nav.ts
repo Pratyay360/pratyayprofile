@@ -14,5 +14,9 @@ export const apiNav: NavItem[] = [
   {
     "title": "+page.server",
     "path": "/api/+page.server"
+  },
+  {
+    "title": "Content",
+    "path": "/api/content"
   }
 ] as const;

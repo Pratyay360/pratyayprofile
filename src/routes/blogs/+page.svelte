@@ -2,19 +2,26 @@
     import { onMount } from "svelte";
     import type { RecordModel } from "pocketbase";
     import BlogCard from "$lib/components/normaluicomponents/blogCard.svelte";
-    import { readString, resolveMediaUrl } from "$lib/content";
+    import {
+        readString,
+        readStringArray,
+        calculateReadingTime,
+        extractImagesFromMarkdown,
+    } from "$lib/content";
     import { createClient } from "$lib/pocketbase";
     import { Skeleton } from "$lib/components/ui/skeleton";
 
     interface BlogRecord {
         id: string;
-        coverImage: string;
         title: string;
         brief: string;
         author: string;
         updated: string;
         created: string;
         link: string;
+        tags: string[];
+        readingTime: number;
+        images: string[];
     }
 
     const pb = createClient(import.meta.env.VITE_POCKET_BASE);
@@ -28,20 +35,26 @@
                 .collection("blogs")
                 .getFullList<RecordModel>({ sort: "-created" });
 
-            posts = records.map((record) => ({
-                id: record.id,
-                title: readString(record, "title"),
-                author: readString(record, "author"),
-                updated: readString(record, "updated"),
-                created: readString(record, "created"),
-                brief:
-                    readString(record, "brief") ||
-                    readString(record, "content"),
-                coverImage: resolveMediaUrl(pb, record, "coverImage", {
-                    token: null,
-                }),
-                link: `/blogs/${record.id}`,
-            }));
+            posts = records.map((record) => {
+                const content = readString(record, "content");
+                const brief = readString(record, "brief") || content;
+                const images = extractImagesFromMarkdown(content);
+                return {
+                    id: record.id,
+                    title: readString(record, "title"),
+                    author: readString(record, "author"),
+                    updated: readString(record, "updated"),
+                    created: readString(record, "created"),
+                    brief:
+                        brief.length > 150
+                            ? brief.slice(0, 150) + "..."
+                            : brief,
+                    link: `/blogs/${record.id}`,
+                    tags: readStringArray(record, "tags"),
+                    readingTime: calculateReadingTime(content),
+                    images: images,
+                };
+            });
         } catch (error) {
             console.error("Failed to fetch blogs:", error);
             failed = true;
@@ -60,7 +73,7 @@
         <div class="mx-auto grid max-w-6xl gap-8 md:grid-cols-2 lg:grid-cols-3">
             {#each Array.from({ length: 6 }, (_, i) => i) as i (i)}
                 <div class="space-y-3">
-                    <Skeleton class="h-56 w-full rounded-xl" />
+                    <Skeleton class="h-48 w-full rounded-xl" />
                     <Skeleton class="h-6 w-2/3" />
                     <Skeleton class="h-4 w-full" />
                     <Skeleton class="h-4 w-4/5" />
