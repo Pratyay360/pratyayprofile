@@ -25,7 +25,6 @@
     "@tailwindcss/vite": "^4.2.4",
     "autoprefixer": "^10.5.0",
     "clsx": "^2.1.1",
-    "mdsvex": "^0.12.7",
     "playwright": "^1.59.1",
     "postcss": "^8.5.10",
     "remixicon-svelte": "^0.0.5",
@@ -38,15 +37,14 @@
     "tw-animate-css": "^1.4.0",
     "typescript": "^6.0.3",
     "vite": "npm:@voidzero-dev/vite-plus-core@latest",
+    "vite-plus": "latest",
     "vitest": "npm:@voidzero-dev/vite-plus-test@latest",
-    "vitest-browser-svelte": "^2.1.1",
-    "vite-plus": "latest"
+    "vitest-browser-svelte": "^2.1.1"
   },
   "dependencies": {
+    "@sveltejs/enhanced-img": "^0.10.4",
     "daisyui": "^5.5.19",
-    "svast": "^0.2.1",
-    "svast-stringify": "^0.1.1",
-    "svast-utils": "^0.0.6",
+    "svelte-exmarkdown": "^5.0.2",
     "svelte-parse": "^0.1.1"
   },
   "packageManager": "bun@1.3.13",
